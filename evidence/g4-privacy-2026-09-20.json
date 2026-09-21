@@ -1,0 +1,19 @@
+{
+  "gate": "G4",
+  "status": "PASS",
+  "checks": {
+    "privacy_manifest_plist_lint": "pass",
+    "info_plist_lint": "pass",
+    "tracking": false,
+    "collected_data_types": 0,
+    "accessed_api_types": 0,
+    "tracking_domains": 0,
+    "notification_entitlement": false,
+    "background_modes": false,
+    "special_permission_usage": false,
+    "network_analytics_telemetry_matches": 0
+  },
+  "bundle": "com.edoworks.focusgate",
+  "build_artifact": "/tmp/FocusGateEvidence/Build/Products/Debug-iphonesimulator/FocusGate.app",
+  "captured_at": "2026-09-21T03:56:00Z"
+}

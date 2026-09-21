@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "product_code_identity": "FocusGate",
+  "provisional_public_name": "NowNest",
+  "status": "PROVISIONAL_NOT_CLEARED",
+  "owner_disposition": "approved_for_further_clearance",
+  "screening": {
+    "storefront": "US",
+    "source": "Apple iTunes Search API",
+    "exact_query_result_count": 0,
+    "retrieved_at": "2026-09-21"
+  },
+  "not_authorized": [
+    "application rename",
+    "bundle identifier change",
+    "App Store Connect reservation",
+    "TestFlight upload",
+    "publication",
+    "trademark adoption"
+  ],
+  "remaining_checks": [
+    "App Store Connect name reservation",
+    "relevant storefront collision screening",
+    "trademark review",
+    "domain and support URL review"
+  ]
+}

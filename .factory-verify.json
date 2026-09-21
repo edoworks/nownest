@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "command": "factory init",
+  "app_name": "FocusGate",
+  "bundle_id": "com.edoworks.focusgate",
+  "timestamp": "2026-09-21T01:17:57Z",
+  "factory_version": "0.1.0-rc2",
+  "template_source": "/var/folders/m6/j69tcnk52059qvy0_6hnxk5r0000gq/T/opencode/factory-0.1.0-rc2/templates/AppTemplate"
+}

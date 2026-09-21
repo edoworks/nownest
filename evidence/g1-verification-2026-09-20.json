@@ -1,0 +1,20 @@
+{
+  "gate": "G1",
+  "status": "PASS",
+  "doctor": {
+    "passed": 6,
+    "failed": 0,
+    "xcode": "Xcode 26.6",
+    "swift": "6.3.3",
+    "simulators": 2
+  },
+  "verification": {
+    "passed": 5,
+    "failed": 0,
+    "steps": ["build", "unit_tests", "ipad_build", "static_analysis", "archive"],
+    "archive": "/tmp/FocusGate-1789962606.xcarchive",
+    "receipt": ".factory-verify-result.json"
+  },
+  "repository": "c20e35a",
+  "captured_at": "2026-09-21T03:50:11Z"
+}

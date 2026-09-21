@@ -1,0 +1,25 @@
+{
+  "gate": "G2",
+  "status": "PASS",
+  "baseline": {
+    "status": "PASS",
+    "appearance": "light",
+    "devices": [
+      "iPhone 17 Pro / iOS 26.5",
+      "iPad Pro 11-inch (M4) / iOS 26.5"
+    ],
+    "screenshots": [
+      "simulator/iphone-now-light-fixed-20260921-081010-128.png",
+      "simulator/ipad-now-light-fixed-20260921-081019-589.png",
+      "simulator/iphone-now-dark-fixed-20260921-080859-455.png",
+      "simulator/ipad-now-dark-fixed-20260921-080911-123.png"
+    ]
+  },
+  "correction": {
+    "summary": "Replaced the fixed white card surface with Color(.secondarySystemBackground).",
+    "source": "FocusGate/ContentView.swift:143",
+    "dark_mode_result": "Readable NOW content on iPhone and iPad"
+  },
+  "historical_failure": "simulator/iphone-now-20260920-205127-997.png",
+  "captured_at": "2026-09-21T08:10:19Z"
+}

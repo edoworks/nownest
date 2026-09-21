@@ -1,0 +1,20 @@
+{
+  "gate": "G3",
+  "status": "PARTIAL",
+  "ui_tests": {
+    "command": "xcodebuild test -project FocusGate.xcodeproj -scheme FocusGate -destination platform=iOS Simulator,name=iPhone 17 Pro -only-testing:FocusGateUITests",
+    "exit_status": 0,
+    "suite": "FocusGateUITests"
+  },
+  "source_checks": {
+    "interactive_identifiers_present": true,
+    "identifiers": ["parkIdeaButton", "parkConfirmation", "ideaField", "confirmParkButton"],
+    "reduce_motion_handling": "ContentView reads accessibilityReduceMotion and disables animations"
+  },
+  "unverified": [
+    "VoiceOver rotor and spoken-label audit",
+    "Physical-device accessibility behavior",
+    "Reduce Motion runtime capture; simctl ui does not expose reduceMotion on this runtime"
+  ],
+  "captured_at": "2026-09-21T03:53:40Z"
+}
