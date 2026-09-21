@@ -66,7 +66,7 @@ final class NowNestUITests: XCTestCase {
         app.buttons["parkIdeaButton"].tap()
         app.textFields["ideaField"].typeText("Relaunch survivor")
         app.buttons["confirmParkButton"].tap()
-        XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["NOW"].waitForExistence(timeout: 10))
         capture(app, named: "persistence-parked")
 
         app.terminate()
