@@ -4,10 +4,24 @@ import SwiftData
 @main
 struct NowNestApp: App {
     private let modelContainer: ModelContainer
+    private let visualVariantConfiguration: VisualVariantConfiguration
 
     init() {
         let schema = Schema([NowContext.self, ParkedIdea.self])
         let arguments = ProcessInfo.processInfo.arguments
+        let isDebug: Bool = {
+            #if DEBUG
+            return true
+            #else
+            return false
+            #endif
+        }()
+        let storedQuietMode = UserDefaults.standard.bool(forKey: "quietModeEnabled")
+        visualVariantConfiguration = VisualVariantLaunchParser.resolve(
+            arguments: arguments,
+            storedQuietMode: storedQuietMode,
+            isDebug: isDebug
+        )
 
         do {
             if arguments.contains("-ui-testing") {
@@ -50,6 +64,7 @@ struct NowNestApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.visualVariantConfiguration, visualVariantConfiguration)
         }
         .modelContainer(modelContainer)
     }

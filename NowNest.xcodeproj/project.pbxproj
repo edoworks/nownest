@@ -9,10 +9,15 @@
 /* Begin PBXBuildFile section */
 		0BAB1828C324F693B34BF97C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81C90C6CEBBC4E7BAC718BFD /* Assets.xcassets */; };
 		3A093E51E3EDAC0D93DC8FCA /* NowNestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE3762B59658AB168CE1A17 /* NowNestApp.swift */; };
+		499C53CFB1F51F7CB5F29373 /* SophieMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23326720E81C1E3A223CC9F /* SophieMark.swift */; };
+		5667A44BAEEAE51D07AEDDDD /* NestSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5ADC2B1639B319E5D67D72 /* NestSurface.swift */; };
 		79D2A1A55E6D11E63AEF215A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A8719FEF75D40BF220B195 /* ContentView.swift */; };
+		7BA7CBF21445E0BC9DD491AD /* VisualVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620F9E8F4BEA668EDD84DBE3 /* VisualVariant.swift */; };
 		9045F8957DAF89D37E927FC1 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C49083F92D055EAF0D7379C /* Models.swift */; };
+		C860464F248A3EEE7C3AEF58 /* VisualVariantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C5FE16E2B7C955FEB907BF /* VisualVariantTests.swift */; };
 		D3CFF7A5126FAF22ED70148A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 3B2336443937CC62959A59AF /* PrivacyInfo.xcprivacy */; };
 		D40665AEEFD0DF808434D4E5 /* NowNestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BECAC0138642477E7BA4EEE /* NowNestUITests.swift */; };
+		EC1FA905B949FEB28907B203 /* NowNestTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B80DF5ABCDB27B954D0B37 /* NowNestTheme.swift */; };
 		ED2F68BD3A5134F9D80393E8 /* NowNestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D67235DBD629CEE85F4ECB /* NowNestTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,12 +42,17 @@
 		2BECAC0138642477E7BA4EEE /* NowNestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestUITests.swift; sourceTree = "<group>"; };
 		3B2336443937CC62959A59AF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3C49083F92D055EAF0D7379C /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		41C5FE16E2B7C955FEB907BF /* VisualVariantTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualVariantTests.swift; sourceTree = "<group>"; };
+		620F9E8F4BEA668EDD84DBE3 /* VisualVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualVariant.swift; sourceTree = "<group>"; };
 		65A8719FEF75D40BF220B195 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		747491AD7B38C7010AB6FA30 /* NowNestUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NowNestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		80A313B93AE7E4395BEE32D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		81C90C6CEBBC4E7BAC718BFD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		98D67235DBD629CEE85F4ECB /* NowNestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestTests.swift; sourceTree = "<group>"; };
+		B8B80DF5ABCDB27B954D0B37 /* NowNestTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestTheme.swift; sourceTree = "<group>"; };
+		C23326720E81C1E3A223CC9F /* SophieMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SophieMark.swift; sourceTree = "<group>"; };
 		E37A336807F27D6E42D52DAA /* NowNestTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NowNestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF5ADC2B1639B319E5D67D72 /* NestSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestSurface.swift; sourceTree = "<group>"; };
 		F4807F2279860D6B05F2AE45 /* NowNest.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = NowNest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBE3762B59658AB168CE1A17 /* NowNestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -60,6 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				98D67235DBD629CEE85F4ECB /* NowNestTests.swift */,
+				41C5FE16E2B7C955FEB907BF /* VisualVariantTests.swift */,
 			);
 			path = NowNestTests;
 			sourceTree = "<group>";
@@ -73,6 +84,7 @@
 				3C49083F92D055EAF0D7379C /* Models.swift */,
 				FBE3762B59658AB168CE1A17 /* NowNestApp.swift */,
 				3B2336443937CC62959A59AF /* PrivacyInfo.xcprivacy */,
+				CBCDC035AA024FC7B4DF4F92 /* Design */,
 			);
 			path = NowNest;
 			sourceTree = "<group>";
@@ -85,6 +97,17 @@
 				281DEE70BA8C9D3656293415 /* NowNestUITests */,
 				E9D0F1FBA6FBE3E6CB5982CF /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		CBCDC035AA024FC7B4DF4F92 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				EF5ADC2B1639B319E5D67D72 /* NestSurface.swift */,
+				B8B80DF5ABCDB27B954D0B37 /* NowNestTheme.swift */,
+				C23326720E81C1E3A223CC9F /* SophieMark.swift */,
+				620F9E8F4BEA668EDD84DBE3 /* VisualVariant.swift */,
+			);
+			path = Design;
 			sourceTree = "<group>";
 		};
 		E9D0F1FBA6FBE3E6CB5982CF /* Products */ = {
@@ -218,7 +241,11 @@
 			files = (
 				79D2A1A55E6D11E63AEF215A /* ContentView.swift in Sources */,
 				9045F8957DAF89D37E927FC1 /* Models.swift in Sources */,
+				5667A44BAEEAE51D07AEDDDD /* NestSurface.swift in Sources */,
 				3A093E51E3EDAC0D93DC8FCA /* NowNestApp.swift in Sources */,
+				EC1FA905B949FEB28907B203 /* NowNestTheme.swift in Sources */,
+				499C53CFB1F51F7CB5F29373 /* SophieMark.swift in Sources */,
+				7BA7CBF21445E0BC9DD491AD /* VisualVariant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED2F68BD3A5134F9D80393E8 /* NowNestTests.swift in Sources */,
+				C860464F248A3EEE7C3AEF58 /* VisualVariantTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
