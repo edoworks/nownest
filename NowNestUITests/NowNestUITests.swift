@@ -31,9 +31,9 @@ final class NowNestUITests: XCTestCase {
         field.typeText("Explore a later idea")
         app.buttons["confirmParkButton"].tap()
 
+        XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["NOW"].waitForExistence(timeout: 5))
         XCTAssertEqual(app.staticTexts["Park one real idea"].label, nextAction)
-        XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
     }
 
     func testReviewShowsOnlyTheIdeaJustParked() {
