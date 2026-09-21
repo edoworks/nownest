@@ -13,12 +13,20 @@ final class NowNestUITests: XCTestCase {
         return app
     }
 
+    private func capture(_ app: XCUIApplication, named name: String) {
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
     func testNowIsVisibleAtLaunch() {
         let app = launchApp()
 
         XCTAssertTrue(app.navigationBars["NowNest"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["NOW"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["parkIdeaButton"].exists)
+        capture(app, named: "launch-now")
     }
 
     func testCaptureReturnsToUnchangedNow() {
@@ -34,6 +42,7 @@ final class NowNestUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["NOW"].waitForExistence(timeout: 5))
         XCTAssertEqual(app.staticTexts["Park one real idea"].label, nextAction)
+        capture(app, named: "capture-confirmed")
     }
 
     func testReviewShowsOnlyTheIdeaJustParked() {
@@ -48,6 +57,7 @@ final class NowNestUITests: XCTestCase {
 
         XCTAssertTrue(app.staticTexts["Review this later"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["PARKED"].exists)
+        capture(app, named: "review-parked")
     }
 
     func testExplicitNowEditChangesOnlyAfterSave() {
@@ -66,6 +76,7 @@ final class NowNestUITests: XCTestCase {
             NSPredicate(format: "label CONTAINS %@", "and return")
         ).firstMatch
         XCTAssertTrue(updatedAction.waitForExistence(timeout: 5))
+        capture(app, named: "now-edited")
     }
 
     func testReviewDeletionRemovesSelectedIdeaAfterConfirmation() {
@@ -84,5 +95,6 @@ final class NowNestUITests: XCTestCase {
         app.buttons["Delete"].tap()
 
         XCTAssertFalse(idea.waitForExistence(timeout: 2))
+        capture(app, named: "review-deleted")
     }
 }
