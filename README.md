@@ -23,6 +23,12 @@ This project was initialized from the downloaded `edoworks/factory`
 - Factory init receipt: `.factory-verify.json`
 - Factory verification receipt: `.factory-verify-result.json`
 
-Run the downloaded factory's `bin/factory-verify` from this project to repeat
-the iPhone build, unit tests, iPad build, static analysis, and unsigned archive
-gate.
+The factory verifier's fifth step creates an unsigned archive. Run it only at a
+release gate with explicit archive authorization. During ordinary implementation
+use the PRD's no-archive build, test, and analysis commands.
+
+## Product Planning
+
+- [Calm Expressive UX PRD](docs/calm-expressive-ux-prd.md) defines the bounded
+  visual-language prototypes, Sophie guardrails, accessibility contract,
+  verification matrix, human decision gate, and implementation chunks.
