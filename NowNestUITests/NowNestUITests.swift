@@ -6,9 +6,9 @@ final class NowNestUITests: XCTestCase {
         continueAfterFailure = false
     }
 
-    private func launchApp() -> XCUIApplication {
+    private func launchApp(arguments: [String] = ["-ui-testing"]) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = ["-ui-testing"]
+        app.launchArguments = arguments
         app.launch()
         return app
     }
@@ -58,6 +58,27 @@ final class NowNestUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Review this later"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["PARKED"].exists)
         capture(app, named: "review-parked")
+    }
+
+    func testParkedIdeaSurvivesAppRelaunch() {
+        let app = launchApp(arguments: ["-ui-testing-persistent-reset"])
+
+        app.buttons["parkIdeaButton"].tap()
+        app.textFields["ideaField"].typeText("Relaunch survivor")
+        app.buttons["confirmParkButton"].tap()
+        XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
+        capture(app, named: "persistence-parked")
+
+        app.terminate()
+
+        let relaunchedApp = launchApp(arguments: ["-ui-testing-persistent"])
+        XCTAssertTrue(relaunchedApp.buttons["Actions"].waitForExistence(timeout: 5))
+        relaunchedApp.buttons["Actions"].tap()
+        relaunchedApp.buttons["Review parked ideas"].tap()
+
+        XCTAssertTrue(relaunchedApp.staticTexts["Relaunch survivor"].waitForExistence(timeout: 5))
+        XCTAssertTrue(relaunchedApp.staticTexts["PARKED"].exists)
+        capture(relaunchedApp, named: "persistence-relaunch")
     }
 
     func testExplicitNowEditChangesOnlyAfterSave() {
