@@ -4,6 +4,7 @@ import SwiftUI
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.visualVariantConfiguration) private var variantConfig
     @Query private var nowContexts: [NowContext]
 
     @State private var presentedSheet: Sheet?
@@ -24,7 +25,7 @@ struct ContentView: View {
         NavigationStack {
             ZStack {
                 LinearGradient(
-                    colors: [Color(red: 0.96, green: 0.94, blue: 0.88), Color(.systemBackground)],
+                    colors: [Color.nestCanvas, Color.nestSurface],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -44,13 +45,13 @@ struct ContentView: View {
                                     .padding(.vertical, 6)
                             }
                             .buttonStyle(.borderedProminent)
-                            .tint(.black)
+                            .tint(Color.nestHoney)
                             .controlSize(.large)
                             .accessibilityIdentifier("parkIdeaButton")
 
                             Text("Capture it safely, then return here. Nothing changes NOW unless you edit it.")
                                 .font(.footnote)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.nestInkMuted)
                                 .frame(maxWidth: 420, alignment: .leading)
                         }
                         .frame(maxWidth: 680, alignment: .leading)
@@ -85,7 +86,7 @@ struct ContentView: View {
                         .foregroundStyle(.white)
                         .padding(.horizontal, 18)
                         .padding(.vertical, 12)
-                        .background(.black, in: Capsule())
+                        .background(Color.nestInk, in: Capsule())
                         .padding(.bottom, 8)
                         .accessibilityIdentifier("parkConfirmation")
                 }
@@ -127,23 +128,19 @@ struct ContentView: View {
     }
 
     private func nowCard(_ now: NowContext) -> some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Text("NOW")
-                .font(.caption.weight(.black))
-                .tracking(2.4)
-                .foregroundStyle(.secondary)
+        NestCard {
+            VStack(alignment: .leading, spacing: 20) {
+                Text("NOW")
+                    .font(.caption.weight(.black))
+                    .tracking(2.4)
+                    .foregroundStyle(Color.nestInkMuted)
 
-            nowField("PROJECT", value: now.project)
-            Divider()
-            nowField("OUTCOME", value: now.outcome)
-            Divider()
-            nowField("NEXT ACTION", value: now.nextAction, emphasized: true)
-        }
-        .padding(24)
-        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 24))
-        .overlay {
-            RoundedRectangle(cornerRadius: 24)
-                .stroke(.black.opacity(0.08), lineWidth: 1)
+                nowField("PROJECT", value: now.project)
+                Divider()
+                nowField("OUTCOME", value: now.outcome)
+                Divider()
+                nowField("NEXT ACTION", value: now.nextAction, emphasized: true)
+            }
         }
         .accessibilityIdentifier("nowCard")
     }
@@ -153,10 +150,10 @@ struct ContentView: View {
             Text(label)
                 .font(.caption2.weight(.bold))
                 .tracking(1.2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.nestInkMuted)
             Text(value)
                 .font(emphasized ? .title2.weight(.bold) : .body)
-                .foregroundStyle(.primary)
+                .foregroundStyle(Color.nestInk)
                 .accessibilityIdentifier(label.lowercased().replacingOccurrences(of: " ", with: ""))
         }
     }
@@ -166,7 +163,7 @@ struct ContentView: View {
             guard try NowNestStore.park(text, in: modelContext) != nil else { return false }
             presentedSheet = nil
             withAnimation(reduceMotion ? nil : .snappy) {
-                confirmation = "Parked. Back to \(nextAction)."
+                confirmation = variantConfig.confirmationCopy(for: nextAction)
             }
             Task {
                 try? await Task.sleep(for: .seconds(3))
