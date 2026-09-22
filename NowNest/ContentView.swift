@@ -7,9 +7,11 @@ struct ContentView: View {
     @Environment(\.visualVariantConfiguration) private var variantConfig
     @Query private var nowContexts: [NowContext]
 
+    @AppStorage("quietModeEnabled") private var quietModeStored = false
     @State private var presentedSheet: Sheet?
     @State private var confirmation: String?
     @State private var errorMessage: String?
+    @State private var showTuckedPose = false
 
     private enum Sheet: Identifiable {
         case capture
@@ -74,6 +76,12 @@ struct ContentView: View {
                         Button("Review parked ideas", systemImage: "archivebox") {
                             presentedSheet = .review
                         }
+
+                        if variantConfig.variant != .control {
+                            Divider()
+                            Toggle("Quiet Mode", isOn: $quietModeStored)
+                                .accessibilityIdentifier("quietModeToggle")
+                        }
                     } label: {
                         Label("Actions", systemImage: "ellipsis.circle")
                     }
@@ -81,14 +89,25 @@ struct ContentView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 if let confirmation {
-                    Text(confirmation)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 18)
-                        .padding(.vertical, 12)
-                        .background(Color.nestInk, in: Capsule())
-                        .padding(.bottom, 8)
-                        .accessibilityIdentifier("parkConfirmation")
+                    HStack(spacing: 10) {
+                        if showTuckedPose && variantConfig.showsSophie && !reduceMotion {
+                            SophieMark(pose: .tucked, size: 24)
+                                .accessibilityHidden(true)
+                                .transition(.scale.combined(with: .opacity))
+                        }
+                        Text(confirmation)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.white)
+                    }
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 12)
+                    .background(
+                        variantConfig.variant == .control ? Color.nestInk :
+                            (showTuckedPose && !reduceMotion ? Color.nestSage : Color.nestInk),
+                        in: Capsule()
+                    )
+                    .padding(.bottom, 8)
+                    .accessibilityIdentifier("parkConfirmation")
                 }
             }
             .sheet(item: $presentedSheet) { sheet in
@@ -176,13 +195,23 @@ struct ContentView: View {
         do {
             guard try NowNestStore.park(text, in: modelContext) != nil else { return false }
             presentedSheet = nil
-            withAnimation(reduceMotion ? nil : .snappy) {
+            showTuckedPose = variantConfig.variant != .control
+            if reduceMotion {
                 confirmation = variantConfig.confirmationCopy(for: nextAction)
+            } else {
+                withAnimation(.easeOut(duration: 0.45)) {
+                    confirmation = variantConfig.confirmationCopy(for: nextAction)
+                }
             }
             Task {
                 try? await Task.sleep(for: .seconds(3))
-                withAnimation(reduceMotion ? nil : .easeOut) {
+                if reduceMotion {
                     confirmation = nil
+                } else {
+                    withAnimation(.easeOut) {
+                        confirmation = nil
+                        showTuckedPose = false
+                    }
                 }
             }
             return true
