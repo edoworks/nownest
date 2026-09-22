@@ -65,7 +65,12 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("NowNest")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    NestWordmark()
+                        .accessibilityIdentifier("nestWordmark")
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Menu {
                         Button("Edit NOW", systemImage: "pencil") {
