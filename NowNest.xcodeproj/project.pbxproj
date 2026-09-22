@@ -14,6 +14,7 @@
 		5667A44BAEEAE51D07AEDDDD /* NestSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5ADC2B1639B319E5D67D72 /* NestSurface.swift */; };
 		79D2A1A55E6D11E63AEF215A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A8719FEF75D40BF220B195 /* ContentView.swift */; };
 		7BA7CBF21445E0BC9DD491AD /* VisualVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620F9E8F4BEA668EDD84DBE3 /* VisualVariant.swift */; };
+		81C797BB935DC0EC45FB8AA9 /* NestMotif.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAB7BD56DFA469E1051B98A /* NestMotif.swift */; };
 		9045F8957DAF89D37E927FC1 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C49083F92D055EAF0D7379C /* Models.swift */; };
 		C860464F248A3EEE7C3AEF58 /* VisualVariantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C5FE16E2B7C955FEB907BF /* VisualVariantTests.swift */; };
 		D3CFF7A5126FAF22ED70148A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 3B2336443937CC62959A59AF /* PrivacyInfo.xcprivacy */; };
@@ -53,6 +54,7 @@
 		80A313B93AE7E4395BEE32D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		81C90C6CEBBC4E7BAC718BFD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		98D67235DBD629CEE85F4ECB /* NowNestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestTests.swift; sourceTree = "<group>"; };
+		AFAB7BD56DFA469E1051B98A /* NestMotif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestMotif.swift; sourceTree = "<group>"; };
 		B8B80DF5ABCDB27B954D0B37 /* NowNestTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestTheme.swift; sourceTree = "<group>"; };
 		C23326720E81C1E3A223CC9F /* SophieMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SophieMark.swift; sourceTree = "<group>"; };
 		E37A336807F27D6E42D52DAA /* NowNestTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NowNestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +110,7 @@
 		CBCDC035AA024FC7B4DF4F92 /* Design */ = {
 			isa = PBXGroup;
 			children = (
+				AFAB7BD56DFA469E1051B98A /* NestMotif.swift */,
 				EF5ADC2B1639B319E5D67D72 /* NestSurface.swift */,
 				B8B80DF5ABCDB27B954D0B37 /* NowNestTheme.swift */,
 				C23326720E81C1E3A223CC9F /* SophieMark.swift */,
@@ -247,6 +250,7 @@
 			files = (
 				79D2A1A55E6D11E63AEF215A /* ContentView.swift in Sources */,
 				9045F8957DAF89D37E927FC1 /* Models.swift in Sources */,
+				81C797BB935DC0EC45FB8AA9 /* NestMotif.swift in Sources */,
 				5667A44BAEEAE51D07AEDDDD /* NestSurface.swift in Sources */,
 				3A093E51E3EDAC0D93DC8FCA /* NowNestApp.swift in Sources */,
 				EC1FA905B949FEB28907B203 /* NowNestTheme.swift in Sources */,
