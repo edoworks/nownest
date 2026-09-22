@@ -348,6 +348,7 @@ private struct EditNowView: View {
 
 private struct ReviewView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.visualVariantConfiguration) private var variantConfig
     @Query(sort: \ParkedIdea.createdAt, order: .reverse) private var ideas: [ParkedIdea]
     @State private var ideaToDelete: ParkedIdea?
     @State private var deleteFailed = false
@@ -356,31 +357,9 @@ private struct ReviewView: View {
         NavigationStack {
             Group {
                 if ideas.isEmpty {
-                    ContentUnavailableView(
-                        "Nothing parked",
-                        systemImage: "archivebox",
-                        description: Text("Ideas appear here only after you park them.")
-                    )
+                    emptyState
                 } else {
-                    List(ideas) { idea in
-                        VStack(alignment: .leading, spacing: 7) {
-                            Text(idea.text)
-                                .font(.body)
-                            HStack {
-                                Text(idea.state)
-                                    .font(.caption2.weight(.black))
-                                    .tracking(1)
-                                Spacer()
-                                Text(idea.createdAt, format: .dateTime.month().day().hour().minute())
-                            }
-                            .foregroundStyle(.secondary)
-                        }
-                        .swipeActions {
-                            Button("Delete", role: .destructive) {
-                                ideaToDelete = idea
-                            }
-                        }
-                    }
+                    ideaList
                 }
             }
             .navigationTitle("Parked ideas")
@@ -413,6 +392,49 @@ private struct ReviewView: View {
             modelContext.rollback()
             deleteFailed = true
         }
+    }
+
+    private var emptyState: some View {
+        VStack(spacing: 16) {
+            if variantConfig.showsSophie {
+                SophieMark(pose: .resting, size: 40)
+                    .accessibilityHidden(true)
+            }
+            ContentUnavailableView(
+                "Nothing parked",
+                systemImage: "archivebox",
+                description: Text("Ideas appear here only after you park them.")
+            )
+        }
+    }
+
+    private var ideaList: some View {
+        List(ideas) { idea in
+            VStack(alignment: .leading, spacing: 7) {
+                Text(idea.text)
+                    .font(.body)
+                    .foregroundStyle(Color.nestInk)
+                HStack {
+                    Text(idea.state)
+                        .font(.caption2.weight(.black))
+                        .tracking(1)
+                        .foregroundStyle(Color.nestSage)
+                    Spacer()
+                    Text(idea.createdAt, format: .dateTime.month().day().hour().minute())
+                        .foregroundStyle(Color.nestInkMuted)
+                }
+            }
+            .listRowBackground(
+                variantConfig.variant == .control ? Color(.secondarySystemBackground) : Color.nestSurfaceRaised.opacity(0.5)
+            )
+            .swipeActions {
+                Button("Delete", role: .destructive) {
+                    ideaToDelete = idea
+                }
+            }
+        }
+        .scrollContentBackground(variantConfig.variant == .control ? .automatic : .hidden)
+        .background(variantConfig.variant == .control ? Color.clear : Color.nestCanvas.opacity(0.3))
     }
 }
 
