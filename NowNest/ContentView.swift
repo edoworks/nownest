@@ -33,6 +33,14 @@ struct ContentView: View {
                 )
                 .ignoresSafeArea()
 
+                if variantConfig.variant != .control {
+                    NestMotif()
+                        .frame(width: 120, height: 120)
+                        .foregroundStyle(Color.nestHoneyLight.opacity(0.15))
+                        .position(x: UIScreen.main.bounds.width * 0.85, y: UIScreen.main.bounds.height * 0.15)
+                        .accessibilityHidden(true)
+                }
+
                 if let now {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 28) {
@@ -156,7 +164,7 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .top, spacing: 12) {
                     Text("NOW")
-                        .font(.caption.weight(.black))
+                        .font(NestTypography.nowHeading)
                         .tracking(2.4)
                         .foregroundStyle(Color.nestInkMuted)
 
@@ -174,23 +182,24 @@ struct ContentView: View {
 
                 if variantConfig.variant != .control {
                     NestMotif()
-                        .frame(width: 28, height: 28)
-                        .foregroundStyle(Color.nestHoney.opacity(0.35))
+                        .frame(width: 36, height: 36)
+                        .foregroundStyle(Color.nestHoney.opacity(0.4))
                         .accessibilityHidden(true)
                 }
             }
         }
+        .nestShadow()
         .accessibilityIdentifier("nowCard")
     }
 
     private func nowField(_ label: String, value: String, emphasized: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: 5) {
             Text(label)
-                .font(.caption2.weight(.bold))
+                .font(NestTypography.fieldLabel)
                 .tracking(1.2)
                 .foregroundStyle(Color.nestInkMuted)
             Text(value)
-                .font(emphasized ? (variantConfig.variant == .control ? .title2.weight(.bold) : .title.weight(.semibold)) : .body)
+                .font(emphasized ? (variantConfig.variant == .control ? NestTypography.nextActionValueControl : NestTypography.nextActionValueExpressive) : NestTypography.fieldValue)
                 .foregroundStyle(Color.nestInk)
                 .accessibilityIdentifier(label.lowercased().replacingOccurrences(of: " ", with: ""))
         }
@@ -201,6 +210,7 @@ struct ContentView: View {
             guard try NowNestStore.park(text, in: modelContext) != nil else { return false }
             presentedSheet = nil
             showTuckedPose = variantConfig.variant != .control
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
             if reduceMotion {
                 confirmation = variantConfig.confirmationCopy(for: nextAction)
             } else {
