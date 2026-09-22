@@ -23,6 +23,22 @@ struct VisualVariantConfiguration: Sendable, Equatable {
         variant.showsSophie && quietMode == .disabled
     }
 
+    var isQuiet: Bool {
+        quietMode == .enabled
+    }
+
+    var showsReassurance: Bool {
+        !isQuiet
+    }
+
+    var showsCaptureTitle: Bool {
+        !isQuiet
+    }
+
+    var returnTargetPrefix: String {
+        isQuiet ? "Back to: " : "After parking, return to: "
+    }
+
     func confirmationCopy(for nextAction: String) -> String {
         switch variant {
         case .control:

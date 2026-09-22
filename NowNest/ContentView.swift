@@ -59,10 +59,12 @@ struct ContentView: View {
                             .controlSize(.large)
                             .accessibilityIdentifier("parkIdeaButton")
 
-                            Text("Capture it safely, then return here. Nothing changes NOW unless you edit it.")
-                                .font(.footnote)
-                                .foregroundStyle(Color.nestInkMuted)
-                                .frame(maxWidth: 420, alignment: .leading)
+                            if variantConfig.showsReassurance {
+                                Text("Capture it safely, then return here. Nothing changes NOW unless you edit it.")
+                                    .font(NestTypography.reassurance)
+                                    .foregroundStyle(Color.nestInkMuted)
+                                    .frame(maxWidth: 420, alignment: .leading)
+                            }
                         }
                         .frame(maxWidth: 680, alignment: .leading)
                         .padding(24)
@@ -147,13 +149,13 @@ struct ContentView: View {
             )) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text(errorMessage ?? "Your changes were not saved.")
+                Text(errorMessage ?? "Couldn't save.")
             }
             .task {
                 do {
                     try NowNestStore.ensureNow(in: modelContext, existing: now)
                 } catch {
-                    errorMessage = "NOW could not be created. Your data was not reported as saved."
+                    errorMessage = "Couldn't create NOW."
                 }
             }
         }
@@ -231,7 +233,7 @@ struct ContentView: View {
             }
             return true
         } catch {
-            errorMessage = "The idea is still in the capture field. It was not parked."
+            errorMessage = "Couldn't park."
             return false
         }
     }
@@ -253,7 +255,7 @@ struct ContentView: View {
             if saved { presentedSheet = nil }
             return saved
         } catch {
-            errorMessage = "NOW was not changed."
+            errorMessage = "Couldn't save NOW."
             return false
         }
     }
@@ -273,9 +275,11 @@ private struct CaptureView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 20) {
-                Text("Make it safe to forget.")
-                    .font(.title2.weight(.bold))
-                    .foregroundStyle(Color.nestInk)
+                if variantConfig.showsCaptureTitle {
+                    Text("Make it safe to forget.")
+                        .font(NestTypography.captureTitle)
+                        .foregroundStyle(Color.nestInk)
+                }
 
                 NestPaperNote {
                     TextField("What showed up?", text: $text, axis: .vertical)
@@ -286,8 +290,8 @@ private struct CaptureView: View {
                 }
 
                 HStack(alignment: .top, spacing: 12) {
-                    Text("After parking, return to: \(nextAction)")
-                        .font(.footnote)
+                    Text("\(variantConfig.returnTargetPrefix)\(nextAction)")
+                        .font(NestTypography.reassurance)
                         .foregroundStyle(Color.nestInkMuted)
 
                     if variantConfig.showsSophie {
