@@ -22,6 +22,7 @@
 		82768F4B072275B495472753 /* RecoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7E5256A2CA246BC5D82A71 /* RecoveryTests.swift */; };
 		9045F8957DAF89D37E927FC1 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C49083F92D055EAF0D7379C /* Models.swift */; };
 		C860464F248A3EEE7C3AEF58 /* VisualVariantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C5FE16E2B7C955FEB907BF /* VisualVariantTests.swift */; };
+		CCEA57D59C1C90D025C091C1 /* ScenarioValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4033E07F3B0912D3D5B32A /* ScenarioValidationTests.swift */; };
 		D3CFF7A5126FAF22ED70148A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 3B2336443937CC62959A59AF /* PrivacyInfo.xcprivacy */; };
 		D40665AEEFD0DF808434D4E5 /* NowNestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BECAC0138642477E7BA4EEE /* NowNestUITests.swift */; };
 		EC1FA905B949FEB28907B203 /* NowNestTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B80DF5ABCDB27B954D0B37 /* NowNestTheme.swift */; };
@@ -68,6 +69,7 @@
 		B8B80DF5ABCDB27B954D0B37 /* NowNestTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestTheme.swift; sourceTree = "<group>"; };
 		C23326720E81C1E3A223CC9F /* SophieMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SophieMark.swift; sourceTree = "<group>"; };
 		E37A336807F27D6E42D52DAA /* NowNestTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NowNestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA4033E07F3B0912D3D5B32A /* ScenarioValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioValidationTests.swift; sourceTree = "<group>"; };
 		EF5ADC2B1639B319E5D67D72 /* NestSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestSurface.swift; sourceTree = "<group>"; };
 		F4807F2279860D6B05F2AE45 /* NowNest.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = NowNest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBE3762B59658AB168CE1A17 /* NowNestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestApp.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				6B8E35C34AEAE71BB71F338E /* ColorTokenVerificationTests.swift */,
 				2BECAC0138642477E7BA4EEE /* NowNestUITests.swift */,
 				1C7E5256A2CA246BC5D82A71 /* RecoveryTests.swift */,
+				EA4033E07F3B0912D3D5B32A /* ScenarioValidationTests.swift */,
 				49543AFEDA364478D1F94647 /* VariantJourneyTests.swift */,
 				7FF003C08E81CAB8F29EEA67 /* VisualVerificationTests.swift */,
 			);
@@ -293,6 +296,7 @@
 				FBF327F541149B0A5FFB09CD /* ColorTokenVerificationTests.swift in Sources */,
 				D40665AEEFD0DF808434D4E5 /* NowNestUITests.swift in Sources */,
 				82768F4B072275B495472753 /* RecoveryTests.swift in Sources */,
+				CCEA57D59C1C90D025C091C1 /* ScenarioValidationTests.swift in Sources */,
 				4D567B53C0539C0C9FB22BC8 /* VariantJourneyTests.swift in Sources */,
 				1AA42D23A4C2F950391B5E80 /* VisualVerificationTests.swift in Sources */,
 			);
