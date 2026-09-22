@@ -129,8 +129,18 @@ final class ScenarioValidationTests: XCTestCase {
             XCTAssertTrue(nextActionPreserved)
             steps.append("resume-now")
 
+            let sheetDismissal = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "exists == false"),
+                object: ideaField
+            )
+            XCTAssertEqual(
+                XCTWaiter.wait(for: [sheetDismissal], timeout: 5),
+                .completed,
+                "Capture sheet must be dismissed before opening Actions"
+            )
             let actionsButton = app.buttons["Actions"]
-            XCTAssertTrue(actionsButton.waitForExistence(timeout: 5), "Sheet must be dismissed before opening Actions")
+            XCTAssertTrue(actionsButton.waitForExistence(timeout: 5))
+            XCTAssertTrue(actionsButton.isHittable, "Actions must be hittable after the capture sheet is dismissed")
             actionsButton.tap()
             app.buttons["Review parked ideas"].tap()
             let parkedIdea = app.staticTexts[contract.interruption]
