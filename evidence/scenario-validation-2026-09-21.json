@@ -4,6 +4,7 @@
   "tracking_issue": "edoworks/factory#37",
   "baseline_commit": "44bca2280d6ecbb33e3c92f18e8056876699bdb5",
   "tested_source_commit": "b3dc6839c491e252f300e09d641514aefb48871b",
+  "evidence_artifact_commit": "fa54274b408ad5be0a9930fbf11b1b29309c570a",
   "status": "PASS_WITH_HUMAN_AND_COMMERCIAL_GAPS",
   "scenario": {
     "id": "competing-context-capture",
