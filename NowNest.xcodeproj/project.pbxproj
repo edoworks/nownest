@@ -11,6 +11,7 @@
 		1AA42D23A4C2F950391B5E80 /* VisualVerificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FF003C08E81CAB8F29EEA67 /* VisualVerificationTests.swift */; };
 		34B98F8AC49B3CB48DA99A15 /* NestWordmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A87EAE2ECED9A87E6EAF66 /* NestWordmark.swift */; };
 		3A093E51E3EDAC0D93DC8FCA /* NowNestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE3762B59658AB168CE1A17 /* NowNestApp.swift */; };
+		499B87AD13FFF95264CE338C /* NestTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674DB55743F426BCEFC7F355 /* NestTypography.swift */; };
 		499C53CFB1F51F7CB5F29373 /* SophieMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23326720E81C1E3A223CC9F /* SophieMark.swift */; };
 		4D567B53C0539C0C9FB22BC8 /* VariantJourneyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49543AFEDA364478D1F94647 /* VariantJourneyTests.swift */; };
 		5667A44BAEEAE51D07AEDDDD /* NestSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5ADC2B1639B319E5D67D72 /* NestSurface.swift */; };
@@ -52,6 +53,7 @@
 		49543AFEDA364478D1F94647 /* VariantJourneyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariantJourneyTests.swift; sourceTree = "<group>"; };
 		620F9E8F4BEA668EDD84DBE3 /* VisualVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualVariant.swift; sourceTree = "<group>"; };
 		65A8719FEF75D40BF220B195 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		674DB55743F426BCEFC7F355 /* NestTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestTypography.swift; sourceTree = "<group>"; };
 		6B8E35C34AEAE71BB71F338E /* ColorTokenVerificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTokenVerificationTests.swift; sourceTree = "<group>"; };
 		747491AD7B38C7010AB6FA30 /* NowNestUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NowNestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FF003C08E81CAB8F29EEA67 /* VisualVerificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualVerificationTests.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 			children = (
 				AFAB7BD56DFA469E1051B98A /* NestMotif.swift */,
 				EF5ADC2B1639B319E5D67D72 /* NestSurface.swift */,
+				674DB55743F426BCEFC7F355 /* NestTypography.swift */,
 				34A87EAE2ECED9A87E6EAF66 /* NestWordmark.swift */,
 				B8B80DF5ABCDB27B954D0B37 /* NowNestTheme.swift */,
 				C23326720E81C1E3A223CC9F /* SophieMark.swift */,
@@ -258,6 +261,7 @@
 				9045F8957DAF89D37E927FC1 /* Models.swift in Sources */,
 				81C797BB935DC0EC45FB8AA9 /* NestMotif.swift in Sources */,
 				5667A44BAEEAE51D07AEDDDD /* NestSurface.swift in Sources */,
+				499B87AD13FFF95264CE338C /* NestTypography.swift in Sources */,
 				34B98F8AC49B3CB48DA99A15 /* NestWordmark.swift in Sources */,
 				3A093E51E3EDAC0D93DC8FCA /* NowNestApp.swift in Sources */,
 				EC1FA905B949FEB28907B203 /* NowNestTheme.swift in Sources */,
