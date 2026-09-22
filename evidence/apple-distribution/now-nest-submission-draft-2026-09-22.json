@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "APP_STORE_CONNECT_DRAFT",
+  "product": "nownest",
+  "metadata": {
+    "name": "NowNest",
+    "subtitle": "Park ideas. Return to now.",
+    "description": "NowNest is a quiet, offline-first space for holding your current next action when a new idea appears. Keep one project, outcome, and next action visible. Park an interruption locally, confirm it is tucked away, and return to NOW. Review parked ideas later. No account, network connection, analytics, notifications, or cloud backup.",
+    "keywords": "focus,ideas,tasks,distraction,productivity,planning",
+    "category": "Productivity",
+    "copyright": "PENDING_OWNER_DECISION",
+    "privacy_url": "PENDING_OWNER_DECISION",
+    "support_url": "PENDING_OWNER_DECISION"
+  },
+  "preflight_report": "evidence/apple-distribution/now-nest-preflight-2026-09-22.md",
+  "submission": {
+    "performed": false,
+    "human_authorization_required": true,
+    "endpoint": "NOT_INVOKED"
+  },
+  "secrets": "NONE"
+}
