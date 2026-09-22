@@ -142,7 +142,10 @@ final class ScenarioValidationTests: XCTestCase {
             XCTAssertTrue(actionsButton.waitForExistence(timeout: 5))
             XCTAssertTrue(actionsButton.isHittable, "Actions must be hittable after the capture sheet is dismissed")
             actionsButton.tap()
-            app.buttons["Review parked ideas"].tap()
+            let reviewButton = app.buttons["Review parked ideas"]
+            XCTAssertTrue(reviewButton.waitForExistence(timeout: 5))
+            XCTAssertTrue(reviewButton.isHittable, "Review must be hittable after opening Actions")
+            reviewButton.tap()
             let parkedIdea = app.staticTexts[contract.interruption]
             XCTAssertTrue(parkedIdea.waitForExistence(timeout: 5))
             let parkedIdeaReviewable = parkedIdea.exists && app.staticTexts["PARKED"].exists
