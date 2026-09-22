@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0BAB1828C324F693B34BF97C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81C90C6CEBBC4E7BAC718BFD /* Assets.xcassets */; };
+		1AA42D23A4C2F950391B5E80 /* VisualVerificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FF003C08E81CAB8F29EEA67 /* VisualVerificationTests.swift */; };
 		3A093E51E3EDAC0D93DC8FCA /* NowNestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE3762B59658AB168CE1A17 /* NowNestApp.swift */; };
 		499C53CFB1F51F7CB5F29373 /* SophieMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23326720E81C1E3A223CC9F /* SophieMark.swift */; };
 		5667A44BAEEAE51D07AEDDDD /* NestSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5ADC2B1639B319E5D67D72 /* NestSurface.swift */; };
@@ -19,6 +20,7 @@
 		D40665AEEFD0DF808434D4E5 /* NowNestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BECAC0138642477E7BA4EEE /* NowNestUITests.swift */; };
 		EC1FA905B949FEB28907B203 /* NowNestTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B80DF5ABCDB27B954D0B37 /* NowNestTheme.swift */; };
 		ED2F68BD3A5134F9D80393E8 /* NowNestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D67235DBD629CEE85F4ECB /* NowNestTests.swift */; };
+		FBF327F541149B0A5FFB09CD /* ColorTokenVerificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8E35C34AEAE71BB71F338E /* ColorTokenVerificationTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +47,9 @@
 		41C5FE16E2B7C955FEB907BF /* VisualVariantTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualVariantTests.swift; sourceTree = "<group>"; };
 		620F9E8F4BEA668EDD84DBE3 /* VisualVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualVariant.swift; sourceTree = "<group>"; };
 		65A8719FEF75D40BF220B195 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6B8E35C34AEAE71BB71F338E /* ColorTokenVerificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTokenVerificationTests.swift; sourceTree = "<group>"; };
 		747491AD7B38C7010AB6FA30 /* NowNestUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NowNestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FF003C08E81CAB8F29EEA67 /* VisualVerificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualVerificationTests.swift; sourceTree = "<group>"; };
 		80A313B93AE7E4395BEE32D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		81C90C6CEBBC4E7BAC718BFD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		98D67235DBD629CEE85F4ECB /* NowNestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestTests.swift; sourceTree = "<group>"; };
@@ -61,7 +65,9 @@
 		281DEE70BA8C9D3656293415 /* NowNestUITests */ = {
 			isa = PBXGroup;
 			children = (
+				6B8E35C34AEAE71BB71F338E /* ColorTokenVerificationTests.swift */,
 				2BECAC0138642477E7BA4EEE /* NowNestUITests.swift */,
+				7FF003C08E81CAB8F29EEA67 /* VisualVerificationTests.swift */,
 			);
 			path = NowNestUITests;
 			sourceTree = "<group>";
@@ -262,7 +268,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBF327F541149B0A5FFB09CD /* ColorTokenVerificationTests.swift in Sources */,
 				D40665AEEFD0DF808434D4E5 /* NowNestUITests.swift in Sources */,
+				1AA42D23A4C2F950391B5E80 /* VisualVerificationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
