@@ -1,0 +1,89 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "5CD09DB8-79EB-4DAA-B52F-FC92DD4500BD",
+        "deviceName" : "iPhone 17 Pro",
+        "exportedFileName" : "035A379C-A427-40BD-933E-F10F96D84F29.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-sophie-review_0_4D94CEA2-033D-4079-B1D3-D33BC9B3C070.png",
+        "timestamp" : 1790054569.006
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "5CD09DB8-79EB-4DAA-B52F-FC92DD4500BD",
+        "deviceName" : "iPhone 17 Pro",
+        "exportedFileName" : "8AE1D6DF-BCB7-4C02-A58B-B1ABD1A739C3.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-sophie-trace_0_33AC5C91-3459-4A6B-8771-73AB5997703C.txt",
+        "timestamp" : 1790054568.875
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "5CD09DB8-79EB-4DAA-B52F-FC92DD4500BD",
+        "deviceName" : "iPhone 17 Pro",
+        "exportedFileName" : "429EAFBA-5019-4E8A-8273-B58915E4F25C.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-sophie-confirmation_0_1E69CA64-63E1-47FA-8D7F-8208154884A7.png",
+        "timestamp" : 1790054563.696
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "5CD09DB8-79EB-4DAA-B52F-FC92DD4500BD",
+        "deviceName" : "iPhone 17 Pro",
+        "exportedFileName" : "40831FD8-DEF7-4F9E-9FF1-7512F81C3143.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-expressive-review_0_F40C86E1-613A-4F85-9965-D6B7AB456A8C.png",
+        "timestamp" : 1790054551.758
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "5CD09DB8-79EB-4DAA-B52F-FC92DD4500BD",
+        "deviceName" : "iPhone 17 Pro",
+        "exportedFileName" : "88061D0D-C812-4888-9CC4-52AEDF92B841.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-expressive-trace_0_3BAF15A8-0BF9-41EE-82F0-8C71B1E47F19.txt",
+        "timestamp" : 1790054551.628
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "5CD09DB8-79EB-4DAA-B52F-FC92DD4500BD",
+        "deviceName" : "iPhone 17 Pro",
+        "exportedFileName" : "023CDCCF-5560-44C4-950D-6367682202BA.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-expressive-confirmation_0_291CDE16-034A-4710-87D7-01AD36EFB07B.png",
+        "timestamp" : 1790054546.44
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "5CD09DB8-79EB-4DAA-B52F-FC92DD4500BD",
+        "deviceName" : "iPhone 17 Pro",
+        "exportedFileName" : "88755205-F07C-45CC-8535-6D3AF0B56696.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-control-review_0_5BFC5AAE-74BF-4210-B8D3-085F5E9B1CBC.png",
+        "timestamp" : 1790054534.38
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "5CD09DB8-79EB-4DAA-B52F-FC92DD4500BD",
+        "deviceName" : "iPhone 17 Pro",
+        "exportedFileName" : "311A8CD4-68E4-4BF4-A8FA-D3AA5C50F9FF.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-control-trace_0_06B14AE6-C438-4964-AD4F-7E0EE80DF9CD.txt",
+        "timestamp" : 1790054534.253
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "5CD09DB8-79EB-4DAA-B52F-FC92DD4500BD",
+        "deviceName" : "iPhone 17 Pro",
+        "exportedFileName" : "F109FFC5-6F9B-48BD-97C7-F02A43CCC5AF.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-control-confirmation_0_7F06DD34-0563-488C-B25B-88A4C7F3DB4E.png",
+        "timestamp" : 1790054529.126
+      }
+    ],
+    "testIdentifier" : "ScenarioValidationTests/testCompetingContextsScenarioCompletesAcrossTreatments()",
+    "testIdentifierURL" : "test://com.apple.xcode/NowNest/NowNestUITests/ScenarioValidationTests/testCompetingContextsScenarioCompletesAcrossTreatments"
+  }
+]

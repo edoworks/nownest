@@ -1,0 +1,89 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "79407976-CC35-4FAF-8E20-501716FC1EE9.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-sophie-review_0_DE57340F-7707-484E-99DE-2DC8B7C44A9B.png",
+        "timestamp" : 1790057031.199
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "35BCC24C-AFBF-4F7D-8DC0-AD0F228EAC2F.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-sophie-trace_0_93DCC1D9-2285-442B-858C-54812F752BD7.txt",
+        "timestamp" : 1790057031.003
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "A49598BB-17FE-4FBD-8055-E4DFE60A5109.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-sophie-confirmation_0_1BAE99FC-4C16-43E7-9939-39C8BC624273.png",
+        "timestamp" : 1790057024.87
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "BD5BA101-D2B2-417A-966B-6D9E2D8673FE.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-expressive-review_0_6783AC3C-415D-4D1B-9606-630F73FA5DF8.png",
+        "timestamp" : 1790057013.342
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "934E04D4-49FE-40AA-9792-D61617B0F632.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-expressive-trace_0_D1235725-2101-4177-9938-2A6272B29CEE.txt",
+        "timestamp" : 1790057013.151
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "7E31BBB2-7023-48E5-AFFD-371335B54776.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-expressive-confirmation_0_347B403E-1A8E-4078-B5E5-1899AEBE3FD3.png",
+        "timestamp" : 1790057007.022
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "7EB1CD27-9281-4822-B0DB-CFD35AAA39B0.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-control-review_0_0EB20EB8-79B0-4718-AEDA-88457FB97612.png",
+        "timestamp" : 1790056995.376
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "BC521664-5656-4FF5-9760-697D8576C3D2.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-control-trace_0_A4E3C34D-D89A-4D9D-88B0-6BC7CA8750E0.txt",
+        "timestamp" : 1790056995.182
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "CCF9A602-4962-4BDF-837A-7266E6FD602A.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-control-confirmation_0_B0D2A30E-0176-4693-B265-494D0F458726.png",
+        "timestamp" : 1790056989.06
+      }
+    ],
+    "testIdentifier" : "ScenarioValidationTests/testCompetingContextsScenarioCompletesAcrossTreatments()",
+    "testIdentifierURL" : "test://com.apple.xcode/NowNest/NowNestUITests/ScenarioValidationTests/testCompetingContextsScenarioCompletesAcrossTreatments"
+  }
+]

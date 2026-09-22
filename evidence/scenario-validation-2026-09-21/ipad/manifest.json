@@ -1,0 +1,62 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "1018FF1B-C0A1-4D5F-B224-36AC821FE2F2.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-sophie-review_0_B188F107-3342-4E20-BE05-2ADBB9CE18D7.png",
+        "timestamp" : 1790053607.152
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "3BB8679A-F697-4415-B045-9C593D94C6DB.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-sophie-trace_0_6B1CFCAC-92AC-4D27-A873-135F00D928FC.txt",
+        "timestamp" : 1790053606.881
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "68BFC66B-E65B-4DA3-98FF-63DAA23C7DD7.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-expressive-review_0_7B96BD22-360E-4DD3-B7CD-049892F9B923.png",
+        "timestamp" : 1790053590.402
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "0C03EBAF-5D67-4914-8749-DE5C7E913B54.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-expressive-trace_0_1EA58BCB-22E1-43A3-BDCA-05CBB970F46E.txt",
+        "timestamp" : 1790053590.144
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "77AD100E-2F06-4E21-A043-4DF87CE35523.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-control-review_0_2B2EB37E-75A0-422A-AF00-72FF35297C4F.png",
+        "timestamp" : 1790053573.403
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "04D665B5-9898-4305-B5D0-EC320AEB0C7F",
+        "deviceName" : "iPad Pro 11-inch (M4)",
+        "exportedFileName" : "BFE5FC62-7C4D-4A53-B3B1-C74EE7A4D584.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "scenario-competing-context-capture-control-trace_0_9071A07D-8230-4C85-A136-3A4451948A73.txt",
+        "timestamp" : 1790053573.13
+      }
+    ],
+    "testIdentifier" : "ScenarioValidationTests/testCompetingContextsScenarioCompletesAcrossTreatments()",
+    "testIdentifierURL" : "test://com.apple.xcode/NowNest/NowNestUITests/ScenarioValidationTests/testCompetingContextsScenarioCompletesAcrossTreatments"
+  }
+]
