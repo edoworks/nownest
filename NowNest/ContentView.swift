@@ -130,16 +130,30 @@ struct ContentView: View {
     private func nowCard(_ now: NowContext) -> some View {
         NestCard {
             VStack(alignment: .leading, spacing: 20) {
-                Text("NOW")
-                    .font(.caption.weight(.black))
-                    .tracking(2.4)
-                    .foregroundStyle(Color.nestInkMuted)
+                HStack(alignment: .top, spacing: 12) {
+                    Text("NOW")
+                        .font(.caption.weight(.black))
+                        .tracking(2.4)
+                        .foregroundStyle(Color.nestInkMuted)
+
+                    if variantConfig.showsSophie {
+                        SophieMark(pose: .resting, size: 22)
+                            .accessibilityHidden(true)
+                    }
+                }
 
                 nowField("PROJECT", value: now.project)
                 Divider()
                 nowField("OUTCOME", value: now.outcome)
                 Divider()
                 nowField("NEXT ACTION", value: now.nextAction, emphasized: true)
+
+                if variantConfig.variant != .control {
+                    NestMotif()
+                        .frame(width: 28, height: 28)
+                        .foregroundStyle(Color.nestHoney.opacity(0.35))
+                        .accessibilityHidden(true)
+                }
             }
         }
         .accessibilityIdentifier("nowCard")
@@ -152,7 +166,7 @@ struct ContentView: View {
                 .tracking(1.2)
                 .foregroundStyle(Color.nestInkMuted)
             Text(value)
-                .font(emphasized ? .title2.weight(.bold) : .body)
+                .font(emphasized ? (variantConfig.variant == .control ? .title2.weight(.bold) : .title.weight(.semibold)) : .body)
                 .foregroundStyle(Color.nestInk)
                 .accessibilityIdentifier(label.lowercased().replacingOccurrences(of: " ", with: ""))
         }
@@ -203,6 +217,7 @@ struct ContentView: View {
 
 private struct CaptureView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.visualVariantConfiguration) private var variantConfig
     @FocusState private var isFocused: Bool
     @State private var text = ""
 
@@ -216,20 +231,31 @@ private struct CaptureView: View {
             VStack(alignment: .leading, spacing: 20) {
                 Text("Make it safe to forget.")
                     .font(.title2.weight(.bold))
+                    .foregroundStyle(Color.nestInk)
 
-                TextField("What showed up?", text: $text, axis: .vertical)
-                    .lineLimit(3...8)
-                    .textFieldStyle(.roundedBorder)
-                    .focused($isFocused)
-                    .accessibilityIdentifier("ideaField")
+                NestPaperNote {
+                    TextField("What showed up?", text: $text, axis: .vertical)
+                        .lineLimit(3...8)
+                        .textFieldStyle(.roundedBorder)
+                        .focused($isFocused)
+                        .accessibilityIdentifier("ideaField")
+                }
 
-                Text("After parking, return to: \(nextAction)")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                HStack(alignment: .top, spacing: 12) {
+                    Text("After parking, return to: \(nextAction)")
+                        .font(.footnote)
+                        .foregroundStyle(Color.nestInkMuted)
+
+                    if variantConfig.showsSophie {
+                        SophieMark(pose: .guarding, size: 20)
+                            .accessibilityHidden(true)
+                    }
+                }
 
                 Spacer()
             }
             .padding(24)
+            .background(variantConfig.variant == .control ? Color.clear : Color.nestCanvas.opacity(0.5))
             .navigationTitle("Park an idea")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
