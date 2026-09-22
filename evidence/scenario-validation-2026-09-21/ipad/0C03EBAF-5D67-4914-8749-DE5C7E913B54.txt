@@ -1,0 +1,10 @@
+{
+  "scenario_id": "competing-context-capture",
+  "variant": "expressive",
+  "persona_hypothesis": "A founder managing two work contexts may benefit from clear visual hierarchy and a short interruption path.",
+  "steps": ["identify-now", "capture-interruption", "resume-now", "review-parked"],
+  "next_action_preserved": true,
+  "parked_idea_reviewable": true,
+  "automated_result": "pass",
+  "not_proven": ["real-user usefulness", "accessibility assistive-technology success", "willingness to pay", "retention"]
+}
