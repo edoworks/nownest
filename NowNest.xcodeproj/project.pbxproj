@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0BAB1828C324F693B34BF97C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81C90C6CEBBC4E7BAC718BFD /* Assets.xcassets */; };
 		1AA42D23A4C2F950391B5E80 /* VisualVerificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FF003C08E81CAB8F29EEA67 /* VisualVerificationTests.swift */; };
+		1CDC4C6E97A965D683A12CD5 /* NestIllustration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81712C656A4B6A888D9022F0 /* NestIllustration.swift */; };
 		34B98F8AC49B3CB48DA99A15 /* NestWordmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A87EAE2ECED9A87E6EAF66 /* NestWordmark.swift */; };
 		3A093E51E3EDAC0D93DC8FCA /* NowNestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE3762B59658AB168CE1A17 /* NowNestApp.swift */; };
 		499B87AD13FFF95264CE338C /* NestTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674DB55743F426BCEFC7F355 /* NestTypography.swift */; };
@@ -60,6 +61,7 @@
 		747491AD7B38C7010AB6FA30 /* NowNestUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NowNestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FF003C08E81CAB8F29EEA67 /* VisualVerificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualVerificationTests.swift; sourceTree = "<group>"; };
 		80A313B93AE7E4395BEE32D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		81712C656A4B6A888D9022F0 /* NestIllustration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestIllustration.swift; sourceTree = "<group>"; };
 		81C90C6CEBBC4E7BAC718BFD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		98D67235DBD629CEE85F4ECB /* NowNestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestTests.swift; sourceTree = "<group>"; };
 		AFAB7BD56DFA469E1051B98A /* NestMotif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestMotif.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 		CBCDC035AA024FC7B4DF4F92 /* Design */ = {
 			isa = PBXGroup;
 			children = (
+				81712C656A4B6A888D9022F0 /* NestIllustration.swift */,
 				AFAB7BD56DFA469E1051B98A /* NestMotif.swift */,
 				EF5ADC2B1639B319E5D67D72 /* NestSurface.swift */,
 				674DB55743F426BCEFC7F355 /* NestTypography.swift */,
@@ -262,6 +265,7 @@
 			files = (
 				79D2A1A55E6D11E63AEF215A /* ContentView.swift in Sources */,
 				9045F8957DAF89D37E927FC1 /* Models.swift in Sources */,
+				1CDC4C6E97A965D683A12CD5 /* NestIllustration.swift in Sources */,
 				81C797BB935DC0EC45FB8AA9 /* NestMotif.swift in Sources */,
 				5667A44BAEEAE51D07AEDDDD /* NestSurface.swift in Sources */,
 				499B87AD13FFF95264CE338C /* NestTypography.swift in Sources */,

@@ -105,13 +105,18 @@ struct ContentView: View {
             .safeAreaInset(edge: .bottom) {
                 if let confirmation {
                     HStack(spacing: 10) {
-                        if showTuckedPose && variantConfig.showsSophie && !reduceMotion {
-                            SophieMark(pose: .tucked, size: 24)
-                                .accessibilityHidden(true)
-                                .transition(.scale.combined(with: .opacity))
+                        if showTuckedPose && !reduceMotion {
+                            if variantConfig.showsSophie {
+                                SophieMark(pose: .tucked, size: 24)
+                                    .accessibilityHidden(true)
+                                    .transition(.scale.combined(with: .opacity))
+                            } else if variantConfig.variant != .control {
+                                TuckedNoteIllustration(size: 32)
+                                    .transition(.scale.combined(with: .opacity))
+                            }
                         }
                         Text(confirmation)
-                            .font(.subheadline.weight(.semibold))
+                            .font(NestTypography.confirmation)
                             .foregroundStyle(.white)
                     }
                     .padding(.horizontal, 18)
@@ -414,15 +419,17 @@ private struct ReviewView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: 16) {
-            if variantConfig.showsSophie {
+        VStack(spacing: 20) {
+            if variantConfig.variant != .control {
+                NestIllustration(size: 120)
+            } else if variantConfig.showsSophie {
                 SophieMark(pose: .resting, size: 40)
                     .accessibilityHidden(true)
             }
             ContentUnavailableView(
                 "Nothing parked",
-                systemImage: "archivebox",
-                description: Text("Ideas appear here only after you park them.")
+                systemImage: variantConfig.variant == .control ? "archivebox" : "",
+                description: Text(variantConfig.isQuiet ? "Park an idea to fill the nest." : "Ideas appear here only after you park them.")
             )
         }
     }
