@@ -1,3 +1,4 @@
+import Foundation
 import XCTest
 
 @MainActor
@@ -9,6 +10,15 @@ final class ScenarioValidationTests: XCTestCase {
         let expectedNextAction = "Park one real idea"
         let requiredSteps = ["identify-now", "capture-interruption", "resume-now", "review-parked"]
         let variants = ["control", "expressive", "sophie"]
+
+        func expectedConfirmation(for variant: String) -> String {
+            switch variant {
+            case "control": return "Parked. Back to"
+            case "expressive": return "Tucked away. Back to:"
+            case "sophie": return "Sophie tucked it away. Back to:"
+            default: return ""
+            }
+        }
     }
 
     override func setUp() {
@@ -34,18 +44,26 @@ final class ScenarioValidationTests: XCTestCase {
         nextActionPreserved: Bool,
         parkedIdeaReviewable: Bool
     ) {
-        let trace = """
-        {
-          "scenario_id": "\(contract.id)",
-          "variant": "\(variant)",
-          "persona_hypothesis": "\(contract.personaHypothesis)",
-          "steps": ["\(steps.joined(separator: "\", \""))"],
-          "next_action_preserved": \(nextActionPreserved),
-          "parked_idea_reviewable": \(parkedIdeaReviewable),
-          "automated_result": "pass",
-          "not_proven": ["real-user usefulness", "accessibility assistive-technology success", "willingness to pay", "retention"]
+        let payload: [String: Any] = [
+            "scenario_id": contract.id,
+            "variant": variant,
+            "persona_hypothesis": contract.personaHypothesis,
+            "steps": steps,
+            "next_action_preserved": nextActionPreserved,
+            "parked_idea_reviewable": parkedIdeaReviewable,
+            "automated_result": "pass",
+            "not_proven": [
+                "real-user usefulness",
+                "accessibility assistive-technology success",
+                "willingness to pay",
+                "retention"
+            ]
+        ]
+        guard let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]),
+              let trace = String(data: data, encoding: .utf8) else {
+            XCTFail("Scenario trace must be valid JSON")
+            return
         }
-        """
         let attachment = XCTAttachment(string: trace)
         attachment.name = "scenario-\(contract.id)-\(variant)-trace"
         attachment.lifetime = .keepAlways
@@ -94,17 +112,31 @@ final class ScenarioValidationTests: XCTestCase {
             XCTAssertTrue(ideaField.waitForExistence(timeout: 5))
             ideaField.typeText(contract.interruption)
             app.buttons["confirmParkButton"].tap()
-            XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
+            let confirmation = app.staticTexts["parkConfirmation"]
+            XCTAssertTrue(confirmation.waitForExistence(timeout: 5))
+            XCTAssertTrue(
+                confirmation.label.contains(contract.expectedConfirmation(for: variant)),
+                "Confirmation must prove that the \(variant) treatment was applied"
+            )
+            let confirmationScreenshot = XCTAttachment(screenshot: app.screenshot())
+            confirmationScreenshot.name = "scenario-\(contract.id)-\(variant)-confirmation"
+            confirmationScreenshot.lifetime = .keepAlways
+            add(confirmationScreenshot)
             steps.append("capture-interruption")
 
             XCTAssertTrue(app.staticTexts["NOW"].exists)
-            XCTAssertEqual(app.staticTexts[contract.expectedNextAction].label, originalNextAction)
+            let nextActionPreserved = app.staticTexts[contract.expectedNextAction].label == originalNextAction
+            XCTAssertTrue(nextActionPreserved)
             steps.append("resume-now")
 
-            app.buttons["Actions"].tap()
+            let actionsButton = app.buttons["Actions"]
+            XCTAssertTrue(actionsButton.waitForExistence(timeout: 5), "Sheet must be dismissed before opening Actions")
+            actionsButton.tap()
             app.buttons["Review parked ideas"].tap()
-            XCTAssertTrue(app.staticTexts[contract.interruption].waitForExistence(timeout: 5))
-            XCTAssertTrue(app.staticTexts["PARKED"].exists)
+            let parkedIdea = app.staticTexts[contract.interruption]
+            XCTAssertTrue(parkedIdea.waitForExistence(timeout: 5))
+            let parkedIdeaReviewable = parkedIdea.exists && app.staticTexts["PARKED"].exists
+            XCTAssertTrue(parkedIdeaReviewable)
             steps.append("review-parked")
 
             XCTAssertEqual(steps, contract.requiredSteps)
@@ -113,8 +145,8 @@ final class ScenarioValidationTests: XCTestCase {
                 contract,
                 variant: variant,
                 steps: steps,
-                nextActionPreserved: true,
-                parkedIdeaReviewable: true
+                nextActionPreserved: nextActionPreserved,
+                parkedIdeaReviewable: parkedIdeaReviewable
             )
             app.terminate()
         }
