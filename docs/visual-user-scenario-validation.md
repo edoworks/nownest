@@ -27,6 +27,11 @@ The test uses the same fixture for `control`, `expressive`, and `sophie`:
 The automated pass condition is completion of all four steps with the expected
 labels, layout order, preserved next action, and reviewable parked idea.
 
+Each treatment must also render its own confirmation copy: `Parked` for
+control, `Tucked away` for expressive, and `Sophie tucked it away` for Sophie.
+Confirmation screenshots are retained so variant coverage is visible rather
+than inferred from a shared path.
+
 Run destination commands sequentially when they share Xcode's default
 DerivedData location. Parallel `xcodebuild` invocations can contend for the
 same build database and produce an infrastructure failure unrelated to the

@@ -3,7 +3,7 @@
   "artifact": "deterministic-persona-scenario-validation",
   "tracking_issue": "edoworks/factory#37",
   "baseline_commit": "44bca2280d6ecbb33e3c92f18e8056876699bdb5",
-  "result_commit": "811262f",
+  "tested_source_commit": "b3dc6839c491e252f300e09d641514aefb48871b",
   "status": "PASS_WITH_HUMAN_AND_COMMERCIAL_GAPS",
   "scenario": {
     "id": "competing-context-capture",
@@ -22,12 +22,12 @@
   },
   "commands": [
     "xcodegen generate",
-    "xcodebuild test -project NowNest.xcodeproj -scheme NowNest -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -only-testing:NowNestUITests/ScenarioValidationTests -resultBundlePath /tmp/NowNest-scenario-iPhone-20260921-final.xcresult",
-    "xcodebuild test -project NowNest.xcodeproj -scheme NowNest -destination 'platform=iOS Simulator,name=iPad Pro 11-inch (M4)' -only-testing:NowNestUITests/ScenarioValidationTests -resultBundlePath /tmp/NowNest-scenario-iPad-20260921-final.xcresult",
-    "xcodebuild test -project NowNest.xcodeproj -scheme NowNest -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -only-testing:NowNestTests -resultBundlePath /tmp/NowNest-scenario-unit-20260921.xcresult",
+    "xcodebuild test -project NowNest.xcodeproj -scheme NowNest -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -only-testing:NowNestUITests/ScenarioValidationTests -resultBundlePath /tmp/NowNest-scenario-iPhone-20260921-review.xcresult",
+    "xcodebuild test -project NowNest.xcodeproj -scheme NowNest -destination 'platform=iOS Simulator,name=iPad Pro 11-inch (M4)' -only-testing:NowNestUITests/ScenarioValidationTests -resultBundlePath /tmp/NowNest-scenario-iPad-20260921-review.xcresult",
+    "xcodebuild test -project NowNest.xcodeproj -scheme NowNest -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -only-testing:NowNestTests -resultBundlePath /tmp/NowNest-scenario-unit-20260921-review.xcresult",
     "xcodebuild analyze -project NowNest.xcodeproj -scheme NowNest -destination 'generic/platform=iOS Simulator'",
-    "xcrun xcresulttool export attachments --path /tmp/NowNest-scenario-iPhone-20260921-final.xcresult --output-path evidence/scenario-validation-2026-09-21/iphone",
-    "xcrun xcresulttool export attachments --path /tmp/NowNest-scenario-iPad-20260921-final.xcresult --output-path evidence/scenario-validation-2026-09-21/ipad"
+    "xcrun xcresulttool export attachments --path /tmp/NowNest-scenario-iPhone-20260921-review.xcresult --output-path evidence/scenario-validation-2026-09-21/review/iphone",
+    "xcrun xcresulttool export attachments --path /tmp/NowNest-scenario-iPad-20260921-review.xcresult --output-path evidence/scenario-validation-2026-09-21/review/ipad"
   ],
   "resolved_destinations": [
     {
@@ -53,62 +53,111 @@
   "pass_fail": {
     "scenario_iphone": "pass",
     "scenario_ipad": "pass",
+    "variant_specific_confirmation_copy": "pass",
     "unit_tests": "pass",
     "static_analysis": "pass"
   },
   "raw_result_bundles": [
     {
-      "path": "/tmp/NowNest-scenario-iPhone-20260921-final.xcresult",
-      "retained_zip": "/tmp/NowNest-scenario-iPhone-20260921-final.xcresult.zip",
-      "retained_zip_sha256": "24058618ffed86753658c449dc118d8c7457f159c2a1291dcc1cb01fb4f2226c"
+      "path": "/tmp/NowNest-scenario-iPhone-20260921-review.xcresult",
+      "retained_zip": "/tmp/NowNest-scenario-iPhone-20260921-review.xcresult.zip",
+      "retained_zip_sha256": "b36b7552e92434813fa1a2224c7a34d61846366dc162a859906773c1a1351f39"
     },
     {
-      "path": "/tmp/NowNest-scenario-iPad-20260921-final.xcresult",
-      "retained_zip": "/tmp/NowNest-scenario-iPad-20260921-final.xcresult.zip",
-      "retained_zip_sha256": "524745593d3d4f8b7684e6540599adea6ad6b6806056149ffb6297bb25281337"
+      "path": "/tmp/NowNest-scenario-iPad-20260921-review.xcresult",
+      "retained_zip": "/tmp/NowNest-scenario-iPad-20260921-review.xcresult.zip",
+      "retained_zip_sha256": "13a317c1975a8c22cf9c12fd4867a6b4acdcf6ba6c55a96ca94666fadb481687"
     },
     {
-      "path": "/tmp/NowNest-scenario-unit-20260921.xcresult",
-      "retained_zip": "/tmp/NowNest-scenario-unit-20260921.xcresult.zip",
-      "retained_zip_sha256": "795698bf0aaf5ee1e39196a342f5e08009aed6bc9560120c9566c00f3a8ce750"
+      "path": "/tmp/NowNest-scenario-unit-20260921-review.xcresult",
+      "retained_zip": "/tmp/NowNest-scenario-unit-20260921-review.xcresult.zip",
+      "retained_zip_sha256": "51f4fe088f6015b317db37c1e117144a84aadaabbd078b5801d53a177d9219ff"
     }
   ],
   "screenshots": [
     {
       "device": "iPhone 17 Pro",
       "variant": "control",
-      "path": "evidence/scenario-validation-2026-09-21/iphone/D56F18C5-F4D8-442B-B140-0924DF836FD7.png",
-      "sha256": "f4ae7feeb7501a682d43a68875b2f2b14fbccf4a2100275fe129cc9c629cfced"
+      "state": "review",
+      "path": "evidence/scenario-validation-2026-09-21/review/iphone/88755205-F07C-45CC-8535-6D3AF0B56696.png",
+      "sha256": "14a556f56c98d695e43e9c681b563b1cf1035166472f86b959bb2b4a10dc6184"
     },
     {
       "device": "iPhone 17 Pro",
       "variant": "expressive",
-      "path": "evidence/scenario-validation-2026-09-21/iphone/CC5C61A0-D1D9-42F6-9B3E-5BD18BE85574.png",
-      "sha256": "c84ac109bee4ff289937690e371c76cc792120f7732721416e5a1f45761cfe00"
+      "state": "review",
+      "path": "evidence/scenario-validation-2026-09-21/review/iphone/40831FD8-DEF7-4F9E-9FF1-7512F81C3143.png",
+      "sha256": "ed372f211083c5c8b25860b9cca36678748395b60b76a613e18173ddf96a8d48"
     },
     {
       "device": "iPhone 17 Pro",
       "variant": "sophie",
-      "path": "evidence/scenario-validation-2026-09-21/iphone/CEDEAFF6-EC06-4CD7-87F7-75653AB5D320.png",
-      "sha256": "c84ac109bee4ff289937690e371c76cc792120f7732721416e5a1f45761cfe00"
+      "state": "review",
+      "path": "evidence/scenario-validation-2026-09-21/review/iphone/035A379C-A427-40BD-933E-F10F96D84F29.png",
+      "sha256": "ed372f211083c5c8b25860b9cca36678748395b60b76a613e18173ddf96a8d48"
     },
     {
       "device": "iPad Pro 11-inch (M4)",
       "variant": "control",
-      "path": "evidence/scenario-validation-2026-09-21/ipad/77AD100E-2F06-4E21-A043-4DF87CE35523.png",
-      "sha256": "7815dbf18a5ffe1a13ff86169cd8aea92cce74d0c31710af24e807df88f9fd81"
+      "state": "review",
+      "path": "evidence/scenario-validation-2026-09-21/review/ipad/6EC2008C-C82E-4779-9739-6145F68341D8.png",
+      "sha256": "283faabeb05f469bb20cb2f7ab59abeca98601d9ac753b8b53d17c27132ad6f7"
     },
     {
       "device": "iPad Pro 11-inch (M4)",
       "variant": "expressive",
-      "path": "evidence/scenario-validation-2026-09-21/ipad/68BFC66B-E65B-4DA3-98FF-63DAA23C7DD7.png",
-      "sha256": "c0e9bc4dab2b93bc066d6f4bcab3eed85f8e99490f13b3767f31bdbf7af78409"
+      "state": "review",
+      "path": "evidence/scenario-validation-2026-09-21/review/ipad/6BDC0FA5-65B1-4CEB-AC4D-F1C9B3C60C10.png",
+      "sha256": "423b533623ff9cbb488195f78bc25c28969dbb475902cbca0b9d48c283e27681"
     },
     {
       "device": "iPad Pro 11-inch (M4)",
       "variant": "sophie",
-      "path": "evidence/scenario-validation-2026-09-21/ipad/1018FF1B-C0A1-4D5F-B224-36AC821FE2F2.png",
-      "sha256": "b17c9df6ae7af85ac6bf5bb7da9dc3a298691a6e99e0ea0e5ed70c3e5a2447c7"
+      "state": "review",
+      "path": "evidence/scenario-validation-2026-09-21/review/ipad/8922B8C1-C9A6-4CD5-B147-242086E032B8.png",
+      "sha256": "f05189907eb1ee6ccd5498cc8bcb0d558e2e9b2fe58565ccbdac5d12eec089ab"
+    },
+    {
+      "device": "iPhone 17 Pro",
+      "variant": "control",
+      "state": "confirmation",
+      "path": "evidence/scenario-validation-2026-09-21/review/iphone/F109FFC5-6F9B-48BD-97C7-F02A43CCC5AF.png",
+      "sha256": "28cb5cab56a746b1d43d277383879b59275a88e924f1837d7ce5a59643779483"
+    },
+    {
+      "device": "iPhone 17 Pro",
+      "variant": "expressive",
+      "state": "confirmation",
+      "path": "evidence/scenario-validation-2026-09-21/review/iphone/023CDCCF-5560-44C4-950D-6367682202BA.png",
+      "sha256": "6f4d3a146dd7b938a766478ffaa9e57863aaf0d0187a4695885b2fe8063ec196"
+    },
+    {
+      "device": "iPhone 17 Pro",
+      "variant": "sophie",
+      "state": "confirmation",
+      "path": "evidence/scenario-validation-2026-09-21/review/iphone/429EAFBA-5019-4E8A-8273-B58915E4F25C.png",
+      "sha256": "2a3cabeabb5dc93ffe6e37d83fefe0d2c05beb64fd8b5ad11efd939d6c2e2db8"
+    },
+    {
+      "device": "iPad Pro 11-inch (M4)",
+      "variant": "control",
+      "state": "confirmation",
+      "path": "evidence/scenario-validation-2026-09-21/review/ipad/1AF8EC4C-32BD-42AF-9843-3CB8570D0E9F.png",
+      "sha256": "685e1cd6605cfc0ccbe31a49992912f418f487acbe1ef25b6a4bc114e8011643"
+    },
+    {
+      "device": "iPad Pro 11-inch (M4)",
+      "variant": "expressive",
+      "state": "confirmation",
+      "path": "evidence/scenario-validation-2026-09-21/review/ipad/172456CD-51A7-4696-B9CA-1A42F8273D5F.png",
+      "sha256": "1f5e61965fda6c84958b3aeedc77538f3345bb45df5a57d13bab1b3b08c3df56"
+    },
+    {
+      "device": "iPad Pro 11-inch (M4)",
+      "variant": "sophie",
+      "state": "confirmation",
+      "path": "evidence/scenario-validation-2026-09-21/review/ipad/89BF432F-7F07-431A-9B1C-200FBE4A75EF.png",
+      "sha256": "d0e8dba92468ccc964e122fdb2188bba9ac0fb4b30479d023ba629a03538b21e"
     }
   ],
   "accessibility_checklist": {
@@ -136,6 +185,27 @@
       }
     ],
     "note": "Vision review complements deterministic assertions and does not prove assistive-technology usability or real-user success."
+  },
+  "review_findings_resolution": {
+    "status": "resolved_and_rerun",
+    "five_whys": [
+      "Why could the first test pass if a visual variant argument was ignored? Assertions covered only shared content and did not inspect variant-specific confirmation copy.",
+      "Why was shared content the only assertion? The first scenario was designed around the invariant interaction path and treated treatment coverage as inherited from existing tests.",
+      "Why was that insufficient? The scenario evidence claimed all three treatments without tying each result to a variant-specific observable.",
+      "Why could the test be flaky after capture? It tapped Actions after confirmation appeared without explicitly waiting for the capture sheet to dismiss.",
+      "Root cause: the initial scenario contract separated behavioral invariants from treatment and transition-state checks, and the test did not encode the UI state boundary."
+    ],
+    "corrections": [
+      "Assert the expected confirmation copy for each variant and retain confirmation screenshots.",
+      "Wait for the Actions button after confirmation before opening the review flow.",
+      "Generate trace attachments with JSONSerialization and derive result booleans from observed UI state.",
+      "Record the tested source commit separately from the later evidence commit."
+    ],
+    "recurrence_guards": [
+      "ScenarioValidationTests now fails if a treatment-specific confirmation is not rendered.",
+      "Scenario documentation and test code require an explicit state wait before the next interaction.",
+      "Evidence records full tested source provenance and variant-specific screenshots."
+    ]
   },
   "verification_incident": {
     "summary": "The first matrix attempt ran iPhone and iPad xcodebuild commands in parallel, causing shared DerivedData build-database contention; the iPhone command also hit the initial 120-second shell timeout.",
