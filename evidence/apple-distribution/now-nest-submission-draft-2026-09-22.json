@@ -1,22 +1,68 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "kind": "APP_STORE_CONNECT_DRAFT",
   "product": "nownest",
+  "revision": "33e4fce",
   "metadata": {
     "name": "NowNest",
     "subtitle": "Park ideas. Return to now.",
     "description": "NowNest is a quiet, offline-first space for holding your current next action when a new idea appears. Keep one project, outcome, and next action visible. Park an interruption locally, confirm it is tucked away, and return to NOW. Review parked ideas later. No account, network connection, analytics, notifications, or cloud backup.",
     "keywords": "focus,ideas,tasks,distraction,productivity,planning",
     "category": "Productivity",
-    "copyright": "PENDING_OWNER_DECISION",
-    "privacy_url": "PENDING_OWNER_DECISION",
-    "support_url": "PENDING_OWNER_DECISION"
+    "copyright": "2026 Foculoom LLC",
+    "privacy_url": "https://nownest.com/privacy/",
+    "support_url": "https://nownest.com/support/",
+    "age_rating": {
+      "alcohol_tobacco_drugs": "none",
+      "gambling": "none",
+      "sexual_content": "none",
+      "nudity": "none",
+      "profanity_crude_humor": "none",
+      "horror_fear": "none",
+      "medical_treatment_info": "none",
+      "violence": "none",
+      "gambling_simulated": "none",
+      "unrestricted_web_access": "no",
+      "animal_killing": "none",
+      "kids_category": false
+    },
+    "review_information": {
+      "contact_email": "hello@foculoom.com",
+      "setup_notes": "NowNest is a single-screen offline app. Launch it and you will see your NOW context (project, outcome, next action). Tap Park to park a new idea. Tap Actions to review parked ideas or edit NOW. No login or network access is required. The app works immediately on first launch.",
+      "demo_account": "not_required"
+    }
   },
-  "preflight_report": "evidence/apple-distribution/now-nest-preflight-2026-09-22.md",
+  "website": {
+    "repository": "foculoom/nownest.com",
+    "local_path": "/Users/hello/foculoom/web/nownest.com",
+    "urls": {
+      "home": "https://nownest.com/",
+      "privacy": "https://nownest.com/privacy/",
+      "terms": "https://nownest.com/terms/",
+      "support": "https://nownest.com/support/"
+    },
+    "deployment": "GitHub Pages (static HTML, no build step)",
+    "status": "scaffold_created_not_yet_deployed"
+  },
+  "preflight_report": "evidence/apple-distribution/now-nest-preflight-2026-09-22-r2.md",
   "submission": {
     "performed": false,
     "human_authorization_required": true,
     "endpoint": "NOT_INVOKED"
   },
-  "secrets": "NONE"
+  "secrets": "NONE",
+  "owner_decisions_remaining": [
+    "Confirm name NowNest after trademark/domain collision check",
+    "Deploy nownest.com to GitHub Pages and verify URLs resolve",
+    "Create distribution provisioning profile and re-sign archive",
+    "Authorize App Store Connect upload and submission"
+  ],
+  "resolved_from_prior_sessions": {
+    "copyright": "Set from Foculoom LLC precedent (Skiplet, Veilsort)",
+    "privacy_url": "https://nownest.com/privacy/ (scaffold created, not yet deployed)",
+    "support_url": "https://nownest.com/support/ (scaffold created, not yet deployed)",
+    "age_rating": "All categories none — app has no content requiring rating. Not Kids Category.",
+    "review_contact": "hello@foculoom.com (Foculoom support precedent)",
+    "review_setup_notes": "Drafted from product behavior evidence"
+  }
 }
