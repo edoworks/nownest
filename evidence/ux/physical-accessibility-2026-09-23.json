@@ -5,7 +5,7 @@
   "tracking_issue": "https://github.com/edoworks/factory/issues/45",
   "baseline_commit": "c7ea771cbcb83f5e7892274ae9f6a8d84c63e91d",
   "result_commit": "eb6ea44661990dfaeecc8f7cde6dc2c650f17f12",
-  "evidence_revision": "PENDING_EVIDENCE_COMMIT",
+  "evidence_revision": "c6cc18f805812160038cc54d575571f8ea1e8e3a",
   "source_branch": "main",
   "build_context": {
     "kind": "signed development test builds",
