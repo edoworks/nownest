@@ -5,13 +5,16 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.visualVariantConfiguration) private var variantConfig
+    @Environment(\.recoveryNotice) private var recoveryNotice
     @Query private var nowContexts: [NowContext]
+    @Query(sort: \ParkedIdea.createdAt, order: .reverse) private var ideas: [ParkedIdea]
 
     @AppStorage("quietModeEnabled") private var quietModeStored = false
     @State private var presentedSheet: Sheet?
     @State private var confirmation: String?
     @State private var errorMessage: String?
     @State private var showTuckedPose = false
+    @State private var recoveryAlertPresented = false
 
     private enum Sheet: Identifiable {
         case capture
@@ -22,6 +25,8 @@ struct ContentView: View {
     }
 
     private var now: NowContext? { nowContexts.first }
+    private var activeIdea: ParkedIdea? { ideas.first { $0.state == "RESUMED" } }
+    private var parkedCount: Int { ideas.count { $0.state == "PARKED" } }
 
     var body: some View {
         NavigationStack {
@@ -44,9 +49,14 @@ struct ContentView: View {
                 if let now {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 28) {
-                            nowCard(now)
+                            if let activeIdea {
+                                activeCard(activeIdea)
+                            } else {
+                                nowCard(now)
+                            }
 
                             Button {
+                                NowNestStore.record("captureAttempt", in: modelContext)
                                 presentedSheet = .capture
                             } label: {
                                 Label("Park an idea", systemImage: "arrow.down.to.line.compact")
@@ -58,6 +68,17 @@ struct ContentView: View {
                             .tint(Color.nestHoney)
                             .controlSize(.large)
                             .accessibilityIdentifier("parkIdeaButton")
+
+                            Button {
+                                NowNestStore.record("resurfaced", in: modelContext)
+                                try? modelContext.save()
+                                presentedSheet = .review
+                            } label: {
+                                Label("Parked ideas (\(parkedCount))", systemImage: "archivebox")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.bordered)
+                            .accessibilityIdentifier("reviewParkedButton")
 
                             if variantConfig.showsReassurance {
                                 Text("Capture it safely, then return here. Nothing changes NOW unless you edit it.")
@@ -89,6 +110,8 @@ struct ContentView: View {
                         .disabled(now == nil)
 
                         Button("Review parked ideas", systemImage: "archivebox") {
+                            NowNestStore.record("resurfaced", in: modelContext)
+                            try? modelContext.save()
                             presentedSheet = .review
                         }
 
@@ -134,8 +157,12 @@ struct ContentView: View {
                 switch sheet {
                 case .capture:
                     if let now {
-                        CaptureView(nextAction: now.nextAction) { text in
-                            park(text, returningTo: now.nextAction)
+                        let context = interruptionContext(now)
+                        CaptureView(
+                            nextAction: context.nextAction,
+                            onCancel: recordAbandonedCapture
+                        ) { text in
+                            park(text, interruptedBy: context)
                         }
                     }
                 case .edit:
@@ -145,7 +172,7 @@ struct ContentView: View {
                         }
                     }
                 case .review:
-                    ReviewView()
+                    ReviewView { presentedSheet = nil }
                 }
             }
             .alert("Couldn’t save", isPresented: Binding(
@@ -156,12 +183,18 @@ struct ContentView: View {
             } message: {
                 Text(errorMessage ?? "Couldn't save.")
             }
+            .alert("Local data recovery", isPresented: $recoveryAlertPresented) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(recoveryNotice ?? "A recovery copy was preserved.")
+            }
             .task {
                 do {
                     try NowNestStore.ensureNow(in: modelContext, existing: now)
                 } catch {
                     errorMessage = "Couldn't create NOW."
                 }
+                recoveryAlertPresented = recoveryNotice != nil
             }
         }
     }
@@ -199,6 +232,44 @@ struct ContentView: View {
         .accessibilityIdentifier("nowCard")
     }
 
+    private func activeCard(_ idea: ParkedIdea) -> some View {
+        NestCard {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("NOW")
+                    .font(NestTypography.nowHeading)
+                    .tracking(2.4)
+                    .foregroundStyle(Color.nestInkMuted)
+                nowField("INTENTION", value: idea.text)
+                Divider()
+                nowField("NEXT ACTION", value: idea.startingAction ?? idea.text, emphasized: true)
+
+                if let originProject = idea.originProject, let originNextAction = idea.originNextAction {
+                    Text("Parked while working on \(originProject): \(originNextAction)")
+                        .font(.footnote)
+                        .foregroundStyle(Color.nestInkMuted)
+                        .accessibilityIdentifier("resumeContext")
+                }
+
+                HStack {
+                    Button("Done", systemImage: "checkmark") { resolveActive(idea, action: .complete) }
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("completeActiveButton")
+                    Button("Re-park", systemImage: "arrow.uturn.backward") { resolveActive(idea, action: .repark) }
+                        .buttonStyle(.bordered)
+                        .accessibilityIdentifier("reparkActiveButton")
+                    Menu {
+                        Button("Abandon", systemImage: "trash", role: .destructive) {
+                            resolveActive(idea, action: .abandon)
+                        }
+                    } label: {
+                        Label("More", systemImage: "ellipsis.circle")
+                    }
+                }
+            }
+        }
+        .nestShadow()
+    }
+
     private func nowField(_ label: String, value: String, emphasized: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: 5) {
             Text(label)
@@ -212,17 +283,34 @@ struct ContentView: View {
         }
     }
 
-    private func park(_ text: String, returningTo nextAction: String) -> Bool {
+    private typealias InterruptionContext = (project: String, outcome: String, nextAction: String)
+
+    private func interruptionContext(_ now: NowContext) -> InterruptionContext {
+        guard let activeIdea else { return (now.project, now.outcome, now.nextAction) }
+        return (
+            activeIdea.originProject ?? activeIdea.text,
+            activeIdea.text,
+            activeIdea.startingAction ?? activeIdea.text
+        )
+    }
+
+    private func park(_ text: String, interruptedBy context: InterruptionContext) -> Bool {
         do {
-            guard try NowNestStore.park(text, in: modelContext) != nil else { return false }
+            guard try NowNestStore.park(
+                text,
+                interruptedProject: context.project,
+                interruptedOutcome: context.outcome,
+                interruptedNextAction: context.nextAction,
+                in: modelContext
+            ) != nil else { return false }
             presentedSheet = nil
             showTuckedPose = variantConfig.variant != .control
             UINotificationFeedbackGenerator().notificationOccurred(.success)
             if reduceMotion {
-                confirmation = variantConfig.confirmationCopy(for: nextAction)
+                confirmation = variantConfig.confirmationCopy(for: context.nextAction)
             } else {
                 withAnimation(.easeOut(duration: 0.45)) {
-                    confirmation = variantConfig.confirmationCopy(for: nextAction)
+                    confirmation = variantConfig.confirmationCopy(for: context.nextAction)
                 }
             }
             Task {
@@ -241,6 +329,25 @@ struct ContentView: View {
             errorMessage = "Couldn't park."
             return false
         }
+    }
+
+    private enum ActiveResolution { case complete, repark, abandon }
+
+    private func resolveActive(_ idea: ParkedIdea, action: ActiveResolution) {
+        do {
+            switch action {
+            case .complete: try NowNestStore.complete(idea, in: modelContext)
+            case .repark: try NowNestStore.repark(idea, in: modelContext)
+            case .abandon: try NowNestStore.abandon(idea, in: modelContext)
+            }
+        } catch {
+            errorMessage = "Couldn't update this idea."
+        }
+    }
+
+    private func recordAbandonedCapture() {
+        NowNestStore.record("abandonedCapture", in: modelContext)
+        try? modelContext.save()
     }
 
     private func update(
@@ -271,8 +378,10 @@ private struct CaptureView: View {
     @Environment(\.visualVariantConfiguration) private var variantConfig
     @FocusState private var isFocused: Bool
     @State private var text = ""
+    @State private var didPark = false
 
     let nextAction: String
+    let onCancel: () -> Void
     let onPark: (String) -> Bool
 
     private var isValid: Bool { NowNestRules.normalized(text) != nil }
@@ -313,10 +422,14 @@ private struct CaptureView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button("Cancel") {
+                        dismiss()
+                    }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Park") { _ = onPark(text) }
+                    Button("Park") {
+                        if onPark(text) { didPark = true }
+                    }
                         .disabled(!isValid)
                         .accessibilityIdentifier("confirmParkButton")
                 }
@@ -324,6 +437,9 @@ private struct CaptureView: View {
             .task { isFocused = true }
         }
         .presentationDetents([.medium, .large])
+        .onDisappear {
+            if !didPark { onCancel() }
+        }
     }
 }
 
@@ -371,50 +487,36 @@ private struct EditNowView: View {
 }
 
 private struct ReviewView: View {
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.visualVariantConfiguration) private var variantConfig
     @Query(sort: \ParkedIdea.createdAt, order: .reverse) private var ideas: [ParkedIdea]
-    @State private var ideaToDelete: ParkedIdea?
-    @State private var deleteFailed = false
+    @State private var updateFailed = false
+
+    let onResumed: () -> Void
+
+    private var parkedIdeas: [ParkedIdea] { ideas.filter { $0.state == "PARKED" } }
 
     var body: some View {
         NavigationStack {
             Group {
-                if ideas.isEmpty {
+                if parkedIdeas.isEmpty {
                     emptyState
                 } else {
                     ideaList
                 }
             }
             .navigationTitle("Parked ideas")
-            .confirmationDialog(
-                "Delete this parked idea?",
-                isPresented: Binding(
-                    get: { ideaToDelete != nil },
-                    set: { if !$0 { ideaToDelete = nil } }
-                ),
-                titleVisibility: .visible
-            ) {
-                Button("Delete", role: .destructive) { deleteSelectedIdea() }
-                Button("Cancel", role: .cancel) { ideaToDelete = nil }
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                }
             }
-            .alert("Couldn’t delete", isPresented: $deleteFailed) {
+            .alert("Couldn’t update", isPresented: $updateFailed) {
                 Button("OK", role: .cancel) {}
             } message: {
                 Text("The parked idea is still present.")
             }
-        }
-    }
-
-    private func deleteSelectedIdea() {
-        guard let ideaToDelete else { return }
-        modelContext.delete(ideaToDelete)
-        do {
-            try modelContext.save()
-            self.ideaToDelete = nil
-        } catch {
-            modelContext.rollback()
-            deleteFailed = true
         }
     }
 
@@ -435,27 +537,45 @@ private struct ReviewView: View {
     }
 
     private var ideaList: some View {
-        List(ideas) { idea in
-            VStack(alignment: .leading, spacing: 7) {
-                Text(idea.text)
-                    .font(.body)
-                    .foregroundStyle(Color.nestInk)
-                HStack {
-                    Text(idea.state)
-                        .font(.caption2.weight(.black))
-                        .tracking(1)
-                        .foregroundStyle(Color.nestSage)
-                    Spacer()
-                    Text(idea.createdAt, format: .dateTime.month().day().hour().minute())
-                        .foregroundStyle(Color.nestInkMuted)
+        List(parkedIdeas) { idea in
+            NavigationLink {
+                ParkedIdeaDetailView(idea: idea) {
+                    onResumed()
+                }
+            } label: {
+                VStack(alignment: .leading, spacing: 7) {
+                    Text(idea.text)
+                        .font(.body)
+                        .foregroundStyle(Color.nestInk)
+                    if let originProject = idea.originProject {
+                        Text("Parked from \(originProject)")
+                            .font(.caption)
+                            .foregroundStyle(Color.nestInkMuted)
+                    }
+                    HStack {
+                        Text("READY")
+                            .font(.caption2.weight(.black))
+                            .tracking(1)
+                            .foregroundStyle(Color.nestSage)
+                        Spacer()
+                        Text(idea.createdAt, format: .dateTime.month().day().hour().minute())
+                            .foregroundStyle(Color.nestInkMuted)
+                    }
                 }
             }
+            .accessibilityIdentifier("parkedIdeaRow")
             .listRowBackground(
                 variantConfig.variant == .control ? Color(.secondarySystemBackground) : Color.nestSurfaceRaised.opacity(0.5)
             )
             .swipeActions {
-                Button("Delete", role: .destructive) {
-                    ideaToDelete = idea
+                Button("Done") {
+                    do { try NowNestStore.complete(idea, in: modelContext) }
+                    catch { updateFailed = true }
+                }
+                .tint(Color.nestSage)
+                Button("Abandon", role: .destructive) {
+                    do { try NowNestStore.abandon(idea, in: modelContext) }
+                    catch { updateFailed = true }
                 }
             }
         }
@@ -464,7 +584,100 @@ private struct ReviewView: View {
     }
 }
 
+private struct ParkedIdeaDetailView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @State private var startingAction: String
+    @State private var saveFailed = false
+
+    let idea: ParkedIdea
+    let onResumed: () -> Void
+
+    init(idea: ParkedIdea, onResumed: @escaping () -> Void) {
+        self.idea = idea
+        self.onResumed = onResumed
+        _startingAction = State(initialValue: idea.startingAction ?? idea.text)
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Original thought") {
+                    Text(idea.text)
+                        .accessibilityIdentifier("originalThought")
+                }
+
+                if idea.originProject != nil || idea.originOutcome != nil || idea.originNextAction != nil {
+                    Section("Why it was parked") {
+                        if let value = idea.originProject { LabeledContent("Project", value: value) }
+                        if let value = idea.originOutcome { LabeledContent("Outcome", value: value) }
+                        if let value = idea.originNextAction { LabeledContent("You were doing", value: value) }
+                    }
+                }
+
+                Section("Starting point") {
+                    TextField("First concrete action", text: $startingAction, axis: .vertical)
+                        .accessibilityIdentifier("startingActionField")
+                    Text("This is your choice, not a generated fact.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Section {
+                    Button("Resume", systemImage: "play.fill") { resume() }
+                        .disabled(NowNestRules.normalized(startingAction) == nil)
+                        .accessibilityIdentifier("resumeIdeaButton")
+                    Button("Done", systemImage: "checkmark") { complete() }
+                    Button("Abandon", systemImage: "trash", role: .destructive) { abandon() }
+                }
+            }
+            .navigationTitle("Ready to resume")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+            }
+            .alert("Couldn’t update", isPresented: $saveFailed) {
+                Button("OK", role: .cancel) {}
+            }
+        }
+    }
+
+    private func resume() {
+        do {
+            if try NowNestStore.resume(idea, startingAction: startingAction, in: modelContext) {
+                dismiss()
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(300))
+                    onResumed()
+                }
+            }
+        } catch {
+            saveFailed = true
+        }
+    }
+
+    private func complete() {
+        do {
+            try NowNestStore.complete(idea, in: modelContext)
+            dismiss()
+        } catch {
+            saveFailed = true
+        }
+    }
+
+    private func abandon() {
+        do {
+            try NowNestStore.abandon(idea, in: modelContext)
+            dismiss()
+        } catch {
+            saveFailed = true
+        }
+    }
+}
+
 #Preview {
     ContentView()
-        .modelContainer(for: [NowContext.self, ParkedIdea.self], inMemory: true)
+        .modelContainer(for: [NowContext.self, ParkedIdea.self, DogfoodEvent.self], inMemory: true)
 }

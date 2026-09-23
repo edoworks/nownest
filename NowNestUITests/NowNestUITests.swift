@@ -56,7 +56,7 @@ final class NowNestUITests: XCTestCase {
         app.buttons["Review parked ideas"].tap()
 
         XCTAssertTrue(app.staticTexts["Review this later"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["PARKED"].exists)
+        XCTAssertTrue(app.staticTexts["READY"].exists)
         capture(app, named: "review-parked")
     }
 
@@ -77,8 +77,16 @@ final class NowNestUITests: XCTestCase {
         relaunchedApp.buttons["Review parked ideas"].tap()
 
         XCTAssertTrue(relaunchedApp.staticTexts["Relaunch survivor"].waitForExistence(timeout: 5))
-        XCTAssertTrue(relaunchedApp.staticTexts["PARKED"].exists)
+        XCTAssertTrue(relaunchedApp.staticTexts["READY"].exists)
         capture(relaunchedApp, named: "persistence-relaunch")
+    }
+
+    func testPriorBuildStoreMigratesWithoutLosingParkedIdea() {
+        let app = launchApp(arguments: ["-ui-testing-persistent"])
+        XCTAssertTrue(app.buttons["Actions"].waitForExistence(timeout: 5))
+        app.buttons["reviewParkedButton"].tap()
+        XCTAssertTrue(app.staticTexts["Relaunch survivor"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["READY"].exists)
     }
 
     func testExplicitNowEditChangesOnlyAfterSave() {
@@ -100,7 +108,7 @@ final class NowNestUITests: XCTestCase {
         capture(app, named: "now-edited")
     }
 
-    func testReviewDeletionRemovesSelectedIdeaAfterConfirmation() {
+    func testReviewAbandonRemovesSelectedIdea() {
         let app = launchApp()
 
         app.buttons["parkIdeaButton"].tap()
@@ -112,10 +120,28 @@ final class NowNestUITests: XCTestCase {
         let idea = app.staticTexts["Delete this later"]
         XCTAssertTrue(idea.waitForExistence(timeout: 5))
         idea.swipeLeft()
-        app.buttons["Delete"].tap()
-        app.buttons["Delete"].tap()
+        app.buttons["Abandon"].tap()
 
         XCTAssertFalse(idea.waitForExistence(timeout: 2))
         capture(app, named: "review-deleted")
+    }
+
+    func testParkedIdeaCanResumeAndResolve() {
+        let app = launchApp()
+
+        app.buttons["parkIdeaButton"].tap()
+        app.textFields["ideaField"].typeText("Investigate Foundation Models")
+        app.buttons["confirmParkButton"].tap()
+        app.buttons["reviewParkedButton"].tap()
+        app.staticTexts["Investigate Foundation Models"].tap()
+
+        XCTAssertTrue(app.staticTexts["originalThought"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["You were doing"].exists)
+        app.buttons["resumeIdeaButton"].tap()
+
+        XCTAssertTrue(app.buttons["completeActiveButton"].waitForExistence(timeout: 5))
+        app.buttons["completeActiveButton"].tap()
+        XCTAssertTrue(app.staticTexts["Park one real idea"].waitForExistence(timeout: 5))
+        capture(app, named: "resume-complete")
     }
 }
