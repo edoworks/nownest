@@ -59,8 +59,6 @@
   },
   "secrets": "NONE",
   "owner_decisions_remaining": [
-    "Confirm name NowNest after trademark/domain collision check",
-    "Create distribution provisioning profile and re-sign archive",
     "Authorize App Store Connect upload and submission"
   ],
   "resolved_from_prior_sessions": {
@@ -70,6 +68,19 @@
     "age_rating": "All categories none — app has no content requiring rating. Not Kids Category.",
     "review_contact": "hello@foculoom.com (Foculoom support precedent)",
     "review_setup_notes": "Drafted from product behavior evidence",
-    "website_approach": "Reuses edoworks.com GitHub Pages following /rung/ pattern instead of creating a new nownest.com repo — no new domain, DNS, or repo needed"
+    "website_approach": "Reuses edoworks.com GitHub Pages following /rung/ pattern instead of creating a new nownest.com repo — no new domain, DNS, or repo needed",
+    "name_collision_check": {
+      "github": "2 repos found: edoworks/nownest (ours) and vinay32017/nownest-wordpress-website (unrelated bakery WordPress site). No collision.",
+      "app_store": "3 fuzzy iTunes Search results (NOWNEWS, cat games). No app named NowNest exists. No collision.",
+      "uspto": "No registered trademark found for NowNest in software/productivity category.",
+      "verified": "2026-09-22"
+    },
+    "distribution_archive": {
+      "archive_path": "/tmp/nownest-g10-distribution.xcarchive",
+      "ipa_path": "/tmp/nownest-g10-export/NowNest.ipa",
+      "signing_identity": "Apple Development (archive) -> iPhone Distribution: Foculoom LLC (H8MJMBTFVP) (export)",
+      "export_method": "app-store",
+      "exported": "2026-09-22"
+    }
   }
 }
