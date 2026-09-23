@@ -73,6 +73,11 @@ struct NowNestApp: App {
         }
     }
 
+    static func recoverFromCorruptedStore(at storeURL: URL, schema: Schema) throws -> ModelContainer {
+        removeStore(at: storeURL)
+        return try ModelContainer(for: schema)
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
