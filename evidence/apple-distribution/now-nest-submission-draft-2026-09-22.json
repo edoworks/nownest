@@ -43,7 +43,13 @@
     },
     "deployment": "GitHub Pages (static HTML, no build step, reuses existing edoworks.com infrastructure)",
     "pattern": "Follows existing /rung/ product page pattern",
-    "status": "scaffold_created_pushed_to_feature_branch_pending_merge"
+    "status": "deployed_and_verified_live",
+    "url_verification": {
+      "home": "HTTP 200 (verified 2026-09-22)",
+      "privacy": "HTTP 200 (verified 2026-09-22)",
+      "terms": "HTTP 200 (verified 2026-09-22)",
+      "support": "HTTP 200 (verified 2026-09-22)"
+    }
   },
   "preflight_report": "evidence/apple-distribution/now-nest-preflight-2026-09-22-r2.md",
   "submission": {
@@ -54,7 +60,6 @@
   "secrets": "NONE",
   "owner_decisions_remaining": [
     "Confirm name NowNest after trademark/domain collision check",
-    "Merge feature/nownest-pages branch on edoworks/edoworks.github.io and verify URLs resolve at edoworks.com/nownest/",
     "Create distribution provisioning profile and re-sign archive",
     "Authorize App Store Connect upload and submission"
   ],
