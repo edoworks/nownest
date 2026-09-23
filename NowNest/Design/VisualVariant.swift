@@ -71,6 +71,9 @@ enum VisualVariantLaunchParser {
         var quietModeValue: String?
         var variantSeen = false
         var quietModeSeen = false
+        var variantInvalid = false
+        var quietModeInvalid = false
+        let recognizedOptions = Set(["-visual-variant", "-quiet-mode"])
 
         var index = 0
         while index < arguments.count {
@@ -78,10 +81,13 @@ enum VisualVariantLaunchParser {
             if arg == "-visual-variant" {
                 if variantSeen {
                     if failFast { throw ParseError.duplicateOption(option: arg) }
+                    variantInvalid = true
                 } else {
                     variantSeen = true
-                    guard index + 1 < arguments.count else {
+                    guard index + 1 < arguments.count,
+                          !recognizedOptions.contains(arguments[index + 1]) else {
                         if failFast { throw ParseError.missingValue(option: arg) }
+                        variantInvalid = true
                         index += 1
                         continue
                     }
@@ -92,10 +98,13 @@ enum VisualVariantLaunchParser {
             } else if arg == "-quiet-mode" {
                 if quietModeSeen {
                     if failFast { throw ParseError.duplicateOption(option: arg) }
+                    quietModeInvalid = true
                 } else {
                     quietModeSeen = true
-                    guard index + 1 < arguments.count else {
+                    guard index + 1 < arguments.count,
+                          !recognizedOptions.contains(arguments[index + 1]) else {
                         if failFast { throw ParseError.missingValue(option: arg) }
+                        quietModeInvalid = true
                         index += 1
                         continue
                     }
@@ -107,8 +116,12 @@ enum VisualVariantLaunchParser {
             index += 1
         }
 
-        let resolvedVariant = try resolveVariant(value: variantValue, failFast: failFast)
-        let resolvedQuietMode = try resolveQuietMode(value: quietModeValue, failFast: failFast)
+        let resolvedVariant = variantInvalid
+            ? .sophie
+            : try resolveVariant(value: variantValue, failFast: failFast)
+        let resolvedQuietMode = quietModeInvalid
+            ? nil
+            : try resolveQuietMode(value: quietModeValue, failFast: failFast)
 
         return ParseResult(variant: resolvedVariant, quietMode: resolvedQuietMode)
     }

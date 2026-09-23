@@ -1,6 +1,6 @@
 # NowNest Calm Expressive UX PRD
 
-- Status: Approved implementation handoff; production treatment not yet selected
+- Status: Sophie selected as the release-default treatment; broader release gates remain open
 - Product: NowNest (`edoworks/nownest`)
 - Baseline: `8d6f3b5`
 - Prepared: 2026-09-21
@@ -9,6 +9,9 @@
 > Customer Zero amendment (2026-09-23): visual treatment is subordinate to the
 > lifecycle contract in `customer-zero-prd.md`. A visually qualified build is not
 > release-ready unless Park -> Resume -> Resolve and the seven-day dogfood gate pass.
+> Founder-feedback amendment (2026-09-23): Sophie supersedes the provisional
+> no-selection state as the release default, with Quiet Mode preserving a fully
+> functional character-free treatment. This selection does not authorize release.
 
 Tracking:
 
@@ -35,9 +38,12 @@ that same loop:
 3. `sophie`: the expressive treatment with Sophie as an optional transition
    character.
 
-The production treatment must not be selected until the task-based human
-comparison in section 12 is recorded. Prototype completion is not approval to
-upload, submit, publish, rename the app, or change the production default.
+The initial selection gate required the task-based human comparison in section
+12. The later owner disposition recorded in
+`evidence/testflight/founder-feedback-2026-09-23.json` selected Sophie as the
+release default and is implemented in the current source. Prototype completion
+and treatment selection do not authorize upload, submission, commercialization,
+application rename, or trademark adoption.
 
 ## 2. Product Decision
 
@@ -123,8 +129,8 @@ Add a small internal `VisualVariant` type with `control`, `expressive`, and
 
 Requirements:
 
-- Release builds use `control` when the variant option is absent or unsupported
-  until a production treatment is approved.
+- Release builds use `sophie` when the variant option is absent or unsupported,
+  reflecting the recorded production-treatment selection.
 - Variant selection is dependency-injected through SwiftUI environment state;
   feature views must not repeatedly inspect `ProcessInfo`.
 - Variants alter presentation and copy only. Persistence and actions use the
@@ -134,7 +140,7 @@ Requirements:
 - Parse each option as an argument/value pair. A missing value, duplicate
   option, or unsupported value is invalid test configuration and must fail fast
   in DEBUG/UI-test runs. In a release run, invalid or absent variant input uses
-  `control`; invalid Quiet Mode input is ignored and the stored preference is
+  `sophie`; invalid Quiet Mode input is ignored and the stored preference is
   used.
 - A valid `-quiet-mode` launch override takes precedence over `@AppStorage` for
   that process but does not mutate the stored preference.
@@ -420,7 +426,7 @@ Physical-device validation follows only after simulator verification and must
 not trigger a TestFlight upload without separate explicit authorization.
 
 The pinned factory verifier is a later release-gate check because it creates an
-unsigned archive. See section 18. Do not run it during Chunks A-C without
+unsigned archive. See section 19. Do not run it during Chunks A-C without
 explicit archive authorization.
 
 ### Static regression check
@@ -443,11 +449,15 @@ recruit or impersonate participants, grant consent, deploy to a device without
 authority, fabricate observations, sign the decision, or change the production
 default.
 
-Use at least five adult participants from the default audience before selecting
-Sophie for production. At least three should self-identify as regularly
-experiencing distractibility or task-switching cost; do not require or record a
-diagnosis. If fewer participants are available, record the run as formative
-dogfooding and do not change the production default from it.
+The original plan required at least five adult participants before selecting
+Sophie. The owner dispositions recorded on 2026-09-23 supersede that requirement
+only for the current qualification-build default and public visual treatment.
+They do not establish preference, usefulness, external validation, or commercial
+fitness. Representative external validation remains a commercialization gate
+and must report the limitations of selecting the current default before that
+comparison. When running the planned comparison, at least three participants
+should self-identify as regularly experiencing distractibility or task-switching
+cost; do not require or record a diagnosis.
 
 Validate both physical form factors: at least two participants use the iPhone
 and at least two use the iPad. The human operator also completes the physical
@@ -504,6 +514,13 @@ anchors to each participant and do not reverse scoring between variants.
 
 ### Selection rule
 
+The rules below remain the evaluation framework for future representative
+external validation and any commercial preference claim. The 2026-09-23 owner
+dispositions supersede their timing, metric, participant-minimum, and
+commit-linked approval prerequisites only for the current qualification-build
+default and public treatment. That exception does not count as passing these
+rules and must be disclosed in later comparison evidence.
+
 - Reject a treatment if any participant cannot complete the loop or recall the
   next action when they succeeded in `control`.
 - Reject Sophie if two or more participants call her childish, demanding, or
@@ -541,7 +558,7 @@ Do not combine chunks if doing so hides a failing intermediate state.
 - Add `VisualVariant`, launch parsing, centralized semantic tokens, reusable
   surfaces, and the local Sophie mark/poses.
 - Add pure unit tests for variant policy and confirmation copy.
-- Keep the release parser fallback at `control`; every UI test passes an
+- Keep the release parser fallback aligned with the recorded default; every UI test passes an
   explicit variant and Quiet Mode value.
 - Verification: unit tests, control launch screenshot, light/dark build.
 
@@ -565,18 +582,19 @@ Do not combine chunks if doing so hides a failing intermediate state.
   accessibility checklist, and screenshot review. The full factory verifier is
   deferred until archive authority is explicit.
 
-### Chunk D: Human comparison and production decision
+### Chunk D: Human comparison and external-validation decision
 
 - The named human operator runs section 12 and the pending physical
   accessibility rows on iPhone and iPad; the agent prepares and summarizes.
 - Record raw results and the selection rule outcome.
 - Only after the result is approved, remove prototype-only branching that is no
-  longer needed or make the selected release default in a separate reviewed
-  change.
+  longer needed. The current qualification default remains Sophie under the
+  recorded owner exception; comparison determines whether evidence supports
+  retaining it for later commercial decisions.
 - Verification: owner-approved decision record linked from
   `edoworks/factory#32`. If the
-  minimum participant rule is unmet, record formative results and leave the
-  production default unchanged.
+  minimum participant rule is unmet, record formative results without claiming
+  external validation or commercial preference.
 
 ## 14. Required Evidence Per Chunk
 
@@ -614,7 +632,77 @@ The subject revision identifies the app source and build under test. The
 evidence revision identifies the later commit containing its durable summary;
 these revisions are intentionally distinct and both are required.
 
-## 15. Authority And Privacy
+## 15. Public Surface Contract
+
+Product-owned public pages must look and sound like the validated qualification
+build rather than a generic documentation template. Apply the visual system in
+section 6 to the NowNest home, support, privacy, and terms pages:
+
+- use `canvas`, `surface`, `surfaceRaised`, `ink`, `inkMuted`, `honey`,
+  `ginger`, and `sage` as semantic web tokens in light and dark appearances;
+- preserve system typography and build identity through hierarchy, spacing,
+  rounded 24-point primary surfaces, rounded 16-point note surfaces, and local
+  illustration rather than a custom display typeface;
+- use checked-in original Sophie, nest, and tucked-note artwork instead of
+  emoji or remotely fetched assets;
+- keep Sophie small, static, secondary to the task, and hidden from assistive
+  technology when decorative; public pages must not turn her into a pet,
+  spokesperson, interactive control, or source of required information;
+- use honey for primary emphasis, ginger for identity, and sage only for safe
+  saved/success states; never use an accent color for body copy;
+- retain visible boundaries without relying on shadows and honor dark and
+  reduced-motion preferences without introducing decorative animation.
+
+Web acceptance requires WCAG AA contrast measurements for every rendered token
+pair, keyboard-operable controls with visible focus, semantic headings and
+landmarks, no information conveyed by color alone, and readable reflow without
+horizontal scrolling at 200% zoom and a 320 CSS-pixel viewport. Decorative
+artwork has empty alternative text or is excluded from the accessibility tree.
+
+Public product language uses `Save for later`, `saved idea`, `Resume`, `Done`,
+`Save again`, and `Abandon`. `PARKED`, `park`, and `re-park` remain acceptable
+only in internal models, historical evidence, or implementation documentation.
+The public headline is `Save it for later. Return to now.` Copy should name the
+human job first: save an interruption without losing the current place, then
+return later with the context needed to begin. Do not use diagnostic language,
+promise an absence of distraction, or describe the product as clinically
+effective.
+
+Every public page must state the lifecycle truth in plain language: NowNest is
+in qualification and is not currently available for public download. Customer
+Zero usefulness, repeated dogfood use, exact-candidate validation, a build-bound
+feedback receipt or `NO_DURABLE_FEEDBACK`, representative external validation,
+willingness-to-pay evidence, and Apple distribution remain separate gates;
+Apple acceptance must not be presented as the only unfinished step. Portfolio
+placement uses an `In qualification` status and must not imply release, revenue,
+customer validation, or commercial proof.
+
+Support and legal copy must match implemented behavior and product-identity
+evidence:
+
+- saved ideas can be marked Done, saved again, or Abandoned; do not claim an
+  individual hard-delete path unless a validated build provides one;
+- removing the app is the available whole-store removal path, subject to
+  operating-system offload, backup, and restore behavior; do not promise
+  irreversible deletion without direct lifecycle evidence;
+- `NowNest` is a provisional public name pending clearance; do not claim
+  trademark registration, adoption, or ownership;
+- privacy statements apply to the validated qualification build and keep
+  website hosting and support-message processing separate from app behavior.
+
+The Edoworks homepage should feature NowNest as qualification-stage work, and
+the portfolio should give it a complete product card rather than a lesser text
+record. Discovery prominence does not change lifecycle status or authorize a
+download.
+
+Public use of the provisional `NowNest` identifier requires explicit current
+owner publication authority and must not be represented as product-name or
+trademark adoption. Commercial name adoption still requires `CLEARED` identity
+evidence. Before either condition is met, implementation remains non-public
+staging. The 2026-09-23 owner direction authorizes the website-alignment change
+described here but does not authorize trademark adoption or commercialization.
+
+## 16. Authority And Privacy
 
 - All content and preferences remain on-device.
 - Do not add telemetry to answer prototype questions. Human comparison notes
@@ -627,7 +715,7 @@ these revisions are intentionally distinct and both are required.
 - `NowNest` remains a provisional public name pending the checks in
   `evidence/product-identity-candidate-2026-09-21.json`.
 
-## 16. Research Basis And Limits
+## 17. Research Basis And Limits
 
 Primary guidance, retrieved 2026-09-21:
 
@@ -647,7 +735,7 @@ prove that those patterns will help NowNest. Evidence for gamification is mixed
 and is not specific to this interruption-capture workflow. Effectiveness and
 preference remain product hypotheses that require the comparison above.
 
-## 17. Definition Of Done
+## 18. Definition Of Done
 
 The redesign program is complete only when:
 
@@ -663,9 +751,10 @@ The redesign program is complete only when:
    recorded.
 
 Until then, describe status precisely as "prototype implemented," "automated
-validation complete," or "awaiting human comparison," not "redesign complete."
+validation complete," "awaiting human comparison," or "treatment selected;
+qualification incomplete," not "redesign complete."
 
-## 18. Fresh-machine Bootstrap
+## 19. Fresh-machine Bootstrap
 
 The repository is the implementation source of truth. A new operator must not
 need this conversation or the machine that produced the PRD.
