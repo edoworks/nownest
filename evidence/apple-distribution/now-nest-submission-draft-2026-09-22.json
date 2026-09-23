@@ -55,12 +55,20 @@
   "submission": {
     "performed": false,
     "human_authorization_required": true,
-    "endpoint": "NOT_INVOKED"
+    "endpoint": "NOT_INVOKED",
+    "next_step": "Wait for Apple processing to complete, then submit for App Review from App Store Connect"
   },
   "secrets": "NONE",
-  "owner_decisions_remaining": [
-    "Authorize App Store Connect upload and submission"
-  ],
+  "owner_decisions_remaining": [],
+  "upload": {
+    "performed": true,
+    "date": "2026-09-22T18:49:37Z",
+    "delivery_uuid": "3780f561-82b7-410e-a3da-e248b552cf43",
+    "bytes_transferred": 515937,
+    "ipa_path": "/tmp/nownest-g10-export-v2/NowNest.ipa",
+    "api_key_id": "C4XD2H8J52",
+    "status": "UPLOADED - processing in App Store Connect"
+  },
   "resolved_from_prior_sessions": {
     "copyright": "Set from Foculoom LLC precedent (Skiplet, Veilsort)",
     "privacy_url": "https://edoworks.com/nownest/privacy/ (scaffold created, pending merge and Pages deployment)",
