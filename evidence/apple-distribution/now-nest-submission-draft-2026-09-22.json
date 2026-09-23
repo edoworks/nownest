@@ -2,7 +2,7 @@
   "schema_version": 2,
   "kind": "APP_STORE_CONNECT_DRAFT",
   "product": "nownest",
-  "revision": "33e4fce",
+  "revision": "5d98f7e",
   "metadata": {
     "name": "NowNest",
     "subtitle": "Park ideas. Return to now.",
@@ -10,8 +10,8 @@
     "keywords": "focus,ideas,tasks,distraction,productivity,planning",
     "category": "Productivity",
     "copyright": "2026 Foculoom LLC",
-    "privacy_url": "https://nownest.com/privacy/",
-    "support_url": "https://nownest.com/support/",
+    "privacy_url": "https://edoworks.com/nownest/privacy/",
+    "support_url": "https://edoworks.com/nownest/support/",
     "age_rating": {
       "alcohol_tobacco_drugs": "none",
       "gambling": "none",
@@ -33,16 +33,17 @@
     }
   },
   "website": {
-    "repository": "foculoom/nownest.com",
-    "local_path": "/Users/hello/foculoom/web/nownest.com",
+    "repository": "edoworks/edoworks.github.io",
+    "local_path": "/Users/hello/foculoom/web/edoworks.github.io/nownest",
     "urls": {
-      "home": "https://nownest.com/",
-      "privacy": "https://nownest.com/privacy/",
-      "terms": "https://nownest.com/terms/",
-      "support": "https://nownest.com/support/"
+      "home": "https://edoworks.com/nownest/",
+      "privacy": "https://edoworks.com/nownest/privacy/",
+      "terms": "https://edoworks.com/nownest/terms/",
+      "support": "https://edoworks.com/nownest/support/"
     },
-    "deployment": "GitHub Pages (static HTML, no build step)",
-    "status": "scaffold_created_not_yet_deployed"
+    "deployment": "GitHub Pages (static HTML, no build step, reuses existing edoworks.com infrastructure)",
+    "pattern": "Follows existing /rung/ product page pattern",
+    "status": "scaffold_created_pushed_to_feature_branch_pending_merge"
   },
   "preflight_report": "evidence/apple-distribution/now-nest-preflight-2026-09-22-r2.md",
   "submission": {
@@ -53,16 +54,17 @@
   "secrets": "NONE",
   "owner_decisions_remaining": [
     "Confirm name NowNest after trademark/domain collision check",
-    "Deploy nownest.com to GitHub Pages and verify URLs resolve",
+    "Merge feature/nownest-pages branch on edoworks/edoworks.github.io and verify URLs resolve at edoworks.com/nownest/",
     "Create distribution provisioning profile and re-sign archive",
     "Authorize App Store Connect upload and submission"
   ],
   "resolved_from_prior_sessions": {
     "copyright": "Set from Foculoom LLC precedent (Skiplet, Veilsort)",
-    "privacy_url": "https://nownest.com/privacy/ (scaffold created, not yet deployed)",
-    "support_url": "https://nownest.com/support/ (scaffold created, not yet deployed)",
+    "privacy_url": "https://edoworks.com/nownest/privacy/ (scaffold created, pending merge and Pages deployment)",
+    "support_url": "https://edoworks.com/nownest/support/ (scaffold created, pending merge and Pages deployment)",
     "age_rating": "All categories none — app has no content requiring rating. Not Kids Category.",
     "review_contact": "hello@foculoom.com (Foculoom support precedent)",
-    "review_setup_notes": "Drafted from product behavior evidence"
+    "review_setup_notes": "Drafted from product behavior evidence",
+    "website_approach": "Reuses edoworks.com GitHub Pages following /rung/ pattern instead of creating a new nownest.com repo — no new domain, DNS, or repo needed"
   }
 }
