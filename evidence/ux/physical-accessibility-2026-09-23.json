@@ -1,0 +1,258 @@
+{
+  "schema_version": 2,
+  "status": "PARTIAL_PASS",
+  "captured_at": "2026-09-23T17:53:50Z",
+  "tracking_issue": "https://github.com/edoworks/factory/issues/45",
+  "baseline_commit": "c7ea771cbcb83f5e7892274ae9f6a8d84c63e91d",
+  "result_commit": "eb6ea44661990dfaeecc8f7cde6dc2c650f17f12",
+  "evidence_revision": "c6cc18f805812160038cc54d575571f8ea1e8e3a",
+  "source_branch": "main",
+  "build_context": {
+    "kind": "signed development test builds",
+    "version": "0.1.0",
+    "build": "3",
+    "xcode": "26.6 (17F113)",
+    "distribution_build_bound": false,
+    "release_gate_effect": "The recorded physical rows pass for development builds of the result commit. Exact TestFlight-candidate qualification and untested accessibility rows remain open."
+  },
+  "commands": {
+    "device_preflight": "scripts/verify-physical-device-ready.sh <redacted-physical-device-id>",
+    "iphone_full": "xcodebuild test -project NowNest.xcodeproj -scheme NowNest -destination 'platform=iOS,id=<redacted-physical-iphone-id>' -derivedDataPath /tmp/NowNestPhysical-iPhone -resultBundlePath /tmp/NowNestPhysical-iPhone.xcresult",
+    "iphone_ui_retry": "xcodebuild test -project NowNest.xcodeproj -scheme NowNest -destination 'platform=iOS,id=<redacted-physical-iphone-id>' -derivedDataPath /tmp/NowNestPhysical-iPhone-Retry -resultBundlePath /tmp/NowNestPhysical-iPhone-Retry.xcresult -only-testing:NowNestUITests",
+    "ipad_full": "xcodebuild test -project NowNest.xcodeproj -scheme NowNest -destination 'platform=iOS,id=<redacted-physical-ipad-id>' -derivedDataPath /tmp/NowNestPhysical-iPad -resultBundlePath /tmp/NowNestPhysical-iPad.xcresult"
+  },
+  "command_privacy_note": "Only unique destination identifiers are redacted; the resolved model and OS are recorded below.",
+  "result_bundles": [
+    {
+      "command": "iphone_full",
+      "path": "/tmp/NowNestPhysical-iPhone.xcresult",
+      "local_archive_path": "/tmp/NowNestPhysical-iPhone.xcresult.zip",
+      "local_archive_sha256": "1811aae9df12c4a3cdd2b57f450832b37dfbade9c2bbd29644f5f22e7706c30c",
+      "result": "35 unit tests passed; UI runner initialization failed before UI tests ran"
+    },
+    {
+      "command": "iphone_ui_retry",
+      "path": "/tmp/NowNestPhysical-iPhone-Retry.xcresult",
+      "local_archive_path": "/tmp/NowNestPhysical-iPhone-Retry.xcresult.zip",
+      "local_archive_sha256": "60691e6a91a98ee3eb6405894d9c45f11c05cb87364c6c4e28ed8ba2254eea02",
+      "result": "34 UI tests passed"
+    },
+    {
+      "command": "ipad_full",
+      "path": "/tmp/NowNestPhysical-iPad.xcresult",
+      "local_archive_path": "/tmp/NowNestPhysical-iPad.xcresult.zip",
+      "local_archive_sha256": "2b5de291bcc72bb18981ecede67d522794e78f116c642cc5e7ad57dafe8501ea",
+      "result": "35 unit tests and 34 UI tests passed"
+    }
+  ],
+  "devices": [
+    {
+      "role": "physical_iphone",
+      "model": "iPhone XR",
+      "os": "iOS 18.7.10 (22H374)",
+      "binary_sha256": "aa93074a3de5c6a90542a876630e4f1fae8a30cb0b393a56d2bba71374b23c98",
+      "automated_results": {
+        "unit_tests": {"passed": 35, "failed": 0, "receipt": "iphone_full"},
+        "ui_tests": {"passed": 34, "failed": 0, "receipt": "iphone_ui_retry"},
+        "lifecycle_and_recovery": "PASS",
+        "accessibility_tree_assertions": "PASS"
+      }
+    },
+    {
+      "role": "physical_ipad",
+      "model": "iPad Air (4th generation)",
+      "os": "iPadOS 26.7 (23H24)",
+      "binary_sha256": "0acb96ac0749e19a58b39796785ebae69c0b885e9ad50c2b03bb53b62d04467b",
+      "automated_results": {
+        "unit_tests": {"passed": 35, "failed": 0, "receipt": "ipad_full"},
+        "ui_tests": {"passed": 34, "failed": 0, "receipt": "ipad_full"},
+        "lifecycle_and_recovery": "PASS",
+        "accessibility_tree_assertions": "PASS"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "device": "physical_iphone",
+      "variant": "Sophie default, light appearance",
+      "path": "evidence/ux/screenshots/eb6ea44/iphone-sophie-light.png",
+      "sha256": "af705b8bf3cbd59b30e62ed16b45512fa960fc059cc7e1921ed045186886a8bb"
+    },
+    {
+      "device": "physical_iphone",
+      "variant": "primary action, dark appearance",
+      "path": "evidence/ux/screenshots/eb6ea44/iphone-primary-dark.png",
+      "sha256": "9bd70ed1267f5000720b8108e463ecbbc872c41e3e1ff7317afb7264b2803185"
+    },
+    {
+      "device": "physical_iphone",
+      "variant": "Quiet Mode, empty state",
+      "path": "evidence/ux/screenshots/eb6ea44/iphone-quiet-empty.png",
+      "sha256": "d478510a435b501ce61c3c7c8b202baf6327b39fad2a93dbca0b747194ad132e"
+    },
+    {
+      "device": "physical_ipad",
+      "variant": "Sophie default, light appearance",
+      "path": "evidence/ux/screenshots/eb6ea44/ipad-sophie-light.png",
+      "sha256": "7d9d9e8a27a2706616e7a2954032e18f73e5e63656aa8b5f39b8a92b05c563b3"
+    },
+    {
+      "device": "physical_ipad",
+      "variant": "primary action, dark appearance",
+      "path": "evidence/ux/screenshots/eb6ea44/ipad-primary-dark.png",
+      "sha256": "54bf7c7d2e34a59f8236a506deba372530d2dbedbd6e56641b3b1ebaa4e8b3be"
+    },
+    {
+      "device": "physical_ipad",
+      "variant": "Quiet Mode, empty state",
+      "path": "evidence/ux/screenshots/eb6ea44/ipad-quiet-empty.png",
+      "sha256": "2ec113bc02e86cc9cfa882c5f95ca62490702abb68f2c459cbd3811952e9a3a0"
+    }
+  ],
+  "accessibility_checklist": [
+    {
+      "mode": "VoiceOver reading and focus order",
+      "status": "PASS",
+      "source_revision": "eb6ea44661990dfaeecc8f7cde6dc2c650f17f12",
+      "devices": [{"role": "physical_iphone", "os": "iOS 18.7.10 (22H374)"}, {"role": "physical_ipad", "os": "iPadOS 26.7 (23H24)"}],
+      "variant": "Sophie default and capture flow",
+      "command": "interactive physical-device checklist",
+      "timestamp": "2026-09-23T17:53:50Z",
+      "evidence_paths": ["evidence/ux/physical-accessibility-2026-09-23.json"],
+      "direct_pass_conditions": ["Home traversed in order: NOW, Project, Outcome, Next Action, Park, reassurance, Actions", "decorative Sophie content skipped", "capture controls read in task order", "save confirmation announced once"],
+      "notes": "Owner-authorized human operator completed the check on both physical form factors."
+    },
+    {
+      "mode": "Increase Contrast",
+      "status": "PASS",
+      "source_revision": "eb6ea44661990dfaeecc8f7cde6dc2c650f17f12",
+      "devices": [{"role": "physical_iphone", "os": "iOS 18.7.10 (22H374)"}, {"role": "physical_ipad", "os": "iPadOS 26.7 (23H24)"}],
+      "variant": "task flow with Increase Contrast enabled",
+      "command": "interactive physical-device checklist",
+      "timestamp": "2026-09-23T17:53:50Z",
+      "evidence_paths": ["evidence/ux/physical-accessibility-2026-09-23.json"],
+      "direct_pass_condition": "content and primary actions remained legible without clipping or information loss",
+      "notes": "Owner-authorized human operator completed the check on both physical form factors; this is not a measured contrast claim."
+    },
+    {
+      "mode": "Reduce Motion",
+      "status": "PASS",
+      "source_revision": "eb6ea44661990dfaeecc8f7cde6dc2c650f17f12",
+      "devices": [{"role": "physical_iphone", "os": "iOS 18.7.10 (22H374)"}, {"role": "physical_ipad", "os": "iPadOS 26.7 (23H24)"}],
+      "variant": "task flow with Reduce Motion enabled",
+      "command": "interactive physical-device checklist",
+      "timestamp": "2026-09-23T17:53:50Z",
+      "evidence_paths": ["evidence/ux/physical-accessibility-2026-09-23.json"],
+      "direct_pass_condition": "decorative animation was suppressed without information loss",
+      "notes": "Owner-authorized human operator completed the check on both physical form factors."
+    },
+    {
+      "mode": "light and dark appearance",
+      "status": "PASS",
+      "source_revision": "eb6ea44661990dfaeecc8f7cde6dc2c650f17f12",
+      "devices": [{"role": "physical_iphone", "os": "iOS 18.7.10 (22H374)"}, {"role": "physical_ipad", "os": "iPadOS 26.7 (23H24)"}],
+      "variant": "Sophie default in light appearance and primary action in dark appearance",
+      "command": "physical UI test screenshots followed by local vision review",
+      "timestamp": "2026-09-23T17:53:50Z",
+      "direct_pass_condition": "reviewed states fit both form factors without horizontal scrolling, visible clipping, illegible pairings, unintended pure-black blocks, or lost boundaries",
+      "evidence_paths": ["evidence/ux/screenshots/eb6ea44/iphone-sophie-light.png", "evidence/ux/screenshots/eb6ea44/iphone-primary-dark.png", "evidence/ux/screenshots/eb6ea44/ipad-sophie-light.png", "evidence/ux/screenshots/eb6ea44/ipad-primary-dark.png"],
+      "notes": "Screenshot review is limited to visible layout and clipping."
+    },
+    {
+      "mode": "Quiet Mode decorative suppression",
+      "status": "PASS",
+      "source_revision": "eb6ea44661990dfaeecc8f7cde6dc2c650f17f12",
+      "devices": [{"role": "physical_iphone", "os": "iOS 18.7.10 (22H374)"}, {"role": "physical_ipad", "os": "iPadOS 26.7 (23H24)"}],
+      "variant": "Quiet Mode empty state",
+      "command": "physical UI test screenshots followed by local vision review",
+      "timestamp": "2026-09-23T17:53:50Z",
+      "direct_pass_condition": "decorative Sophie treatment was absent while task content remained",
+      "evidence_paths": ["evidence/ux/screenshots/eb6ea44/iphone-quiet-empty.png", "evidence/ux/screenshots/eb6ea44/ipad-quiet-empty.png"],
+      "notes": "Both physical form factors were reviewed."
+    },
+    {
+      "mode": "Dynamic Type at largest accessibility size",
+      "status": "NOT_RUN",
+      "source_revision": "eb6ea44661990dfaeecc8f7cde6dc2c650f17f12",
+      "devices": [{"role": "physical_iphone", "os": "iOS 18.7.10 (22H374)"}, {"role": "physical_ipad", "os": "iPadOS 26.7 (23H24)"}],
+      "variant": "largest accessibility size",
+      "command": "NOT_RUN",
+      "timestamp": "2026-09-23T17:53:50Z",
+      "evidence_paths": [],
+      "direct_pass_condition": "No pass condition evaluated.",
+      "notes": "No direct physical-device execution receipt was retained for this mode."
+    },
+    {
+      "mode": "Differentiate Without Color",
+      "status": "NOT_RUN",
+      "source_revision": "eb6ea44661990dfaeecc8f7cde6dc2c650f17f12",
+      "devices": [{"role": "physical_iphone", "os": "iOS 18.7.10 (22H374)"}, {"role": "physical_ipad", "os": "iPadOS 26.7 (23H24)"}],
+      "variant": "Differentiate Without Color enabled",
+      "command": "NOT_RUN",
+      "timestamp": "2026-09-23T17:53:50Z",
+      "evidence_paths": [],
+      "direct_pass_condition": "No pass condition evaluated.",
+      "notes": "No direct physical-device execution receipt was retained for this mode."
+    },
+    {
+      "mode": "Reduce Transparency",
+      "status": "NOT_RUN",
+      "source_revision": "eb6ea44661990dfaeecc8f7cde6dc2c650f17f12",
+      "devices": [{"role": "physical_iphone", "os": "iOS 18.7.10 (22H374)"}, {"role": "physical_ipad", "os": "iPadOS 26.7 (23H24)"}],
+      "variant": "Reduce Transparency enabled",
+      "command": "NOT_RUN",
+      "timestamp": "2026-09-23T17:53:50Z",
+      "evidence_paths": [],
+      "direct_pass_condition": "No pass condition evaluated.",
+      "notes": "No direct physical-device execution receipt was retained for this mode."
+    },
+    {
+      "mode": "measured text and non-text contrast",
+      "status": "NOT_RUN",
+      "source_revision": "eb6ea44661990dfaeecc8f7cde6dc2c650f17f12",
+      "devices": [{"role": "physical_iphone", "os": "iOS 18.7.10 (22H374)"}, {"role": "physical_ipad", "os": "iPadOS 26.7 (23H24)"}],
+      "variant": "text and non-text contrast measurement",
+      "command": "NOT_RUN",
+      "timestamp": "2026-09-23T17:53:50Z",
+      "evidence_paths": [],
+      "direct_pass_condition": "No pass condition evaluated.",
+      "notes": "Visual and Increase Contrast checks are not Accessibility Inspector measurements."
+    }
+  ],
+  "vision_verification": {
+    "model": "ollama/qwen3.5:9b",
+    "status": "PASS_FOR_RECORDED_SCREENSHOTS",
+    "checks": ["light and dark layout", "Sophie default", "Quiet Mode", "visible clipping", "form-factor fit"],
+    "scope_note": "Vision review evaluates rendered screenshots only. It does not establish VoiceOver, motion behavior, or measured contrast."
+  },
+  "initial_iphone_ui_runner_failure": {
+    "result": "RESOLVED_AND_RERUN",
+    "symptom": "UI test runner initialization failed because Local Authentication was canceled by the system.",
+    "root_cause_evidence": [
+      "The failed result bundle records LocalAuthentication code -4 and an authentication-canceled initialization failure.",
+      "Evidence does not establish why iOS canceled the first prompt, so no deeper cause is asserted.",
+      "After the device was unlocked and the operator was ready to approve automation, all 34 UI tests passed."
+    ],
+    "immediate_correction": "Unlock and keep the physical device awake before retrying UI automation.",
+    "root_cause_correction": "Require an unlocked and awake device authentication preflight before physical UI automation.",
+    "recurrence_guard": "scripts/verify-physical-device-ready.sh fails before UI automation when devicectl does not report the device unlocked; both failed and passing result-bundle archive hashes are retained in this receipt.",
+    "guard_verification": "PASS: scripts/verify-physical-device-ready.sh reported both physical destinations unlocked on 2026-09-23; run it before each future physical xcodebuild invocation."
+  },
+  "privacy_and_authority": {
+    "privacy": "No participant identity, unique device identifier, or content-bearing user data is recorded.",
+    "authority": "No distribution, release, TestFlight, publication, or commercialization authority is claimed."
+  },
+  "independent_review": {
+    "method": "rubberduck review of the final evidence diff against the accessibility PRD, Customer Zero PRD, and release criteria",
+    "result": "PASS",
+    "findings": "No blocking, high, or medium findings remain.",
+    "scope": ["row-level evidence metadata", "screenshot and result-bundle hashes", "PASS and NOT_RUN scope", "privacy", "build identity", "release gates", "device-preflight shell correctness"]
+  },
+  "known_gaps_and_remaining_gates": [
+    "Run and retain direct receipts for Dynamic Type at the largest accessibility size, Differentiate Without Color, and Reduce Transparency.",
+    "Record Accessibility Inspector measurements for text and non-text contrast.",
+    "Build and validate the exact distribution/TestFlight candidate on both physical form factors.",
+    "Record build-bound TestFlight feedback or NO_DURABLE_FEEDBACK.",
+    "Complete the seven-day Customer Zero protocol before commercialization."
+  ]
+}
