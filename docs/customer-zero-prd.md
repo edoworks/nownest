@@ -36,12 +36,46 @@ is local SwiftData on iPhone and iPad.
 4. Opening one shows the exact original thought and the context it interrupted.
 5. Resume asks only for a concrete starting action and activates the intention
    without overwriting the underlying NOW.
-6. The active intention offers Done, Re-park, and Abandon.
+6. The active intention offers Done, Save again, and Abandon. Internal state
+   and historical evidence may continue to use `re-park`.
 7. Local content-free events measure the lifecycle. No text or identifier leaves
    the device.
 
 `Resume` is the sole term. `Make NOW` is rejected because the implementation
 temporarily overlays the resumed intention while preserving the prior NOW.
+
+## Public-surface wording
+
+Public pages describe the current loop in ordinary language:
+
+1. Keep the current project, outcome, and next action visible.
+2. Save an interruption for later without changing NOW.
+3. Reopen the saved idea with the context it interrupted.
+4. Add one concrete starting action and Resume.
+5. Finish with Done, Save again, or Abandon.
+
+Use `Save for later` rather than `Park` in user-facing headings, buttons, feature
+names, metadata, and explanations. `PARKED` remains an internal persistence
+state. The public headline is `Save it for later. Return to now.`
+
+The website must say that NowNest is still in qualification and is not
+currently available for public download. It must not reduce the remaining work
+to Apple acceptance: Customer Zero usefulness, seven consecutive days of
+voluntary use, exact-candidate validation, build-bound feedback or
+`NO_DURABLE_FEEDBACK`, representative external validation, and
+willingness-to-pay evidence still precede commercialization. Plain language is
+required; repeated legalistic or factory-process wording should not displace
+the product explanation.
+
+Public support and legal statements are bounded by implemented behavior and
+identity evidence. The current build supports Done, Save again, and Abandon,
+not individual hard deletion. Removing the app is the available whole-store
+removal path, subject to operating-system offload, backup, and restore behavior;
+do not promise irreversible deletion without direct lifecycle evidence.
+`NowNest` is provisional and must not be represented as an adopted or
+registered trademark until clearance is recorded. Public use of that
+provisional identifier requires explicit current owner publication authority;
+commercial name adoption requires `CLEARED` identity evidence.
 
 ## Feedback traceability
 

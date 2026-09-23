@@ -79,6 +79,28 @@ final class VisualVariantTests: XCTestCase {
         }
     }
 
+    func testAdjacentOptionIsNotConsumedAsVariantValueInDebug() {
+        XCTAssertThrowsError(
+            try VisualVariantLaunchParser.parse(
+                arguments: ["-visual-variant", "-quiet-mode", "enabled"],
+                failFast: true
+            )
+        ) { error in
+            XCTAssertEqual(error as? VisualVariantLaunchParser.ParseError, .missingValue(option: "-visual-variant"))
+        }
+    }
+
+    func testAdjacentOptionIsNotConsumedAsQuietModeValueInDebug() {
+        XCTAssertThrowsError(
+            try VisualVariantLaunchParser.parse(
+                arguments: ["-quiet-mode", "-visual-variant", "expressive"],
+                failFast: true
+            )
+        ) { error in
+            XCTAssertEqual(error as? VisualVariantLaunchParser.ParseError, .missingValue(option: "-quiet-mode"))
+        }
+    }
+
     func testUnsupportedVariantValueFailsFastInDebug() {
         XCTAssertThrowsError(
             try VisualVariantLaunchParser.parse(arguments: ["-visual-variant", "bogus"], failFast: true)
@@ -139,12 +161,50 @@ final class VisualVariantTests: XCTestCase {
         XCTAssertEqual(config.variant, .sophie)
     }
 
+    func testReleaseFallbackUsesSophieForDuplicateVariantOption() {
+        let config = VisualVariantLaunchParser.resolve(
+            arguments: ["-visual-variant", "control", "-visual-variant", "expressive"],
+            storedQuietMode: false,
+            isDebug: false
+        )
+        XCTAssertEqual(config.variant, .sophie)
+    }
+
     func testReleaseIgnoresInvalidQuietModeValue() {
         let config = VisualVariantLaunchParser.resolve(
             arguments: ["-quiet-mode", "maybe"],
             storedQuietMode: true,
             isDebug: false
         )
+        XCTAssertEqual(config.quietMode, .enabled)
+    }
+
+    func testReleaseUsesStoredPreferenceForDuplicateQuietModeOption() {
+        let config = VisualVariantLaunchParser.resolve(
+            arguments: ["-quiet-mode", "disabled", "-quiet-mode", "enabled"],
+            storedQuietMode: true,
+            isDebug: false
+        )
+        XCTAssertEqual(config.quietMode, .enabled)
+    }
+
+    func testReleaseMissingVariantValueStillParsesQuietMode() {
+        let config = VisualVariantLaunchParser.resolve(
+            arguments: ["-visual-variant", "-quiet-mode", "enabled"],
+            storedQuietMode: false,
+            isDebug: false
+        )
+        XCTAssertEqual(config.variant, .sophie)
+        XCTAssertEqual(config.quietMode, .enabled)
+    }
+
+    func testReleaseMissingQuietModeValueStillParsesVariant() {
+        let config = VisualVariantLaunchParser.resolve(
+            arguments: ["-quiet-mode", "-visual-variant", "expressive"],
+            storedQuietMode: true,
+            isDebug: false
+        )
+        XCTAssertEqual(config.variant, .expressive)
         XCTAssertEqual(config.quietMode, .enabled)
     }
 
