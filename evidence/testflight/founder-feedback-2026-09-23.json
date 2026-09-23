@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "retrieved_at": "2026-09-23",
+  "source": "App Store Connect API app beta feedback relationship",
+  "bundle_id": "com.foculoom.nownest",
+  "build_binding": "UNAVAILABLE_FROM_COLLECTION_RESPONSE",
+  "crash_submissions": 0,
+  "screenshot_submissions": [
+    {
+      "created_at": "2026-09-23T02:37:59.528Z",
+      "feedback": "There’s no way to resume a Parker idea",
+      "workflow": "resume",
+      "severity": "P0",
+      "disposition": "ACCEPTED",
+      "requirement": "Provide first-class Resume with preserved original thought and interruption context.",
+      "acceptance": "Park, relaunch, open saved idea, Resume, then Done or Save again.",
+      "status": "IMPLEMENTED_AND_RELAUNCH_JOURNEY_SIMULATOR_VALIDATED"
+    },
+    {
+      "created_at": "2026-09-23T02:37:41.479Z",
+      "feedback": "“Park” seems like developer speak! Not everyone is a developer who has attended scrum or standup!",
+      "workflow": "capture and retrieval terminology",
+      "severity": "P1",
+      "disposition": "ACCEPTED",
+      "requirement": "Use Save for later in user-facing copy; retain internal persistence names only.",
+      "acceptance": "Primary capture, review, confirmation, and repeat-save controls contain no user-facing Park terminology.",
+      "status": "IMPLEMENTED_AND_SIMULATOR_VALIDATED"
+    },
+    {
+      "created_at": "2026-09-23T02:36:10.785Z",
+      "feedback": "Missing image",
+      "workflow": "visual identity",
+      "severity": "P1",
+      "disposition": "ACCEPTED_WITH_RELATED_ITEM",
+      "requirement": "Ship the already-qualified Sophie treatment by default while preserving Quiet Mode.",
+      "acceptance": "A release launch without debug arguments displays Sophie; Quiet Mode removes decorative imagery.",
+      "status": "IMPLEMENTED_AND_SIMULATOR_VALIDATED_PENDING_PHYSICAL_VALIDATION"
+    },
+    {
+      "created_at": "2026-09-23T02:35:32.812Z",
+      "feedback": "There’s no cat image",
+      "workflow": "visual identity",
+      "severity": "P1",
+      "disposition": "ACCEPTED",
+      "requirement": "Select Sophie as the production default.",
+      "acceptance": "Release-default launch visibly includes Sophie and remains optional through Quiet Mode.",
+      "status": "IMPLEMENTED_AND_SIMULATOR_VALIDATED_PENDING_PHYSICAL_VALIDATION"
+    },
+    {
+      "created_at": "2026-09-23T02:35:02.311Z",
+      "feedback": "I can’t read all text. Seems like a bug in the button color ",
+      "workflow": "capture",
+      "severity": "P0",
+      "disposition": "ACCEPTED",
+      "requirement": "Use dark semantic foreground text on the honey primary action and verify contrast on the exact candidate.",
+      "acceptance": "Primary action text remains readable in light/dark, Increase Contrast, and physical-device review.",
+      "status": "IMPLEMENTED_AND_DARK_MODE_SIMULATOR_VISUALLY_VALIDATED_PENDING_PHYSICAL_AND_INCREASE_CONTRAST"
+    }
+  ],
+  "unknowns": [
+    "The collection response does not expose a build relationship or build version, so these records are not claimed as build-bound.",
+    "The screenshot images were not downloaded; dispositions use the founder's submitted text and current source evidence."
+  ]
+}

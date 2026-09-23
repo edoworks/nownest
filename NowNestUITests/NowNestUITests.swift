@@ -31,7 +31,7 @@ final class NowNestUITests: XCTestCase {
 
     func testCaptureReturnsToUnchangedNow() {
         let app = launchApp()
-        let nextAction = app.staticTexts["Park one real idea"].label
+        let nextAction = app.staticTexts["Save one real idea for later"].label
 
         app.buttons["parkIdeaButton"].tap()
         let field = app.textFields["ideaField"]
@@ -41,7 +41,7 @@ final class NowNestUITests: XCTestCase {
 
         XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["NOW"].waitForExistence(timeout: 5))
-        XCTAssertEqual(app.staticTexts["Park one real idea"].label, nextAction)
+        XCTAssertEqual(app.staticTexts["Save one real idea for later"].label, nextAction)
         capture(app, named: "capture-confirmed")
     }
 
@@ -53,7 +53,7 @@ final class NowNestUITests: XCTestCase {
         app.buttons["confirmParkButton"].tap()
 
         app.buttons["Actions"].tap()
-        app.buttons["Review parked ideas"].tap()
+        app.buttons["Review saved ideas"].tap()
 
         XCTAssertTrue(app.staticTexts["Review this later"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["READY"].exists)
@@ -74,7 +74,7 @@ final class NowNestUITests: XCTestCase {
         let relaunchedApp = launchApp(arguments: ["-ui-testing-persistent"])
         XCTAssertTrue(relaunchedApp.buttons["Actions"].waitForExistence(timeout: 5))
         relaunchedApp.buttons["Actions"].tap()
-        relaunchedApp.buttons["Review parked ideas"].tap()
+        relaunchedApp.buttons["Review saved ideas"].tap()
 
         XCTAssertTrue(relaunchedApp.staticTexts["Relaunch survivor"].waitForExistence(timeout: 5))
         XCTAssertTrue(relaunchedApp.staticTexts["READY"].exists)
@@ -115,7 +115,7 @@ final class NowNestUITests: XCTestCase {
         app.textFields["ideaField"].typeText("Delete this later")
         app.buttons["confirmParkButton"].tap()
         app.buttons["Actions"].tap()
-        app.buttons["Review parked ideas"].tap()
+        app.buttons["Review saved ideas"].tap()
 
         let idea = app.staticTexts["Delete this later"]
         XCTAssertTrue(idea.waitForExistence(timeout: 5))
@@ -127,21 +127,24 @@ final class NowNestUITests: XCTestCase {
     }
 
     func testParkedIdeaCanResumeAndResolve() {
-        let app = launchApp()
+        let app = launchApp(arguments: ["-ui-testing-persistent-reset"])
 
         app.buttons["parkIdeaButton"].tap()
         app.textFields["ideaField"].typeText("Investigate Foundation Models")
         app.buttons["confirmParkButton"].tap()
-        app.buttons["reviewParkedButton"].tap()
-        app.staticTexts["Investigate Foundation Models"].tap()
+        app.terminate()
 
-        XCTAssertTrue(app.staticTexts["originalThought"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["You were doing"].exists)
-        app.buttons["resumeIdeaButton"].tap()
+        let relaunchedApp = launchApp(arguments: ["-ui-testing-persistent"])
+        relaunchedApp.buttons["reviewParkedButton"].tap()
+        relaunchedApp.staticTexts["Investigate Foundation Models"].tap()
 
-        XCTAssertTrue(app.buttons["completeActiveButton"].waitForExistence(timeout: 5))
-        app.buttons["completeActiveButton"].tap()
-        XCTAssertTrue(app.staticTexts["Park one real idea"].waitForExistence(timeout: 5))
-        capture(app, named: "resume-complete")
+        XCTAssertTrue(relaunchedApp.staticTexts["originalThought"].waitForExistence(timeout: 5))
+        XCTAssertTrue(relaunchedApp.staticTexts["You were doing"].exists)
+        relaunchedApp.buttons["resumeIdeaButton"].tap()
+
+        XCTAssertTrue(relaunchedApp.buttons["completeActiveButton"].waitForExistence(timeout: 5))
+        relaunchedApp.buttons["completeActiveButton"].tap()
+        XCTAssertTrue(relaunchedApp.staticTexts["Save one real idea for later"].waitForExistence(timeout: 5))
+        capture(relaunchedApp, named: "resume-complete")
     }
 }

@@ -7,6 +7,7 @@ extension Color {
     static let nestInk = Color("NestInk")
     static let nestInkMuted = Color("NestInkMuted")
     static let nestHoney = Color("NestHoney")
+    static let nestHoneyInk = Color(red: 0.157, green: 0.137, blue: 0.114)
     static let nestHoneyLight = Color("NestHoneyLight")
     static let nestGinger = Color("NestGinger")
     static let nestSage = Color("NestSage")

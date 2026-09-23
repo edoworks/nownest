@@ -7,13 +7,13 @@ final class ScenarioValidationTests: XCTestCase {
         let id = "competing-context-capture"
         let personaHypothesis = "A founder managing two work contexts may benefit from clear visual hierarchy and a short interruption path."
         let interruption = "Compare standing desks"
-        let expectedNextAction = "Park one real idea"
-        let requiredSteps = ["identify-now", "capture-interruption", "resume-now", "review-parked"]
+        let expectedNextAction = "Save one real idea for later"
+        let requiredSteps = ["identify-now", "capture-interruption", "resume-now", "review-saved"]
         let variants = ["control", "expressive", "sophie"]
 
         func expectedConfirmation(for variant: String) -> String {
             switch variant {
-            case "control": return "Parked. Back to"
+            case "control": return "Saved for later. Back to"
             case "expressive": return "Tucked away. Back to:"
             case "sophie": return "Sophie tucked it away. Back to:"
             default: return ""
@@ -142,7 +142,7 @@ final class ScenarioValidationTests: XCTestCase {
             XCTAssertTrue(actionsButton.waitForExistence(timeout: 5))
             XCTAssertTrue(actionsButton.isHittable, "Actions must be hittable after the capture sheet is dismissed")
             actionsButton.tap()
-            let reviewButton = app.buttons["Review parked ideas"]
+            let reviewButton = app.buttons["Review saved ideas"]
             XCTAssertTrue(reviewButton.waitForExistence(timeout: 5))
             XCTAssertTrue(reviewButton.isHittable, "Review must be hittable after opening Actions")
             reviewButton.tap()
@@ -150,7 +150,7 @@ final class ScenarioValidationTests: XCTestCase {
             XCTAssertTrue(parkedIdea.waitForExistence(timeout: 5))
             let parkedIdeaReviewable = parkedIdea.exists && app.staticTexts["READY"].exists
             XCTAssertTrue(parkedIdeaReviewable)
-            steps.append("review-parked")
+            steps.append("review-saved")
 
             XCTAssertEqual(steps, contract.requiredSteps)
             recordTrace(

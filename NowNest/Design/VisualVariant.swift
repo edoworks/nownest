@@ -17,7 +17,7 @@ struct VisualVariantConfiguration: Sendable, Equatable {
     let variant: VisualVariant
     let quietMode: QuietMode
 
-    static let control = VisualVariantConfiguration(variant: .control, quietMode: .disabled)
+    static let control = VisualVariantConfiguration(variant: .sophie, quietMode: .disabled)
 
     var showsSophie: Bool {
         variant.showsSophie && quietMode == .disabled
@@ -36,13 +36,13 @@ struct VisualVariantConfiguration: Sendable, Equatable {
     }
 
     var returnTargetPrefix: String {
-        isQuiet ? "Back to: " : "After parking, return to: "
+        isQuiet ? "Back to: " : "After saving, return to: "
     }
 
     func confirmationCopy(for nextAction: String) -> String {
         switch variant {
         case .control:
-            return "Parked. Back to \(nextAction)."
+            return "Saved for later. Back to \(nextAction)."
         case .expressive:
             return "Tucked away. Back to: \(nextAction)."
         case .sophie:
@@ -119,7 +119,7 @@ enum VisualVariantLaunchParser {
             if failFast {
                 throw ParseError.unsupportedValue(option: "-visual-variant", value: value)
             }
-            return .control
+            return .sophie
         }
         return variant
     }
@@ -147,10 +147,10 @@ enum VisualVariantLaunchParser {
             if isDebug {
                 fatalError("Invalid visual variant launch configuration: \(error)")
             }
-            result = ParseResult(variant: .control, quietMode: nil)
+            result = ParseResult(variant: .sophie, quietMode: nil)
         }
 
-        let variant = result.variant ?? .control
+        let variant = result.variant ?? .sophie
         let quietMode = result.quietMode ?? (storedQuietMode ? .enabled : .disabled)
 
         return VisualVariantConfiguration(variant: variant, quietMode: quietMode)

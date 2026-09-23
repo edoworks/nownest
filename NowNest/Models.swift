@@ -9,8 +9,8 @@ final class NowContext {
 
     init(
         project: String = "NowNest",
-        outcome: String = "Prove the park-and-resume loop",
-        nextAction: String = "Park one real idea"
+        outcome: String = "Prove the save-and-resume loop",
+        nextAction: String = "Save one real idea for later"
     ) {
         self.project = project
         self.outcome = outcome
@@ -92,7 +92,19 @@ enum NowNestRules {
 @MainActor
 enum NowNestStore {
     static func ensureNow(in context: ModelContext, existing: NowContext?) throws {
-        guard existing == nil else { return }
+        if let existing {
+            var migrated = false
+            if existing.outcome == "Prove the park-and-resume loop" {
+                existing.outcome = "Prove the save-and-resume loop"
+                migrated = true
+            }
+            if existing.nextAction == "Park one real idea" {
+                existing.nextAction = "Save one real idea for later"
+                migrated = true
+            }
+            if migrated { try context.save() }
+            return
+        }
         context.insert(NowContext())
         try context.save()
     }

@@ -55,7 +55,7 @@ final class VariantJourneyTests: XCTestCase {
 
     func testControlVariantCaptureReturnsToUnchangedNow() {
         let app = launchApp(variant: "control")
-        let nextAction = app.staticTexts["Park one real idea"].label
+        let nextAction = app.staticTexts["Save one real idea for later"].label
 
         app.buttons["parkIdeaButton"].tap()
         let field = app.textFields["ideaField"]
@@ -65,13 +65,13 @@ final class VariantJourneyTests: XCTestCase {
 
         XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["NOW"].waitForExistence(timeout: 5))
-        XCTAssertEqual(app.staticTexts["Park one real idea"].label, nextAction)
+        XCTAssertEqual(app.staticTexts["Save one real idea for later"].label, nextAction)
         capture(app, named: "control-capture-confirmed")
     }
 
     func testExpressiveVariantCaptureReturnsToUnchangedNow() {
         let app = launchApp(variant: "expressive")
-        let nextAction = app.staticTexts["Park one real idea"].label
+        let nextAction = app.staticTexts["Save one real idea for later"].label
 
         app.buttons["parkIdeaButton"].tap()
         let field = app.textFields["ideaField"]
@@ -81,13 +81,13 @@ final class VariantJourneyTests: XCTestCase {
 
         XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["NOW"].waitForExistence(timeout: 5))
-        XCTAssertEqual(app.staticTexts["Park one real idea"].label, nextAction)
+        XCTAssertEqual(app.staticTexts["Save one real idea for later"].label, nextAction)
         capture(app, named: "expressive-capture-confirmed")
     }
 
     func testSophieVariantCaptureReturnsToUnchangedNow() {
         let app = launchApp(variant: "sophie")
-        let nextAction = app.staticTexts["Park one real idea"].label
+        let nextAction = app.staticTexts["Save one real idea for later"].label
 
         app.buttons["parkIdeaButton"].tap()
         let field = app.textFields["ideaField"]
@@ -97,11 +97,28 @@ final class VariantJourneyTests: XCTestCase {
 
         XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["NOW"].waitForExistence(timeout: 5))
-        XCTAssertEqual(app.staticTexts["Park one real idea"].label, nextAction)
+        XCTAssertEqual(app.staticTexts["Save one real idea for later"].label, nextAction)
         capture(app, named: "sophie-capture-confirmed")
     }
 
     // MARK: - Sophie Quiet Mode test
+
+    func testSophieQuietModeAppliesImmediately() {
+        let app = launchApp(variant: "sophie", quietMode: "disabled")
+        let reassurance = app.staticTexts["Capture it safely, then return here. Nothing changes NOW unless you edit it."]
+
+        XCTAssertTrue(reassurance.waitForExistence(timeout: 5))
+        app.buttons["Actions"].tap()
+        let quietMode = app.descendants(matching: .any)["quietModeToggle"]
+        XCTAssertTrue(quietMode.waitForExistence(timeout: 5))
+        quietMode.tap()
+
+        XCTAssertFalse(reassurance.waitForExistence(timeout: 2))
+        app.buttons["Actions"].tap()
+        app.buttons["Review saved ideas"].tap()
+        XCTAssertTrue(app.staticTexts["Nothing saved"].waitForExistence(timeout: 5))
+        capture(app, named: "sophie-quiet-mode-immediate")
+    }
 
     func testSophieQuietModeRemovesSophieWithoutRemovingControls() {
         let app = launchApp(variant: "sophie", quietMode: "enabled")
@@ -110,7 +127,7 @@ final class VariantJourneyTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["NOW"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["parkIdeaButton"].exists)
 
-        let nextAction = app.staticTexts["Park one real idea"].label
+        let nextAction = app.staticTexts["Save one real idea for later"].label
 
         app.buttons["parkIdeaButton"].tap()
         let field = app.textFields["ideaField"]
@@ -120,10 +137,10 @@ final class VariantJourneyTests: XCTestCase {
 
         XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["NOW"].waitForExistence(timeout: 5))
-        XCTAssertEqual(app.staticTexts["Park one real idea"].label, nextAction)
+        XCTAssertEqual(app.staticTexts["Save one real idea for later"].label, nextAction)
 
         app.buttons["Actions"].tap()
-        app.buttons["Review parked ideas"].tap()
+        app.buttons["Review saved ideas"].tap()
         XCTAssertTrue(app.staticTexts["Quiet mode test idea"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["READY"].exists)
 
@@ -145,7 +162,7 @@ final class VariantJourneyTests: XCTestCase {
         let relaunchedApp = launchApp(variant: "expressive", quietMode: "disabled", extraArgs: ["-ui-testing-persistent"])
         XCTAssertTrue(relaunchedApp.buttons["Actions"].waitForExistence(timeout: 5))
         relaunchedApp.buttons["Actions"].tap()
-        relaunchedApp.buttons["Review parked ideas"].tap()
+        relaunchedApp.buttons["Review saved ideas"].tap()
 
         XCTAssertTrue(relaunchedApp.staticTexts["Expressive relaunch survivor"].waitForExistence(timeout: 5))
         XCTAssertTrue(relaunchedApp.staticTexts["READY"].exists)
@@ -164,7 +181,7 @@ final class VariantJourneyTests: XCTestCase {
         let relaunchedApp = launchApp(variant: "sophie", quietMode: "disabled", extraArgs: ["-ui-testing-persistent"])
         XCTAssertTrue(relaunchedApp.buttons["Actions"].waitForExistence(timeout: 5))
         relaunchedApp.buttons["Actions"].tap()
-        relaunchedApp.buttons["Review parked ideas"].tap()
+        relaunchedApp.buttons["Review saved ideas"].tap()
 
         XCTAssertTrue(relaunchedApp.staticTexts["Sophie relaunch survivor"].waitForExistence(timeout: 5))
         XCTAssertTrue(relaunchedApp.staticTexts["READY"].exists)

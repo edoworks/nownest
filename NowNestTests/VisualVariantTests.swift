@@ -123,20 +123,20 @@ final class VisualVariantTests: XCTestCase {
         }
     }
 
-    func testReleaseFallbackUsesControlWhenVariantAbsent() throws {
+    func testReleaseFallbackUsesSophieWhenVariantAbsent() throws {
         let result = try VisualVariantLaunchParser.parse(arguments: [], failFast: false)
         XCTAssertNil(result.variant)
         let config = VisualVariantLaunchParser.resolve(arguments: [], storedQuietMode: false, isDebug: false)
-        XCTAssertEqual(config.variant, .control)
+        XCTAssertEqual(config.variant, .sophie)
     }
 
-    func testReleaseFallbackUsesControlForInvalidVariantValue() throws {
+    func testReleaseFallbackUsesSophieForInvalidVariantValue() throws {
         let config = VisualVariantLaunchParser.resolve(
             arguments: ["-visual-variant", "bogus"],
             storedQuietMode: false,
             isDebug: false
         )
-        XCTAssertEqual(config.variant, .control)
+        XCTAssertEqual(config.variant, .sophie)
     }
 
     func testReleaseIgnoresInvalidQuietModeValue() {
@@ -168,7 +168,7 @@ final class VisualVariantTests: XCTestCase {
 
     func testControlConfirmationCopy() {
         let config = VisualVariantConfiguration(variant: .control, quietMode: .disabled)
-        XCTAssertEqual(config.confirmationCopy(for: nextAction), "Parked. Back to \(nextAction).")
+        XCTAssertEqual(config.confirmationCopy(for: nextAction), "Saved for later. Back to \(nextAction).")
     }
 
     func testExpressiveConfirmationCopy() {

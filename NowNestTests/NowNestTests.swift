@@ -54,6 +54,31 @@ final class NowNestTests: XCTestCase {
         XCTAssertEqual(values?.2, "Dogfood one capture")
     }
 
+    @MainActor
+    func testEnsureNowMigratesOnlyLegacySeededCopy() throws {
+        let schema = Schema([NowContext.self, ParkedIdea.self, DogfoodEvent.self])
+        let container = try ModelContainer(
+            for: schema,
+            configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        )
+        let context = container.mainContext
+        let legacy = NowContext(outcome: "Prove the park-and-resume loop", nextAction: "Park one real idea")
+        context.insert(legacy)
+        try context.save()
+
+        try NowNestStore.ensureNow(in: context, existing: legacy)
+
+        XCTAssertEqual(legacy.outcome, "Prove the save-and-resume loop")
+        XCTAssertEqual(legacy.nextAction, "Save one real idea for later")
+
+        let custom = NowContext(outcome: "Custom outcome", nextAction: "Custom next action")
+        context.insert(custom)
+        try context.save()
+        try NowNestStore.ensureNow(in: context, existing: custom)
+        XCTAssertEqual(custom.outcome, "Custom outcome")
+        XCTAssertEqual(custom.nextAction, "Custom next action")
+    }
+
     func testRecoverFromCorruptedStorePreservesRecoveryCopy() throws {
         let tempDir = FileManager.default.temporaryDirectory
             .appendingPathComponent("nownest-recovery-test-\(UUID().uuidString)")
