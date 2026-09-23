@@ -242,6 +242,12 @@
     "privacy": "No participant identity, unique device identifier, or content-bearing user data is recorded.",
     "authority": "No distribution, release, TestFlight, publication, or commercialization authority is claimed."
   },
+  "independent_review": {
+    "method": "rubberduck review of the final evidence diff against the accessibility PRD, Customer Zero PRD, and release criteria",
+    "result": "PASS",
+    "findings": "No blocking, high, or medium findings remain.",
+    "scope": ["row-level evidence metadata", "screenshot and result-bundle hashes", "PASS and NOT_RUN scope", "privacy", "build identity", "release gates", "device-preflight shell correctness"]
+  },
   "known_gaps_and_remaining_gates": [
     "Run and retain direct receipts for Dynamic Type at the largest accessibility size, Differentiate Without Color, and Reduce Transparency.",
     "Record Accessibility Inspector measurements for text and non-text contrast.",
