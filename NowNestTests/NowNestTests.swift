@@ -1,4 +1,5 @@
 import XCTest
+import SwiftData
 @testable import NowNest
 
 final class NowNestTests: XCTestCase {
@@ -51,5 +52,22 @@ final class NowNestTests: XCTestCase {
         XCTAssertEqual(values?.0, "Reference App")
         XCTAssertEqual(values?.1, "Prove the loop")
         XCTAssertEqual(values?.2, "Dogfood one capture")
+    }
+
+    func testRecoverFromCorruptedStoreCreatesFreshContainer() throws {
+        let tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("nownest-recovery-test-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+
+        let storeURL = tempDir.appendingPathComponent("default.store")
+        try Data("CORRUPTED-GARBAGE".utf8).write(to: storeURL)
+
+        let schema = Schema([NowContext.self, ParkedIdea.self])
+        let container = try NowNestApp.recoverFromCorruptedStore(at: storeURL, schema: schema)
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: storeURL.path), "Corrupted store must be deleted before recovery")
+
+        try FileManager.default.removeItem(at: tempDir)
+        _ = container
     }
 }
