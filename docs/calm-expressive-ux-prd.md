@@ -279,6 +279,12 @@ Do not expand the character system before the human comparison passes.
 Quiet Mode removes character copy, Sophie imagery, and decorative motion while
 preserving the selected variant's functional layout and all task information.
 
+"Decorative motion" includes Sophie poses, tucked-note or substitute
+illustrations, success-transition animation, and animated dismissal. Quiet
+Mode uses immediate state replacement for those elements even when Reduce
+Motion is off. Functional system transitions may remain only when they carry
+task state and do not reintroduce character or celebratory motion.
+
 - Store the preference locally with `@AppStorage("quietModeEnabled")`.
 - Expose a clearly labeled `Quiet Mode` toggle from the existing Actions menu
   or a small settings sheet. Do not add a tab bar.
@@ -291,6 +297,12 @@ preserving the selected variant's functional layout and all task information.
 - Quiet Mode is not a substitute for Reduce Motion; both must work together.
 - Hide the Quiet Mode control in `control`; the baseline must not gain a no-op
   menu item.
+- Keep the presentation policy test-visible without exposing decorative art to
+  VoiceOver. Tests must assert absent Sophie imagery/copy and absent decorative
+  transition state, not infer suppression from a test name or screenshot.
+- Include separate negative or mutation guards demonstrating that reintroducing
+  Sophie imagery/copy and reintroducing each decorative-motion path make Quiet
+  Mode verification fail.
 
 ## 10. Accessibility Contract
 
@@ -309,7 +321,10 @@ preserving the selected variant's functional layout and all task information.
   visual state. Record the chosen behavior in tests.
 
 Use this qualification checklist and record each row as pass/fail/not run with
-device, OS, variant, evidence path, and notes:
+source revision, mode, device, OS, variant, command, timestamp, evidence path,
+direct pass condition, and notes. A row without matching execution evidence is
+`NOT_RUN`; source inspection, ordinary-mode tests, and screenshots do not prove
+an accessibility mode was exercised.
 
 | Check | Where | Pass condition |
 | --- | --- | --- |
@@ -353,6 +368,9 @@ that launches an explicit visual variant. At minimum:
   screenshots for each prototype using variant-qualified attachment names.
 - Assert Quiet Mode removes Sophie without removing the Park control, next
   action, return target, confirmation, or parked ideas.
+- Assert exact confirmation and return-target copy. Provide a test-visible
+  presentation-state assertion or deterministic comparison for decorative
+  imagery and motion; screenshot capture alone is not an assertion.
 
 Required matrix (`R` means required):
 
@@ -368,6 +386,12 @@ Required matrix (`R` means required):
 Add one Sophie Quiet Mode test on both simulator families. Test helpers must
 always pass both `-visual-variant` and `-quiet-mode`; persistence relaunches must
 reuse the same values.
+
+The required journey matrix contains 36 cells (six journeys x three variants x
+two device families). A passing count for a smaller suite does not satisfy this
+contract. Each retained result identifies source revision, resolved simulator
+and OS, completed test count, result bundle, and any incomplete or timed-out
+cells.
 
 ### Build matrix
 
@@ -563,6 +587,14 @@ Every implementation issue or pull request must state:
 - known failures and untested claims;
 - confirmation that release/publication authority boundaries were preserved.
 
+TestFlight evidence is build-bound. For each build, record the source revision,
+version/build, Apple build identifier, processing and beta state, observation
+date, and either a sanitized authenticated tester-feedback reference or
+`NO_DURABLE_FEEDBACK`. App Store Connect platform feedback, including export-
+compliance or metadata guidance, is recorded separately and never represented
+as tester feedback. Feedback for an earlier revision does not qualify a later
+build, and absence of durable feedback does not mean "no issues found."
+
 Store durable summaries under `evidence/ux/<chunk>-YYYY-MM-DD.json` and
 representative PNGs under `evidence/ux/screenshots/<commit>/`. The JSON must
 include schema version, baseline/result commit, commands, resolved destinations,
@@ -573,6 +605,10 @@ logs in the tracking issue when needed; the checked-in summary and PNGs must be
 sufficient to resume work after loss of the original machine.
 
 Never mark a human or device check complete based only on automation.
+
+The subject revision identifies the app source and build under test. The
+evidence revision identifies the later commit containing its durable summary;
+these revisions are intentionally distinct and both are required.
 
 ## 15. Authority And Privacy
 
