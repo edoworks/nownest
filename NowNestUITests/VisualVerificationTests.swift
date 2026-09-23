@@ -23,7 +23,7 @@ final class VisualVerificationTests: XCTestCase {
         let projectLabel = app.staticTexts["PROJECT"]
         let outcomeLabel = app.staticTexts["OUTCOME"]
         let nextActionLabel = app.staticTexts["NEXT ACTION"]
-        let nextActionValue = app.staticTexts["Park one real idea"]
+        let nextActionValue = app.staticTexts["Save one real idea for later"]
         let parkButton = app.buttons["parkIdeaButton"]
 
         XCTAssertTrue(projectLabel.exists, "PROJECT label must be visible")
@@ -67,7 +67,7 @@ final class VisualVerificationTests: XCTestCase {
         let projectLabel = app.staticTexts["PROJECT"]
         let outcomeLabel = app.staticTexts["OUTCOME"]
         let nextActionLabel = app.staticTexts["NEXT ACTION"]
-        let nextActionValue = app.staticTexts["Park one real idea"]
+        let nextActionValue = app.staticTexts["Save one real idea for later"]
         let parkButton = app.buttons["parkIdeaButton"]
 
         let elementsInOrder: [(XCUIElement, String)] = [
@@ -95,7 +95,7 @@ final class VisualVerificationTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["NOW"].waitForExistence(timeout: 5))
 
         let nowLabel = app.staticTexts["NOW"]
-        let nextActionValue = app.staticTexts["Park one real idea"]
+        let nextActionValue = app.staticTexts["Save one real idea for later"]
         let parkButton = app.buttons["parkIdeaButton"]
 
         let window = app.windows.element(boundBy: 0)
@@ -123,10 +123,10 @@ final class VisualVerificationTests: XCTestCase {
         XCTAssertTrue(parkButton.waitForExistence(timeout: 5))
 
         let parkLabel = parkButton.label
-        XCTAssertTrue(parkLabel.contains("Park"), "Park button label must contain 'Park'")
+        XCTAssertTrue(parkLabel.contains("Save for later"), "Primary button must use plain-language Save for later copy")
         XCTAssertTrue(parkButton.isEnabled, "Park button must be enabled at launch")
 
-        let nextActionValue = app.staticTexts["Park one real idea"]
+        let nextActionValue = app.staticTexts["Save one real idea for later"]
         let parkFrame = parkButton.frame
         let nextActionFrame = nextActionValue.frame
 
@@ -183,6 +183,21 @@ final class VisualVerificationTests: XCTestCase {
 
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = "sophie-quiet-visual-verification-launch"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
+    func testPrimaryActionDarkModeScreenshotRetention() {
+        let app = launchControl(arguments: [
+            "-ui-testing",
+            "-ui-testing-dark-mode",
+            "-visual-variant", "sophie",
+            "-quiet-mode", "disabled"
+        ])
+
+        XCTAssertTrue(app.buttons["parkIdeaButton"].waitForExistence(timeout: 5))
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = "primary-action-dark-mode"
         attachment.lifetime = .keepAlways
         add(attachment)
     }

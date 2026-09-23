@@ -10,6 +10,7 @@ struct ContentView: View {
     @Query(sort: \ParkedIdea.createdAt, order: .reverse) private var ideas: [ParkedIdea]
 
     @AppStorage("quietModeEnabled") private var quietModeStored = false
+    @State private var quietModeSelection: Bool?
     @State private var presentedSheet: Sheet?
     @State private var confirmation: String?
     @State private var errorMessage: String?
@@ -27,6 +28,21 @@ struct ContentView: View {
     private var now: NowContext? { nowContexts.first }
     private var activeIdea: ParkedIdea? { ideas.first { $0.state == "RESUMED" } }
     private var parkedCount: Int { ideas.count { $0.state == "PARKED" } }
+    private var currentVariantConfig: VisualVariantConfiguration {
+        VisualVariantConfiguration(
+            variant: variantConfig.variant,
+            quietMode: (quietModeSelection ?? variantConfig.isQuiet) ? .enabled : .disabled
+        )
+    }
+    private var quietModeBinding: Binding<Bool> {
+        Binding(
+            get: { currentVariantConfig.isQuiet },
+            set: {
+                quietModeSelection = $0
+                quietModeStored = $0
+            }
+        )
+    }
 
     var body: some View {
         NavigationStack {
@@ -38,7 +54,7 @@ struct ContentView: View {
                 )
                 .ignoresSafeArea()
 
-                if variantConfig.variant != .control {
+                if currentVariantConfig.variant != .control && !currentVariantConfig.isQuiet {
                     NestMotif()
                         .frame(width: 120, height: 120)
                         .foregroundStyle(Color.nestHoneyLight.opacity(0.15))
@@ -59,13 +75,14 @@ struct ContentView: View {
                                 NowNestStore.record("captureAttempt", in: modelContext)
                                 presentedSheet = .capture
                             } label: {
-                                Label("Park an idea", systemImage: "arrow.down.to.line.compact")
+                                Label("Save for later", systemImage: "arrow.down.to.line.compact")
                                     .font(.headline)
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, 6)
                             }
                             .buttonStyle(.borderedProminent)
                             .tint(Color.nestHoney)
+                            .foregroundStyle(Color.nestHoneyInk)
                             .controlSize(.large)
                             .accessibilityIdentifier("parkIdeaButton")
 
@@ -74,13 +91,13 @@ struct ContentView: View {
                                 try? modelContext.save()
                                 presentedSheet = .review
                             } label: {
-                                Label("Parked ideas (\(parkedCount))", systemImage: "archivebox")
+                                Label("Saved for later (\(parkedCount))", systemImage: "archivebox")
                                     .frame(maxWidth: .infinity)
                             }
                             .buttonStyle(.bordered)
                             .accessibilityIdentifier("reviewParkedButton")
 
-                            if variantConfig.showsReassurance {
+                            if currentVariantConfig.showsReassurance {
                                 Text("Capture it safely, then return here. Nothing changes NOW unless you edit it.")
                                     .font(NestTypography.reassurance)
                                     .foregroundStyle(Color.nestInkMuted)
@@ -109,15 +126,15 @@ struct ContentView: View {
                         }
                         .disabled(now == nil)
 
-                        Button("Review parked ideas", systemImage: "archivebox") {
+                        Button("Review saved ideas", systemImage: "archivebox") {
                             NowNestStore.record("resurfaced", in: modelContext)
                             try? modelContext.save()
                             presentedSheet = .review
                         }
 
-                        if variantConfig.variant != .control {
+                        if currentVariantConfig.variant != .control {
                             Divider()
-                            Toggle("Quiet Mode", isOn: $quietModeStored)
+                            Toggle("Quiet Mode", isOn: quietModeBinding)
                                 .accessibilityIdentifier("quietModeToggle")
                         }
                     } label: {
@@ -129,11 +146,11 @@ struct ContentView: View {
                 if let confirmation {
                     HStack(spacing: 10) {
                         if showTuckedPose && !reduceMotion {
-                            if variantConfig.showsSophie {
+                            if currentVariantConfig.showsSophie {
                                 SophieMark(pose: .tucked, size: 24)
                                     .accessibilityHidden(true)
                                     .transition(.scale.combined(with: .opacity))
-                            } else if variantConfig.variant != .control {
+                            } else if currentVariantConfig.variant != .control && !currentVariantConfig.isQuiet {
                                 TuckedNoteIllustration(size: 32)
                                     .transition(.scale.combined(with: .opacity))
                             }
@@ -145,7 +162,7 @@ struct ContentView: View {
                     .padding(.horizontal, 18)
                     .padding(.vertical, 12)
                     .background(
-                        variantConfig.variant == .control ? Color.nestInk :
+                        currentVariantConfig.variant == .control ? Color.nestInk :
                             (showTuckedPose && !reduceMotion ? Color.nestSage : Color.nestInk),
                         in: Capsule()
                     )
@@ -197,6 +214,7 @@ struct ContentView: View {
                 recoveryAlertPresented = recoveryNotice != nil
             }
         }
+        .environment(\.visualVariantConfiguration, currentVariantConfig)
     }
 
     private func nowCard(_ now: NowContext) -> some View {
@@ -208,7 +226,7 @@ struct ContentView: View {
                         .tracking(2.4)
                         .foregroundStyle(Color.nestInkMuted)
 
-                    if variantConfig.showsSophie {
+                    if currentVariantConfig.showsSophie {
                         SophieMark(pose: .resting, size: 22)
                             .accessibilityHidden(true)
                     }
@@ -220,7 +238,7 @@ struct ContentView: View {
                 Divider()
                 nowField("NEXT ACTION", value: now.nextAction, emphasized: true)
 
-                if variantConfig.variant != .control {
+                if currentVariantConfig.variant != .control && !currentVariantConfig.isQuiet {
                     NestMotif()
                         .frame(width: 36, height: 36)
                         .foregroundStyle(Color.nestHoney.opacity(0.4))
@@ -244,7 +262,7 @@ struct ContentView: View {
                 nowField("NEXT ACTION", value: idea.startingAction ?? idea.text, emphasized: true)
 
                 if let originProject = idea.originProject, let originNextAction = idea.originNextAction {
-                    Text("Parked while working on \(originProject): \(originNextAction)")
+                    Text("Saved while working on \(originProject): \(originNextAction)")
                         .font(.footnote)
                         .foregroundStyle(Color.nestInkMuted)
                         .accessibilityIdentifier("resumeContext")
@@ -254,7 +272,7 @@ struct ContentView: View {
                     Button("Done", systemImage: "checkmark") { resolveActive(idea, action: .complete) }
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("completeActiveButton")
-                    Button("Re-park", systemImage: "arrow.uturn.backward") { resolveActive(idea, action: .repark) }
+                    Button("Save again", systemImage: "arrow.uturn.backward") { resolveActive(idea, action: .repark) }
                         .buttonStyle(.bordered)
                         .accessibilityIdentifier("reparkActiveButton")
                     Menu {
@@ -277,7 +295,7 @@ struct ContentView: View {
                 .tracking(1.2)
                 .foregroundStyle(Color.nestInkMuted)
             Text(value)
-                .font(emphasized ? (variantConfig.variant == .control ? NestTypography.nextActionValueControl : NestTypography.nextActionValueExpressive) : NestTypography.fieldValue)
+                .font(emphasized ? (currentVariantConfig.variant == .control ? NestTypography.nextActionValueControl : NestTypography.nextActionValueExpressive) : NestTypography.fieldValue)
                 .foregroundStyle(Color.nestInk)
                 .accessibilityIdentifier(label.lowercased().replacingOccurrences(of: " ", with: ""))
         }
@@ -304,13 +322,13 @@ struct ContentView: View {
                 in: modelContext
             ) != nil else { return false }
             presentedSheet = nil
-            showTuckedPose = variantConfig.variant != .control
+            showTuckedPose = currentVariantConfig.variant != .control && !currentVariantConfig.isQuiet
             UINotificationFeedbackGenerator().notificationOccurred(.success)
             if reduceMotion {
-                confirmation = variantConfig.confirmationCopy(for: context.nextAction)
+                confirmation = currentVariantConfig.confirmationCopy(for: context.nextAction)
             } else {
                 withAnimation(.easeOut(duration: 0.45)) {
-                    confirmation = variantConfig.confirmationCopy(for: context.nextAction)
+                    confirmation = currentVariantConfig.confirmationCopy(for: context.nextAction)
                 }
             }
             Task {
@@ -326,7 +344,7 @@ struct ContentView: View {
             }
             return true
         } catch {
-            errorMessage = "Couldn't park."
+            errorMessage = "Couldn't save for later."
             return false
         }
     }
@@ -418,7 +436,7 @@ private struct CaptureView: View {
             }
             .padding(24)
             .background(variantConfig.variant == .control ? Color.clear : Color.nestCanvas.opacity(0.5))
-            .navigationTitle("Park an idea")
+            .navigationTitle("Save for later")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -427,7 +445,7 @@ private struct CaptureView: View {
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Park") {
+                    Button("Save") {
                         if onPark(text) { didPark = true }
                     }
                         .disabled(!isValid)
@@ -506,7 +524,7 @@ private struct ReviewView: View {
                     ideaList
                 }
             }
-            .navigationTitle("Parked ideas")
+            .navigationTitle("Saved for later")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
@@ -515,23 +533,20 @@ private struct ReviewView: View {
             .alert("Couldn’t update", isPresented: $updateFailed) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text("The parked idea is still present.")
+                Text("The saved idea is still present.")
             }
         }
     }
 
     private var emptyState: some View {
         VStack(spacing: 20) {
-            if variantConfig.variant != .control {
+            if variantConfig.variant != .control && !variantConfig.isQuiet {
                 NestIllustration(size: 120)
-            } else if variantConfig.showsSophie {
-                SophieMark(pose: .resting, size: 40)
-                    .accessibilityHidden(true)
             }
             ContentUnavailableView(
-                "Nothing parked",
+                "Nothing saved",
                 systemImage: variantConfig.variant == .control ? "archivebox" : "",
-                description: Text(variantConfig.isQuiet ? "Park an idea to fill the nest." : "Ideas appear here only after you park them.")
+                description: Text(variantConfig.isQuiet ? "Save an idea to fill the nest." : "Ideas appear here after you save them for later.")
             )
         }
     }
@@ -548,7 +563,7 @@ private struct ReviewView: View {
                         .font(.body)
                         .foregroundStyle(Color.nestInk)
                     if let originProject = idea.originProject {
-                        Text("Parked from \(originProject)")
+                        Text("Saved from \(originProject)")
                             .font(.caption)
                             .foregroundStyle(Color.nestInkMuted)
                     }
@@ -608,7 +623,7 @@ private struct ParkedIdeaDetailView: View {
                 }
 
                 if idea.originProject != nil || idea.originOutcome != nil || idea.originNextAction != nil {
-                    Section("Why it was parked") {
+                    Section("Why it was saved") {
                         if let value = idea.originProject { LabeledContent("Project", value: value) }
                         if let value = idea.originOutcome { LabeledContent("Outcome", value: value) }
                         if let value = idea.originNextAction { LabeledContent("You were doing", value: value) }

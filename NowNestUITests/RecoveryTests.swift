@@ -37,11 +37,11 @@ final class RecoveryTests: XCTestCase {
         let restoredApp = launchApp(arguments: ["-ui-testing-persistent-reset", "-visual-variant", "control", "-quiet-mode", "disabled"])
 
         XCTAssertTrue(restoredApp.staticTexts["NOW"].waitForExistence(timeout: 10), "App must recover after data loss with persistent reset")
-        XCTAssertTrue(restoredApp.staticTexts["Park one real idea"].exists, "Default next action must be present after recovery")
+        XCTAssertTrue(restoredApp.staticTexts["Save one real idea for later"].exists, "Default next action must be present after recovery")
 
         restoredApp.buttons["Actions"].tap()
-        restoredApp.buttons["Review parked ideas"].tap()
-        XCTAssertTrue(restoredApp.staticTexts["Nothing parked"].waitForExistence(timeout: 5), "Review must be empty after data loss recovery")
+        restoredApp.buttons["Review saved ideas"].tap()
+        XCTAssertTrue(restoredApp.staticTexts["Nothing saved"].waitForExistence(timeout: 5), "Review must be empty after data loss recovery")
         capture(restoredApp, named: "g9-after-data-loss-recovery")
     }
 
@@ -57,7 +57,7 @@ final class RecoveryTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["parkConfirmation"].waitForExistence(timeout: 5))
 
         app.buttons["Actions"].tap()
-        app.buttons["Review parked ideas"].tap()
+        app.buttons["Review saved ideas"].tap()
         XCTAssertTrue(app.staticTexts["Should not survive deletion"].waitForExistence(timeout: 5))
         capture(app, named: "g9-before-deletion")
 
@@ -66,11 +66,11 @@ final class RecoveryTests: XCTestCase {
         let reinstalledApp = launchApp(arguments: ["-ui-testing-persistent-reset", "-visual-variant", "control", "-quiet-mode", "disabled"])
 
         XCTAssertTrue(reinstalledApp.staticTexts["NOW"].waitForExistence(timeout: 10), "App must show NOW after reinstall")
-        XCTAssertTrue(reinstalledApp.staticTexts["Park one real idea"].exists, "Default next action must be present after reinstall")
+        XCTAssertTrue(reinstalledApp.staticTexts["Save one real idea for later"].exists, "Default next action must be present after reinstall")
 
         reinstalledApp.buttons["Actions"].tap()
-        reinstalledApp.buttons["Review parked ideas"].tap()
-        XCTAssertTrue(reinstalledApp.staticTexts["Nothing parked"].waitForExistence(timeout: 5), "Review must be empty after delete/reinstall")
+        reinstalledApp.buttons["Review saved ideas"].tap()
+        XCTAssertTrue(reinstalledApp.staticTexts["Nothing saved"].waitForExistence(timeout: 5), "Review must be empty after delete/reinstall")
         capture(reinstalledApp, named: "g9-after-reinstall-fresh")
     }
 
@@ -90,7 +90,7 @@ final class RecoveryTests: XCTestCase {
         let relaunchedApp = launchApp(arguments: ["-ui-testing-persistent", "-visual-variant", "control", "-quiet-mode", "disabled"])
         XCTAssertTrue(relaunchedApp.buttons["Actions"].waitForExistence(timeout: 5))
         relaunchedApp.buttons["Actions"].tap()
-        relaunchedApp.buttons["Review parked ideas"].tap()
+        relaunchedApp.buttons["Review saved ideas"].tap()
 
         XCTAssertTrue(relaunchedApp.staticTexts["Recovery baseline idea"].waitForExistence(timeout: 5), "Parked idea must survive graceful relaunch")
         capture(relaunchedApp, named: "g9-persistence-baseline")
