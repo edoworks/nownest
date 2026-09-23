@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "product": "nownest",
+  "source": "docs/customer-zero-prd.md",
+  "fail_closed": true,
+  "required_gates": [
+    {"id": "p0-lifecycle", "evidence": "behavioral unit and UI tests on iPhone and iPad", "status": "IN_PROGRESS"},
+    {"id": "privacy", "evidence": "exact-build manifest, entitlement, dependency, and network inspection", "status": "REQUIRED"},
+    {"id": "migration-recovery", "evidence": "prior-store migration and non-destructive recovery tests", "status": "REQUIRED"},
+    {"id": "physical-accessibility", "evidence": "exact-build iPhone and iPad visual and VoiceOver receipt", "status": "REQUIRED"},
+    {"id": "testflight-feedback", "evidence": "build/revision-bound feedback receipt or NO_DURABLE_FEEDBACK", "status": "REQUIRED"},
+    {"id": "customer-zero-seven-day", "evidence": "seven consecutive days plus explicit founder usefulness decision", "status": "REQUIRED"},
+    {"id": "website-consistency", "evidence": "live claims and design checked against validated app revision", "status": "REQUIRED_BEFORE_COMMERCIALIZATION"},
+    {"id": "external-validation", "evidence": "representative external-user behavior", "status": "REQUIRED_BEFORE_COMMERCIALIZATION"},
+    {"id": "willingness-to-pay", "evidence": "observed willingness-to-pay evidence", "status": "REQUIRED_BEFORE_COMMERCIALIZATION"}
+  ],
+  "prohibited_shortcuts": [
+    "tests imply usefulness",
+    "TestFlight upload implies feedback resolution",
+    "Apple processing implies acceptance",
+    "implementation implies validation"
+  ]
+}

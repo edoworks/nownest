@@ -6,6 +6,10 @@
 - Prepared: 2026-09-21
 - Release parent: `edoworks/factory` issue "Reference App 1: Apple submission and acceptance"
 
+> Customer Zero amendment (2026-09-23): visual treatment is subordinate to the
+> lifecycle contract in `customer-zero-prd.md`. A visually qualified build is not
+> release-ready unless Park -> Resume -> Resolve and the seven-day dogfood gate pass.
+
 Tracking:
 
 - [Redesign map](https://github.com/edoworks/factory/issues/28)
