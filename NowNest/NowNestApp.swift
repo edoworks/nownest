@@ -42,7 +42,7 @@ struct NowNestApp: App {
                     configurations: ModelConfiguration(schema: schema, url: Self.uiTestingStoreURL)
                 )
             } else {
-                modelContainer = try ModelContainer(for: schema)
+                modelContainer = try Self.createRecoverableModelContainer(for: schema)
             }
         } catch {
             fatalError("Unable to create NowNest model container: \(error)")
@@ -58,6 +58,18 @@ struct NowNestApp: App {
         let fileManager = FileManager.default
         for suffix in ["", "-shm", "-wal"] {
             try? fileManager.removeItem(at: URL(fileURLWithPath: url.path + suffix))
+        }
+    }
+
+    private static func createRecoverableModelContainer(for schema: Schema) throws -> ModelContainer {
+        do {
+            return try ModelContainer(for: schema)
+        } catch {
+            let storeURL = FileManager.default
+                .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+                .appendingPathComponent("default.store")
+            removeStore(at: storeURL)
+            return try ModelContainer(for: schema)
         }
     }
 
