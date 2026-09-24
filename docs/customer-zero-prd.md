@@ -4,6 +4,7 @@
 - Source revision audited: build 4 candidate `405b3124bd92d84e69d1bbc947b6a9abf5ed2aef`
 - Tracking: `edoworks/factory#54`, implementation `edoworks/factory#55`, TestFlight lifecycle `edoworks/factory#46`
 - Evidence cutoff: 2026-09-24
+- Accepted-feedback increment: `edoworks/factory#59`
 
 ## Product outcome
 
@@ -32,9 +33,11 @@ character. Physical installation and launch are separately verified, but the
 simulator visual receipt does not claim physical-device visual or accessibility
 qualification.
 
-No Foundation Models, App Intents, Shortcuts, Siri, Core Spotlight, notification,
-background, network, analytics, or account integration exists. The current app
-is local SwiftData on iPhone and iPad.
+Build 4 contains no Foundation Models, App Intents, Shortcuts, Siri, Core
+Spotlight, notification, background, network, analytics, or account integration.
+The current TestFlight app is local SwiftData on iPhone and iPad. Build-bound
+feedback now authorizes a later source increment for one optional on-device
+starting-action suggestion; it does not retroactively change build 4 behavior.
 
 The active product, repository, and checkout identity is `NowNest`. `FocusGate`
 is retained only where historical evidence or an explicit internal-codename
@@ -99,21 +102,45 @@ commercial name adoption requires `CLEARED` identity evidence.
 | Build 4 visual receipt, 2026-09-24 | Fresh NowNest identity and layout review | Visual review | P1 | Accept within simulator boundary | Preserve build-bound iPhone/iPad captures | Six visual checks pass on both simulator form factors | Passed; physical visual gate remains open |
 | PR rationale only | “bland” concern | Visual identity | P1 | Preserve as unattributed | Complete existing treatment decision | Human comparison issue #32 | Open |
 | PR rationale only | “ADHD verbosity concern” | Capture/copy | P1 | Preserve as unattributed | Keep capture terse and Quiet Mode functional | Variant/Quiet Mode matrix | Open |
-| Repository and available tooling | No durable founder tester comments or crashes recovered | Feedback | P0 gate | Record unavailable | Query/record current-build feedback or `NO_DURABLE_FEEDBACK` | Build/revision-bound receipt | Unavailable |
+| Repository audit before authenticated readback | No durable current-build comments or crashes had been recovered | Feedback | P0 gate | Superseded by authenticated readback | Bind each submission to its Apple build relationship | Build/revision-bound receipt | Build 3 correction and build 4 receipt recorded |
+| Build 4 feedback, 2026-09-24 | Expected Apple Intelligence to process a saved idea | Starting point | P0 | Accept as product direction, not a build-4 regression | Offer one optional on-device suggestion after save; preserve immediate save and manual fallback | Explicit states, editable suggestion, confirmation before Resume, unavailable/failure tests, iPhone/iPad visual evidence | Source implemented and simulator-verified in issue #59; integration pending |
 
-App Store Connect feedback was not retrieved during the audit because credentialed
-Apple operations were outside that read-only authority. It must be retrieved at
-the release gate; absence must be recorded as `NO_DURABLE_FEEDBACK`, never inferred.
+Authenticated readback on 2026-09-24 bound the five earlier submissions to build
+3 and one new submission to build 4. The correction is
+`evidence/testflight/founder-feedback-build-binding-correction-2026-09-24.json`;
+the current-build receipt is
+`evidence/testflight/build-4-feedback-2026-09-24.json`. Build-bound feedback is
+now present, but its accepted requirement remains open until issue #59 is
+implemented and validated.
+
+## Optional on-device suggestion contract
+
+The accepted build-4 direction adds assistance to the saved-idea detail, not to
+the interruption path:
+
+1. Saving remains synchronous, local, and immediately returns to NOW.
+2. A saved idea remains complete and resumable without Apple Intelligence.
+3. The person explicitly requests a suggestion from the saved-idea detail.
+4. The app shows saved, preparing, suggestion-ready, unavailable, or failed in
+   text and shape; no state relies on color, motion, or Sophie alone.
+5. At most one concise starting action is generated from the saved thought and
+   interruption context. The original thought is never overwritten.
+6. Generated text is labeled `On-device suggestion`, is editable, and does not
+   become active until the person chooses Resume.
+7. Unsupported devices, disabled Apple Intelligence, model unavailability,
+   cancellation, malformed output, and runtime failure preserve the manual field
+   and never create a dead end.
+8. No network fallback, background processing, telemetry, account, generic chat,
+   or automatic task execution is introduced.
 
 ## Grounded research disposition
 
-Research remains a separately gated P2 experiment until the P0 lifecycle proves
-useful. Apple Foundation Models can structure and synthesize supplied evidence;
-they do not provide turnkey open-web discovery or citation verification. On-device
-sessions are limited to 4,096 tokens. Private Cloud Compute provides a 32K context
-on supported OS 27 devices, requires network access and entitlement, and has quotas.
-Tool calling executes app-owned code; NowNest remains responsible for retrieval,
-source validation, consent, persistence, and side effects.
+Open-web research remains a separately gated P2 experiment until the P0 lifecycle
+proves useful. Issue #59 authorizes only an on-device starting-action suggestion;
+it does not authorize research, source retrieval, Private Cloud Compute, or tool
+execution. Apple Foundation Models can structure and synthesize supplied evidence;
+they do not provide turnkey open-web discovery or citation verification. NowNest
+remains responsible for consent, persistence, validation, and side effects.
 
 Any future online research must be explicitly initiated, visibly online, disabled
 until chosen, and transmit only the original thought plus the approved research

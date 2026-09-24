@@ -12,6 +12,10 @@
 > Founder-feedback amendment (2026-09-23): Sophie supersedes the provisional
 > no-selection state as the release default, with Quiet Mode preserving a fully
 > functional character-free treatment. This selection does not authorize release.
+> Build-4 feedback amendment (2026-09-24): issue #59 authorizes one optional,
+> explicitly requested on-device starting-action suggestion in the saved-idea
+> detail. Capture remains immediate and the complete manual workflow remains the
+> fallback. This amendment does not authorize upload or release.
 
 Tracking:
 
@@ -20,6 +24,7 @@ Tracking:
 - [Chunk B: Home, Capture, success, and Quiet Mode](https://github.com/edoworks/factory/issues/30)
 - [Chunk C: Review and accessibility qualification](https://github.com/edoworks/factory/issues/33)
 - [Chunk D: human comparison and selection](https://github.com/edoworks/factory/issues/32)
+- [Build-4 on-device suggestion](https://github.com/edoworks/factory/issues/59)
 
 ## 1. Outcome
 
@@ -76,9 +81,11 @@ hurting those measures.
 - No feeds, dashboards, streaks, points, currencies, collections, levels, or
   routine confetti.
 - No timers, reminders, notifications, accounts, analytics, cloud sync,
-  network access, or background work.
+  network access, or background work. On-device Foundation Models may run only
+  after an explicit request in the saved-idea detail.
 - No pet care, hunger, mood, obligation, punishment, or random interruption.
-- No changes to SwiftData models or the meaning of `NOW` and `PARKED`.
+- No change to the meaning of `NOW` and `PARKED`; generated text is an editable
+  suggestion and never overwrites the original thought or activates itself.
 - No new navigation destinations except a lightweight appearance/settings
   control if needed for Quiet Mode.
 - No third-party packages, fonts, remote images, or generated-at-runtime assets.
@@ -98,6 +105,10 @@ hurting those measures.
 - Dynamic Type does not clip or hide the next action, capture field, Park
   control, confirmation, or review content at accessibility sizes.
 - The app remains offline and adds no entitlements or packages.
+- Suggestion generation never delays Save, never blocks Resume, and exposes a
+  complete manual fallback when unavailable or failed.
+- Saved, preparing, ready, unavailable, and failed states use explicit text and
+  controls rather than color or animation alone.
 
 ### Human-verifiable
 

@@ -142,7 +142,7 @@ final class VariantJourneyTests: XCTestCase {
         app.buttons["Actions"].tap()
         app.buttons["Review saved ideas"].tap()
         XCTAssertTrue(app.staticTexts["Quiet mode test idea"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["READY"].exists)
+        XCTAssertTrue(app.staticTexts["SAVED"].exists)
 
         capture(app, named: "sophie-quiet-mode-verified")
     }
@@ -165,7 +165,7 @@ final class VariantJourneyTests: XCTestCase {
         relaunchedApp.buttons["Review saved ideas"].tap()
 
         XCTAssertTrue(relaunchedApp.staticTexts["Expressive relaunch survivor"].waitForExistence(timeout: 5))
-        XCTAssertTrue(relaunchedApp.staticTexts["READY"].exists)
+        XCTAssertTrue(relaunchedApp.staticTexts["SAVED"].exists)
     }
 
     func testSophieVariantParkedIdeaSurvivesAppRelaunch() {
@@ -184,6 +184,6 @@ final class VariantJourneyTests: XCTestCase {
         relaunchedApp.buttons["Review saved ideas"].tap()
 
         XCTAssertTrue(relaunchedApp.staticTexts["Sophie relaunch survivor"].waitForExistence(timeout: 5))
-        XCTAssertTrue(relaunchedApp.staticTexts["READY"].exists)
+        XCTAssertTrue(relaunchedApp.staticTexts["SAVED"].exists)
     }
 }

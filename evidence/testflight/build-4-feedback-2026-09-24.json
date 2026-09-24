@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "kind": "TESTFLIGHT_BUILD_FEEDBACK",
+  "retrieved_at": "2026-09-24T07:21:54.178993Z",
+  "source": "Authenticated App Store Connect beta feedback readback with include=build",
+  "app_id": "6814614006",
+  "bundle_id": "com.foculoom.nownest",
+  "apple_build_id": "ddd4b09b-9701-4656-b0f8-d0bd4e6db07f",
+  "marketing_version": "0.1.0",
+  "build_version": "4",
+  "candidate_source_revision": "405b3124bd92d84e69d1bbc947b6a9abf5ed2aef",
+  "crash_submission_count": 0,
+  "screenshot_feedback": {
+    "submission_id": "AJCLbB4yIgy52G97B5Kv3dA",
+    "created_at": "2026-09-24T07:06:04.308Z",
+    "comment": "Apple Intelligence does not work. I expect Apple Intelligence to have processed this request after I saved it for later so it seems like Apple Intelligence is not working",
+    "classification": "P0_PRODUCT_DIRECTION_CONFLICT",
+    "disposition": "ACCEPTED",
+    "requirement": "Offer an optional on-device starting-action suggestion after save without delaying capture or replacing the manual workflow.",
+    "status": "IMPLEMENTATION_IN_PROGRESS",
+    "tracking_issue": "edoworks/factory#59"
+  },
+  "interpretation": "Build 4 behaves as implemented because it contains no Foundation Models integration. The submission is accepted as a new product requirement, not mislabeled as a crash or regression.",
+  "privacy_boundary": "Tester identity, device details, screenshot URLs, credentials, and screenshot content are excluded."
+}

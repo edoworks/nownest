@@ -13,6 +13,50 @@ final class VisualVerificationTests: XCTestCase {
         return app
     }
 
+    private func openSuggestionDetail(
+        mode: String,
+        additionalArguments: [String] = []
+    ) -> XCUIApplication {
+        let app = launchControl(arguments: [
+            "-ui-testing",
+            "-visual-variant", "control",
+            "-quiet-mode", "disabled",
+            "-suggestion-mode", mode
+        ] + additionalArguments)
+        XCTAssertTrue(app.buttons["parkIdeaButton"].waitForExistence(timeout: 5))
+        app.buttons["parkIdeaButton"].tap()
+        app.textFields["ideaField"].typeText("Compare standing desks")
+        app.buttons["confirmParkButton"].tap()
+        app.buttons["reviewParkedButton"].tap()
+        XCTAssertTrue(app.staticTexts["Compare standing desks"].waitForExistence(timeout: 5))
+        app.staticTexts["Compare standing desks"].tap()
+        XCTAssertTrue(app.buttons["requestSuggestionButton"].waitForExistence(timeout: 5))
+        return app
+    }
+
+    private func revealSuggestionControls(_ app: XCUIApplication, stateIdentifier: String) {
+        let state = app.staticTexts[stateIdentifier]
+        let field = app.textFields["startingActionField"]
+        let resume = app.buttons["resumeIdeaButton"]
+        for _ in 0..<3 where !resume.exists {
+            app.swipeUp()
+        }
+
+        XCTAssertTrue(state.exists)
+        XCTAssertTrue(field.exists)
+        XCTAssertTrue(resume.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.frame.contains(state.frame))
+        XCTAssertTrue(app.frame.contains(field.frame))
+        XCTAssertTrue(app.frame.contains(resume.frame))
+    }
+
+    private func retainScreenshot(_ app: XCUIApplication, named name: String) {
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
     func testControlVariantLayoutStructureAtLaunch() {
         let app = launchControl()
 
@@ -200,5 +244,43 @@ final class VisualVerificationTests: XCTestCase {
         attachment.name = "primary-action-dark-mode"
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+
+    func testSuggestionPreparingScreenshotRetention() {
+        let app = openSuggestionDetail(mode: "preparing")
+        app.buttons["requestSuggestionButton"].tap()
+        XCTAssertTrue(app.staticTexts["suggestionPreparingState"].waitForExistence(timeout: 5))
+        revealSuggestionControls(app, stateIdentifier: "suggestionPreparingState")
+        retainScreenshot(app, named: "suggestion-preparing")
+    }
+
+    func testSuggestionReadyScreenshotRetention() {
+        let app = openSuggestionDetail(mode: "ready")
+        app.buttons["requestSuggestionButton"].tap()
+        XCTAssertTrue(app.staticTexts["suggestionReadyState"].waitForExistence(timeout: 5))
+        revealSuggestionControls(app, stateIdentifier: "suggestionReadyState")
+        retainScreenshot(app, named: "suggestion-ready")
+    }
+
+    func testSuggestionUnavailableScreenshotRetention() {
+        let app = openSuggestionDetail(mode: "unavailable")
+        app.buttons["requestSuggestionButton"].tap()
+        XCTAssertTrue(app.staticTexts["suggestionUnavailableState"].waitForExistence(timeout: 5))
+        revealSuggestionControls(app, stateIdentifier: "suggestionUnavailableState")
+        retainScreenshot(app, named: "suggestion-unavailable")
+    }
+
+    func testSuggestionReadyAtLargestAccessibilityTextSize() {
+        let app = openSuggestionDetail(
+            mode: "ready",
+            additionalArguments: [
+                "-UIPreferredContentSizeCategoryName",
+                "UICTContentSizeCategoryAccessibilityExtraExtraExtraLarge"
+            ]
+        )
+        app.buttons["requestSuggestionButton"].tap()
+        XCTAssertTrue(app.staticTexts["suggestionReadyState"].waitForExistence(timeout: 5))
+        revealSuggestionControls(app, stateIdentifier: "suggestionReadyState")
+        retainScreenshot(app, named: "suggestion-ready-accessibility-text")
     }
 }
