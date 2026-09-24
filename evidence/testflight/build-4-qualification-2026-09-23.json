@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "kind": "TESTFLIGHT_BUILD_QUALIFICATION",
+  "product": "NowNest",
+  "bundle_id": "com.foculoom.nownest",
+  "marketing_version": "0.1.0",
+  "build_version": "4",
+  "candidate_source_revision": "405b3124bd92d84e69d1bbc947b6a9abf5ed2aef",
+  "source_base_revision": "78f6742",
+  "artifact_source_binding": "OPERATOR_ATTESTED_BUILD_SEQUENCE_NOT_EMBEDDED_IN_ARCHIVE",
+  "authorization_reference": "owner request 2026-09-23",
+  "recorded_at": "2026-09-24T03:01:29.635716+00:00",
+  "verification": {
+    "python_activation_tests": {
+      "passed": 14,
+      "failed": 0
+    },
+    "iphone_simulator": {
+      "model": "iPhone 17 Pro",
+      "os": "iOS 26.5",
+      "passed": 75,
+      "failed": 0
+    },
+    "ipad_simulator": {
+      "model": "iPad Pro 11-inch (M4)",
+      "os": "iPadOS 26.5",
+      "passed": 75,
+      "failed": 0
+    },
+    "static_analysis": "PASS",
+    "archive_signature": "PASS",
+    "distribution_signature": "iPhone Distribution: Foculoom LLC (H8MJMBTFVP)",
+    "distribution_get_task_allow": false,
+    "distribution_beta_reports_active": true,
+    "privacy_manifest_present": true
+  },
+  "physical_installations": [
+    {
+      "device": "iPhone 16 Pro Max",
+      "os": "iOS 26.7",
+      "installed_version": "0.1.0",
+      "installed_build": "4",
+      "launch_result": "PASS",
+      "method": "xcrun devicectl device install app and process launch",
+      "candidate_source_revision": "405b3124bd92d84e69d1bbc947b6a9abf5ed2aef"
+    },
+    {
+      "device": "iPad Air (4th generation)",
+      "os": "iPadOS 26.7",
+      "installed_version": "0.1.0",
+      "installed_build": "4",
+      "launch_result": "PASS",
+      "method": "xcrun devicectl device install app and process launch",
+      "candidate_source_revision": "405b3124bd92d84e69d1bbc947b6a9abf5ed2aef"
+    }
+  ],
+  "artifacts": {
+    "archive_sha256": "cff130603ca327ae6247716c8bbf74430ed4587ffe2889fbe7a390de684d3390",
+    "archive_app_binary_sha256": "306db587f9ac98bad0da7a7efb5d0c6db1c3f026b568326d044a65561ed72798",
+    "ipa_sha256": "c201c553b53b96349037574b8665be9c976f672172a6406cd6bdf3cfc97d6d99"
+  },
+  "effective_bundle": {
+    "device_families": [
+      "iPhone",
+      "iPad"
+    ],
+    "minimum_os": "18.0",
+    "uses_non_exempt_encryption": false
+  },
+  "app_store_connect": {
+    "delivery_uuid": "ddd4b09b-9701-4656-b0f8-d0bd4e6db07f",
+    "processing_state": "VALID",
+    "internal_build_state": "IN_BETA_TESTING",
+    "internal_group_membership": "CONFIRMED",
+    "app_review_submission": "NOT_ASSESSED"
+  },
+  "qualification_boundary": [
+    "Internal TestFlight activation does not imply App Review submission or Apple acceptance.",
+    "Physical installation and launch do not replace the remaining exact-build accessibility and Customer Zero observations.",
+    "The archive does not embed a Git revision; source-to-artifact provenance is an operator-attested build sequence, not a mechanical binary-to-commit proof."
+  ]
+}
