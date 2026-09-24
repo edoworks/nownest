@@ -1,9 +1,9 @@
 # NowNest Customer Zero PRD
 
-- Status: P0 implementation contract
-- Source revision audited: `a055cfc8c1b0f6e42230f5cfd52fe07645d8232f`
-- Tracking: `edoworks/factory#54`, implementation `edoworks/factory#55`
-- Evidence cutoff: 2026-09-23
+- Status: P0 validation contract
+- Source revision audited: build 4 candidate `405b3124bd92d84e69d1bbc947b6a9abf5ed2aef`
+- Tracking: `edoworks/factory#54`, implementation `edoworks/factory#55`, TestFlight lifecycle `edoworks/factory#46`
+- Evidence cutoff: 2026-09-24
 
 ## Product outcome
 
@@ -19,14 +19,26 @@ and later encounter a better starting point than the sentence alone.
 
 ## Current-state decision
 
-The audited build captures and persists a sentence, confirms return to NOW, and
-lists parked records behind an overflow menu. It does not resurface, reorient,
-resume, complete, or re-park. `ParkedIdea.state` never changes from `PARKED` and
-deletion is the only terminal action. This is P0.
+Build `0.1.0 (4)` implements capture, resurface, reorient, Resume, Done, Save
+again, and Abandon. It passed 75 tests on each supported simulator family,
+static analysis, archive inspection, physical installation and launch on the
+owner iPhone and iPad, Apple processing, and internal TestFlight activation.
+These facts establish an available validation candidate; they do not establish
+Customer Zero usefulness or release readiness.
+
+Fresh build 4 simulator captures pass visual checks for the NowNest identity,
+required content, clipping, hierarchy, form-factor adaptation, and calm visual
+character. Physical installation and launch are separately verified, but the
+simulator visual receipt does not claim physical-device visual or accessibility
+qualification.
 
 No Foundation Models, App Intents, Shortcuts, Siri, Core Spotlight, notification,
 background, network, analytics, or account integration exists. The current app
 is local SwiftData on iPhone and iPad.
+
+The active product, repository, and checkout identity is `NowNest`. `FocusGate`
+is retained only where historical evidence or an explicit internal-codename
+field requires it; it is not an active local checkout or user-facing name.
 
 ## Customer Zero interaction
 
@@ -81,9 +93,10 @@ commercial name adoption requires `CLEARED` identity evidence.
 
 | Evidence | Observed problem | Workflow | Severity | Disposition | Requirement | Acceptance | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Founder direction, 2026-09-23 | TestFlight build is not useful end-to-end | Full lifecycle | P0 | Accept | Complete Park -> Resume -> Resolve | Behavioral simulator and seven-day dogfood gates | In progress |
-| Founder direction, 2026-09-23 | Parked items lack a natural return to active work | Resurface/Resume | P0 | Accept | Visible Parked entry, context, Resume | Park, relaunch, resume, resolve journey | In progress |
+| Founder direction, 2026-09-23 | TestFlight build is not useful end-to-end | Full lifecycle | P0 | Accept | Complete Park -> Resume -> Resolve | Behavioral simulator and seven-day dogfood gates | Implemented; dogfood validation open |
+| Founder direction, 2026-09-23 | Parked items lack a natural return to active work | Resurface/Resume | P0 | Accept | Visible saved entry, context, Resume | Save, relaunch, resume, resolve journey | Implemented in build 4 |
 | G8 evidence at commit `8d6f3b5` | “owner confirmed both devices look good” | Visual review | P1 | Preserve, do not generalize | Fresh review for exact candidate | Build-bound physical-device receipt | Stale |
+| Build 4 visual receipt, 2026-09-24 | Fresh NowNest identity and layout review | Visual review | P1 | Accept within simulator boundary | Preserve build-bound iPhone/iPad captures | Six visual checks pass on both simulator form factors | Passed; physical visual gate remains open |
 | PR rationale only | “bland” concern | Visual identity | P1 | Preserve as unattributed | Complete existing treatment decision | Human comparison issue #32 | Open |
 | PR rationale only | “ADHD verbosity concern” | Capture/copy | P1 | Preserve as unattributed | Keep capture terse and Quiet Mode functional | Variant/Quiet Mode matrix | Open |
 | Repository and available tooling | No durable founder tester comments or crashes recovered | Feedback | P0 gate | Record unavailable | Query/record current-build feedback or `NO_DURABLE_FEEDBACK` | Build/revision-bound receipt | Unavailable |
@@ -135,3 +148,17 @@ CUSTOMER ZERO USEFULNESS -> REPEATED DOGFOODING -> EXTERNAL VALIDATION
 ```
 
 Passing tests, an uploaded build, or Apple processing cannot skip a preceding gate.
+
+## Checkout hygiene
+
+The canonical local checkout name is `NowNest`. Before release work, run:
+
+```text
+python3 scripts/verify-local-checkout.py --require-clean --require-main-sync
+```
+
+The guard fetches live `origin/main`, then rejects legacy checkout names,
+sibling legacy paths, dirty state, non-`main` branches, and divergence from the
+fetched remote. Historical
+evidence remains immutable; local drafts that are not repository evidence must
+be archived outside the checkout before synchronization.
