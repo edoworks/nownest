@@ -38,6 +38,8 @@ def main():
 
     branch = git(root, "branch", "--show-current")
     head = git(root, "rev-parse", "HEAD")
+    if args.require_main_sync:
+        git(root, "fetch", "--prune", "origin", "main")
     remote = git(root, "rev-parse", "refs/remotes/origin/main")
     if args.require_main_sync:
         if branch != "main":

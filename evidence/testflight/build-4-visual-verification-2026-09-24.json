@@ -4,6 +4,8 @@
   "product": "NowNest",
   "version": "0.1.0",
   "build": "4",
+  "candidate_source_revision": "405b3124bd92d84e69d1bbc947b6a9abf5ed2aef",
+  "source_binding": "Operator-attested build sequence; the simulator binary does not embed a Git revision.",
   "date": "2026-09-24",
   "source_receipt": "evidence/testflight/build-4-qualification-2026-09-23.json",
   "capture_environment": [
@@ -15,6 +17,18 @@
     "-visual-variant sophie",
     "-quiet-mode disabled"
   ],
+  "capture_commands": [
+    "xcrun simctl launch <device> com.foculoom.nownest -ui-testing -visual-variant sophie -quiet-mode disabled",
+    "xcrun simctl io <device> screenshot <output.png>"
+  ],
+  "installed_artifact": {
+    "bundle_id": "com.foculoom.nownest",
+    "marketing_version": "0.1.0",
+    "build_version": "4",
+    "executable_sha256": "439f61b04ffd08dc3c932280ff10a4d7162875a484480483497e85f389eea7fb",
+    "info_plist_sha256": "085041b486225d0a1dfbc51f35bfc08afe590edb853220c5f5fb76569207db1a",
+    "same_hashes_on_both_simulators": true
+  },
   "model": "ollama/qwen3.5:9b",
   "results": {
     "identity": "PASS",

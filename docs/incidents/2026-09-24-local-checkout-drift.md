@@ -29,8 +29,10 @@ drafts also prevented a simple clean-state assertion.
   was fast-forwarded, and stale remote-tracking refs were pruned.
 - The active checkout was renamed to `/Users/hello/NowNest`; the separate clean
   deprecated checkout was removed after proving it had no unique branch or tag.
+- Xcode's still-open legacy workspace recreated an empty old-path remnant; the
+  workspace was closed and the generated remnant removed.
 - `scripts/verify-local-checkout.py` is the recurrence guard for checkout name,
-  sibling legacy paths, cleanliness, branch, and fetched remote equality.
+  sibling legacy paths, cleanliness, branch, and live-fetched remote equality.
 
 Historical product references remain preserved. This correction removes active
 legacy paths; it does not rewrite evidence or repository history.

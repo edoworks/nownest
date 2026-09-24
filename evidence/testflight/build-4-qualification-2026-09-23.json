@@ -78,6 +78,9 @@
     "date": "2026-09-24",
     "model": "ollama/qwen3.5:9b",
     "build": "0.1.0 (4)",
+    "receipt": "evidence/testflight/build-4-visual-verification-2026-09-24.json",
+    "installed_executable_sha256": "439f61b04ffd08dc3c932280ff10a4d7162875a484480483497e85f389eea7fb",
+    "source_binding": "Operator-attested build sequence; the simulator binary does not embed a Git revision.",
     "screenshots": [
       {
         "path": "evidence/testflight/build-4-visual/iphone-17-pro.png",

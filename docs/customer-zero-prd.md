@@ -157,7 +157,8 @@ The canonical local checkout name is `NowNest`. Before release work, run:
 python3 scripts/verify-local-checkout.py --require-clean --require-main-sync
 ```
 
-The guard rejects legacy checkout names, sibling legacy checkouts, dirty state,
-non-`main` branches, and divergence from the fetched `origin/main`. Historical
+The guard fetches live `origin/main`, then rejects legacy checkout names,
+sibling legacy paths, dirty state, non-`main` branches, and divergence from the
+fetched remote. Historical
 evidence remains immutable; local drafts that are not repository evidence must
 be archived outside the checkout before synchronization.
