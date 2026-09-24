@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "kind": "ON_DEVICE_SUGGESTION_VERIFICATION",
+  "verified_at": "2026-09-24",
+  "source_revision": "5c574af841d1434d68219424995c63a126718b95",
+  "base_revision": "f55e1e7f4f73fa77908a83947109aa001e8ff44a",
+  "tracking_issue": "edoworks/factory#59",
+  "simulators": {
+    "iphone": {
+      "name": "iPhone 17 Pro",
+      "os": "iOS 26.5",
+      "full_ui_tests": {
+        "executed": 43,
+        "failures": 0
+      },
+      "unit_tests": {
+        "executed": 46,
+        "failures": 0
+      },
+      "final_visual_tests": {
+        "executed": 13,
+        "failures": 0
+      }
+    },
+    "ipad": {
+      "name": "iPad Pro 11-inch (M4)",
+      "os": "iOS 26.5",
+      "full_ui_tests": {
+        "executed": 43,
+        "failures": 0
+      },
+      "unit_tests": {
+        "executed": 46,
+        "failures": 0
+      },
+      "final_visual_tests": {
+        "executed": 13,
+        "failures": 0
+      }
+    }
+  },
+  "static_analysis": "PASS",
+  "privacy_and_capability_inspection": {
+    "networking_added": false,
+    "analytics_added": false,
+    "background_capability_added": false,
+    "entitlement_added": false,
+    "third_party_dependency_added": false,
+    "app_intent_added": false
+  },
+  "behavioral_guards": [
+    "Suggestion generation is explicitly requested after local save.",
+    "Unavailable, runtime-failure, malformed-output, and cancellation paths are deterministic.",
+    "A delayed response cannot replace a manual edit made while generation is in flight.",
+    "Generated text remains editable and requires Resume before it changes active work.",
+    "An unresumed suggestion is not persisted across relaunch."
+  ],
+  "rendered_evidence": {
+    "directory": "evidence/ux/screenshots/issue-59",
+    "states": [
+      "preparing",
+      "ready",
+      "unavailable",
+      "ready-accessibility-text"
+    ],
+    "mechanical_assertions": "PASS: state, editable field, and Resume frames are within the app viewport after bounded Form scrolling on iPhone and iPad.",
+    "vision_model": "ollama/qwen3.5:4b",
+    "vision_result": "PASS: text and non-color state cues are legible, unclipped, and preserve a calm hierarchy with Resume visible."
+  },
+  "incidents": [
+    "docs/incidents/2026-09-24-suggestion-resume-ipad.md",
+    "docs/incidents/2026-09-24-suggestion-manual-edit-race.md"
+  ],
+  "open_separate_gates": [
+    "Measured contrast under edoworks/factory#45",
+    "Exact-TestFlight-build physical accessibility under edoworks/factory#45",
+    "Replacement TestFlight build authorization and activation",
+    "Seven consecutive days of Customer Zero use"
+  ],
+  "boundary": "Simulator and local-source verification only. This receipt does not authorize or claim physical deployment, archive, TestFlight upload, App Store submission, measured contrast, or seven-day usefulness."
+}

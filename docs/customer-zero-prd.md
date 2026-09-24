@@ -103,7 +103,7 @@ commercial name adoption requires `CLEARED` identity evidence.
 | PR rationale only | “bland” concern | Visual identity | P1 | Preserve as unattributed | Complete existing treatment decision | Human comparison issue #32 | Open |
 | PR rationale only | “ADHD verbosity concern” | Capture/copy | P1 | Preserve as unattributed | Keep capture terse and Quiet Mode functional | Variant/Quiet Mode matrix | Open |
 | Repository audit before authenticated readback | No durable current-build comments or crashes had been recovered | Feedback | P0 gate | Superseded by authenticated readback | Bind each submission to its Apple build relationship | Build/revision-bound receipt | Build 3 correction and build 4 receipt recorded |
-| Build 4 feedback, 2026-09-24 | Expected Apple Intelligence to process a saved idea | Starting point | P0 | Accept as product direction, not a build-4 regression | Offer one optional on-device suggestion after save; preserve immediate save and manual fallback | Explicit states, editable suggestion, confirmation before Resume, unavailable/failure tests, iPhone/iPad visual evidence | Issue #59 in progress |
+| Build 4 feedback, 2026-09-24 | Expected Apple Intelligence to process a saved idea | Starting point | P0 | Accept as product direction, not a build-4 regression | Offer one optional on-device suggestion after save; preserve immediate save and manual fallback | Explicit states, editable suggestion, confirmation before Resume, unavailable/failure tests, iPhone/iPad visual evidence | Source implemented and simulator-verified in issue #59; integration pending |
 
 Authenticated readback on 2026-09-24 bound the five earlier submissions to build
 3 and one new submission to build 4. The correction is
