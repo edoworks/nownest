@@ -7,6 +7,8 @@
     {"id": "p0-lifecycle", "evidence": "behavioral unit and UI tests on iPhone and iPad", "status": "IN_PROGRESS"},
     {"id": "privacy", "evidence": "exact-build manifest, entitlement, dependency, and network inspection", "status": "REQUIRED"},
     {"id": "migration-recovery", "evidence": "prior-store migration and non-destructive recovery tests", "status": "REQUIRED"},
+    {"id": "testflight-activation", "evidence": "build 4 lifecycle and qualification receipts", "status": "PASS_BUILD_4"},
+    {"id": "simulator-visual", "evidence": "build 4 iPhone and iPad visual receipt", "status": "PASS_BUILD_4"},
     {"id": "physical-accessibility", "evidence": "exact-build iPhone and iPad visual and VoiceOver receipt", "status": "REQUIRED"},
     {"id": "testflight-feedback", "evidence": "build/revision-bound feedback receipt or NO_DURABLE_FEEDBACK", "status": "REQUIRED"},
     {"id": "customer-zero-seven-day", "evidence": "seven consecutive days plus explicit founder usefulness decision", "status": "REQUIRED"},
@@ -19,5 +21,6 @@
     "TestFlight upload implies feedback resolution",
     "Apple processing implies acceptance",
     "implementation implies validation"
-  ]
+  ],
+  "checkout_guard": "python3 scripts/verify-local-checkout.py --require-clean --require-main-sync"
 }

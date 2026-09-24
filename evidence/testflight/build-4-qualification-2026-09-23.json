@@ -74,6 +74,30 @@
     "internal_group_membership": "CONFIRMED",
     "app_review_submission": "NOT_ASSESSED"
   },
+  "visual_verification": {
+    "date": "2026-09-24",
+    "model": "ollama/qwen3.5:9b",
+    "build": "0.1.0 (4)",
+    "screenshots": [
+      {
+        "path": "evidence/testflight/build-4-visual/iphone-17-pro.png",
+        "sha256": "d93754a7f3210115bdfc69b39ab28a4e8031ca47ed8a4447da7df0891009a92b"
+      },
+      {
+        "path": "evidence/testflight/build-4-visual/ipad-pro-11.png",
+        "sha256": "dac0dc0093f908c9a17757ad51bd186beddb88c834b26d160246196cd9e009a1"
+      }
+    ],
+    "results": {
+      "identity": "PASS - NowNest is visible and no user-facing FocusGate name appears.",
+      "content": "PASS - NOW context and Save for later controls are visible and readable.",
+      "layout": "PASS - no overlap or clipping is visible on either form factor.",
+      "primary_action": "PASS - the honey Save for later button is prominent with readable dark text.",
+      "responsiveness": "PASS - both compositions fit without horizontal scrolling.",
+      "impression": "PASS - the interface is calm and restrained."
+    },
+    "boundary": "Simulator visual evidence only; it does not replace physical-device accessibility qualification."
+  },
   "qualification_boundary": [
     "Internal TestFlight activation does not imply App Review submission or Apple acceptance.",
     "Physical installation and launch do not replace the remaining exact-build accessibility and Customer Zero observations.",

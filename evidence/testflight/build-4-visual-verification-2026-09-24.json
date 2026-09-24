@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "kind": "BUILD_VISUAL_VERIFICATION",
+  "product": "NowNest",
+  "version": "0.1.0",
+  "build": "4",
+  "date": "2026-09-24",
+  "source_receipt": "evidence/testflight/build-4-qualification-2026-09-23.json",
+  "capture_environment": [
+    "iPhone 17 Pro simulator, iOS 26.5",
+    "iPad Pro 11-inch (M4) simulator, iPadOS 26.5"
+  ],
+  "deterministic_launch": [
+    "-ui-testing",
+    "-visual-variant sophie",
+    "-quiet-mode disabled"
+  ],
+  "model": "ollama/qwen3.5:9b",
+  "results": {
+    "identity": "PASS",
+    "content": "PASS",
+    "layout": "PASS",
+    "primary_action": "PASS",
+    "responsiveness": "PASS",
+    "impression": "PASS"
+  },
+  "screenshots": [
+    {
+      "path": "evidence/testflight/build-4-visual/iphone-17-pro.png",
+      "sha256": "d93754a7f3210115bdfc69b39ab28a4e8031ca47ed8a4447da7df0891009a92b"
+    },
+    {
+      "path": "evidence/testflight/build-4-visual/ipad-pro-11.png",
+      "sha256": "dac0dc0093f908c9a17757ad51bd186beddb88c834b26d160246196cd9e009a1"
+    }
+  ],
+  "boundary": "This verifies rendered build 4 simulator frames. Physical installation and launch are recorded separately; physical visual and accessibility qualification remain open."
+}
