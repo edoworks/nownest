@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "kind": "TESTFLIGHT_FEEDBACK_BINDING_CORRECTION",
+  "recorded_at": "2026-09-24",
+  "supersedes_build_binding_in": "evidence/testflight/founder-feedback-2026-09-23.json",
+  "source": "Authenticated App Store Connect beta feedback readback with include=build",
+  "app_id": "6814614006",
+  "bundle_id": "com.foculoom.nownest",
+  "corrected_binding": {
+    "apple_build_id": "55275038-140b-4604-a714-85fb3fc309b3",
+    "build_version": "3",
+    "submission_count": 5,
+    "crash_submission_count": 0
+  },
+  "interpretation": "The five 2026-09-23 founder submissions are build 3 feedback and do not qualify build 4.",
+  "privacy_boundary": "Tester identity, device details, screenshot URLs, credentials, and screenshot content are excluded."
+}
