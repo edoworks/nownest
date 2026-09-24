@@ -71,6 +71,17 @@
     "docs/incidents/2026-09-24-suggestion-resume-ipad.md",
     "docs/incidents/2026-09-24-suggestion-manual-edit-race.md"
   ],
+  "final_diff_review": {
+    "method": "Independent code review followed by rubberduck review of the staged implementation and evidence diff.",
+    "result": "PASS",
+    "open_findings": [],
+    "resolved_findings": [
+      "Prevent delayed suggestion output from replacing a manual edit.",
+      "Align output validation with the 120-character prompt contract.",
+      "Add deterministic cancellation and malformed-output coverage.",
+      "Replace clipped iPad evidence and assert state, field, and Resume viewport reachability."
+    ]
+  },
   "open_separate_gates": [
     "Measured contrast under edoworks/factory#45",
     "Exact-TestFlight-build physical accessibility under edoworks/factory#45",
