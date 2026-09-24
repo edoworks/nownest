@@ -20,6 +20,34 @@ final class NowNestUITests: XCTestCase {
         add(attachment)
     }
 
+    private func saveAndOpenIdea(_ text: String, in app: XCUIApplication) {
+        XCTAssertTrue(app.buttons["parkIdeaButton"].waitForExistence(timeout: 5))
+        app.buttons["parkIdeaButton"].tap()
+        app.textFields["ideaField"].typeText(text)
+        app.buttons["confirmParkButton"].tap()
+        XCTAssertTrue(app.buttons["reviewParkedButton"].waitForExistence(timeout: 5))
+        app.buttons["reviewParkedButton"].tap()
+        let idea = app.staticTexts[text]
+        XCTAssertTrue(idea.waitForExistence(timeout: 5))
+        idea.tap()
+        XCTAssertTrue(app.textFields["startingActionField"].waitForExistence(timeout: 5))
+    }
+
+    private func editText(in field: XCUIElement, adding text: String) {
+        field.tap()
+        field.typeText(text)
+        XCTAssertTrue((field.value as? String)?.contains(text) == true)
+    }
+
+    private func tapResume(in app: XCUIApplication) {
+        let button = app.buttons["resumeIdeaButton"]
+        for _ in 0..<3 where !button.exists {
+            app.swipeUp()
+        }
+        XCTAssertTrue(button.waitForExistence(timeout: 5))
+        button.tap()
+    }
+
     func testNowIsVisibleAtLaunch() {
         let app = launchApp()
 
@@ -56,7 +84,7 @@ final class NowNestUITests: XCTestCase {
         app.buttons["Review saved ideas"].tap()
 
         XCTAssertTrue(app.staticTexts["Review this later"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["READY"].exists)
+        XCTAssertTrue(app.staticTexts["SAVED"].exists)
         capture(app, named: "review-parked")
     }
 
@@ -77,7 +105,7 @@ final class NowNestUITests: XCTestCase {
         relaunchedApp.buttons["Review saved ideas"].tap()
 
         XCTAssertTrue(relaunchedApp.staticTexts["Relaunch survivor"].waitForExistence(timeout: 5))
-        XCTAssertTrue(relaunchedApp.staticTexts["READY"].exists)
+        XCTAssertTrue(relaunchedApp.staticTexts["SAVED"].exists)
         capture(relaunchedApp, named: "persistence-relaunch")
     }
 
@@ -86,7 +114,7 @@ final class NowNestUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Actions"].waitForExistence(timeout: 5))
         app.buttons["reviewParkedButton"].tap()
         XCTAssertTrue(app.staticTexts["Relaunch survivor"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["READY"].exists)
+        XCTAssertTrue(app.staticTexts["SAVED"].exists)
     }
 
     func testExplicitNowEditChangesOnlyAfterSave() {
@@ -140,11 +168,109 @@ final class NowNestUITests: XCTestCase {
 
         XCTAssertTrue(relaunchedApp.staticTexts["originalThought"].waitForExistence(timeout: 5))
         XCTAssertTrue(relaunchedApp.staticTexts["You were doing"].exists)
-        relaunchedApp.buttons["resumeIdeaButton"].tap()
+        tapResume(in: relaunchedApp)
 
         XCTAssertTrue(relaunchedApp.buttons["completeActiveButton"].waitForExistence(timeout: 5))
         relaunchedApp.buttons["completeActiveButton"].tap()
         XCTAssertTrue(relaunchedApp.staticTexts["Save one real idea for later"].waitForExistence(timeout: 5))
         capture(relaunchedApp, named: "resume-complete")
+    }
+
+    func testSuggestionReadyCanBeEditedBeforeResume() {
+        let app = launchApp(arguments: ["-ui-testing", "-suggestion-mode", "ready"])
+        saveAndOpenIdea("Investigate local models", in: app)
+
+        app.buttons["requestSuggestionButton"].tap()
+        XCTAssertTrue(app.staticTexts["suggestionReadyState"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["suggestionReadyLabel"].exists)
+
+        let field = app.textFields["startingActionField"]
+        XCTAssertEqual(field.value as? String, "Open the Foundation Models documentation and read the overview.")
+        editText(in: field, adding: "Edited action")
+        tapResume(in: app)
+
+        XCTAssertTrue(app.staticTexts["nextaction"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["nextaction"].label.contains("Edited action"))
+    }
+
+    func testUnavailableSuggestionKeepsManualResumeUsable() {
+        let app = launchApp(arguments: ["-ui-testing", "-suggestion-mode", "unavailable"])
+        saveAndOpenIdea("Compare standing desks", in: app)
+
+        app.buttons["requestSuggestionButton"].tap()
+        XCTAssertTrue(app.staticTexts["suggestionUnavailableState"].waitForExistence(timeout: 5))
+        let field = app.textFields["startingActionField"]
+        editText(in: field, adding: "Manual action")
+        tapResume(in: app)
+
+        XCTAssertTrue(app.staticTexts["nextaction"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["nextaction"].label.contains("Manual action"))
+    }
+
+    func testFailedSuggestionKeepsManualResumeUsable() {
+        let app = launchApp(arguments: ["-ui-testing", "-suggestion-mode", "failure"])
+        saveAndOpenIdea("Draft a customer question", in: app)
+
+        app.buttons["requestSuggestionButton"].tap()
+        XCTAssertTrue(app.staticTexts["suggestionFailedState"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["retrySuggestionButton"].exists)
+        let field = app.textFields["startingActionField"]
+        editText(in: field, adding: "Manual fallback")
+        tapResume(in: app)
+
+        XCTAssertTrue(app.staticTexts["nextaction"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["nextaction"].label.contains("Manual fallback"))
+    }
+
+    func testMalformedSuggestionKeepsManualResumeUsable() {
+        let app = launchApp(arguments: ["-ui-testing", "-suggestion-mode", "malformed"])
+        saveAndOpenIdea("Outline the release note", in: app)
+
+        app.buttons["requestSuggestionButton"].tap()
+        XCTAssertTrue(app.staticTexts["suggestionFailedState"].waitForExistence(timeout: 5))
+        let field = app.textFields["startingActionField"]
+        XCTAssertEqual(field.value as? String, "Outline the release note")
+        editText(in: field, adding: "Manual fallback")
+        tapResume(in: app)
+
+        XCTAssertTrue(app.staticTexts["nextaction"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["nextaction"].label.contains("Manual fallback"))
+    }
+
+    func testDelayedSuggestionDoesNotOverwriteManualEdit() {
+        let app = launchApp(arguments: ["-ui-testing", "-suggestion-mode", "delayed-ready"])
+        saveAndOpenIdea("Keep the saved thought", in: app)
+
+        app.buttons["requestSuggestionButton"].tap()
+        XCTAssertTrue(app.staticTexts["suggestionPreparingState"].waitForExistence(timeout: 5))
+        let field = app.textFields["startingActionField"]
+        field.tap()
+        field.typeText("Manual edit wins")
+
+        XCTAssertTrue(app.staticTexts["suggestionSavedState"].waitForExistence(timeout: 5))
+        XCTAssertTrue((field.value as? String)?.contains("Manual edit wins") == true)
+        XCTAssertFalse((field.value as? String)?.contains("Generated action") == true)
+    }
+
+    func testUnresumedSuggestionIsNotPersistedAndManualRelaunchStillWorks() {
+        let app = launchApp(arguments: ["-ui-testing-persistent-reset", "-suggestion-mode", "ready"])
+        saveAndOpenIdea("Preserve this saved thought", in: app)
+        app.buttons["requestSuggestionButton"].tap()
+        XCTAssertTrue(app.staticTexts["suggestionReadyState"].waitForExistence(timeout: 5))
+        app.terminate()
+
+        let relaunchedApp = launchApp(arguments: ["-ui-testing-persistent", "-suggestion-mode", "unavailable"])
+        relaunchedApp.buttons["reviewParkedButton"].tap()
+        XCTAssertTrue(relaunchedApp.staticTexts["Preserve this saved thought"].waitForExistence(timeout: 5))
+        relaunchedApp.staticTexts["Preserve this saved thought"].tap()
+        let field = relaunchedApp.textFields["startingActionField"]
+        XCTAssertTrue(field.waitForExistence(timeout: 5))
+        XCTAssertEqual(field.value as? String, "Preserve this saved thought")
+        XCTAssertTrue(relaunchedApp.staticTexts["suggestionSavedState"].exists)
+        editText(in: field, adding: "Relaunch edit")
+        tapResume(in: relaunchedApp)
+
+        XCTAssertTrue(relaunchedApp.staticTexts["nextaction"].waitForExistence(timeout: 5))
+        XCTAssertTrue(relaunchedApp.staticTexts["nextaction"].label.contains("Relaunch edit"))
     }
 }

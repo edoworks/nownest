@@ -568,7 +568,7 @@ private struct ReviewView: View {
                             .foregroundStyle(Color.nestInkMuted)
                     }
                     HStack {
-                        Text("READY")
+                        Text("SAVED")
                             .font(.caption2.weight(.black))
                             .tracking(1)
                             .foregroundStyle(Color.nestSage)
@@ -602,8 +602,11 @@ private struct ReviewView: View {
 private struct ParkedIdeaDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.startingActionSuggestionClient) private var suggestionClient
     @State private var startingAction: String
     @State private var saveFailed = false
+    @State private var suggestionState = StartingActionSuggestionState.saved
+    @State private var suggestionTask: Task<Void, Never>?
 
     let idea: ParkedIdea
     let onResumed: () -> Void
@@ -631,17 +634,24 @@ private struct ParkedIdeaDetailView: View {
                 }
 
                 Section("Starting point") {
+                    suggestionControl
+
                     TextField("First concrete action", text: $startingAction, axis: .vertical)
                         .accessibilityIdentifier("startingActionField")
-                    Text("This is your choice, not a generated fact.")
+                    if suggestionState == .ready {
+                        Text("On-device suggestion")
+                            .font(.caption.weight(.semibold))
+                            .accessibilityIdentifier("suggestionReadyLabel")
+                    }
+                    Text("Edit this before Resume. It remains your choice, not a generated fact.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                }
-
-                Section {
                     Button("Resume", systemImage: "play.fill") { resume() }
                         .disabled(NowNestRules.normalized(startingAction) == nil)
                         .accessibilityIdentifier("resumeIdeaButton")
+                }
+
+                Section {
                     Button("Done", systemImage: "checkmark") { complete() }
                     Button("Abandon", systemImage: "trash", role: .destructive) { abandon() }
                 }
@@ -655,6 +665,80 @@ private struct ParkedIdeaDetailView: View {
             }
             .alert("Couldn’t update", isPresented: $saveFailed) {
                 Button("OK", role: .cancel) {}
+            }
+            .onDisappear {
+                suggestionTask?.cancel()
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var suggestionControl: some View {
+        switch suggestionState {
+        case .saved:
+            Label("Saved", systemImage: "checkmark.circle")
+                .accessibilityIdentifier("suggestionSavedState")
+            Button("Suggest a starting action", systemImage: "sparkles") {
+                requestSuggestion()
+            }
+            .accessibilityIdentifier("requestSuggestionButton")
+        case .preparing:
+            HStack {
+                ProgressView()
+                Text("Preparing on-device suggestion")
+                    .accessibilityIdentifier("suggestionPreparingState")
+            }
+        case .ready:
+            Label("Suggestion ready", systemImage: "checkmark.circle.fill")
+                .accessibilityIdentifier("suggestionReadyState")
+        case .unavailable:
+            Label("On-device suggestion unavailable", systemImage: "slash.circle")
+                .accessibilityIdentifier("suggestionUnavailableState")
+            Text("Add or edit the starting point yourself, then choose Resume.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        case .failed:
+            Label("Suggestion failed", systemImage: "exclamationmark.circle")
+                .accessibilityIdentifier("suggestionFailedState")
+            Text("Your saved idea is unchanged. You can edit the starting point and Resume.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Button("Try suggestion again") { requestSuggestion() }
+                .accessibilityIdentifier("retrySuggestionButton")
+        }
+    }
+
+    private func requestSuggestion() {
+        suggestionTask?.cancel()
+        suggestionState = .preparing
+        let requestedStartingAction = startingAction
+        let input = StartingActionSuggestionInput(
+            thought: idea.text,
+            project: idea.originProject,
+            outcome: idea.originOutcome,
+            interruptedAction: idea.originNextAction
+        )
+        suggestionTask = Task {
+            do {
+                switch try await suggestionClient.generate(input) {
+                case .suggestion(let output):
+                    guard let output = StartingActionSuggestionClient.sanitize(output) else {
+                        suggestionState = .failed
+                        return
+                    }
+                    guard startingAction == requestedStartingAction else {
+                        suggestionState = .saved
+                        return
+                    }
+                    startingAction = output
+                    suggestionState = .ready
+                case .unavailable:
+                    suggestionState = .unavailable
+                }
+            } catch is CancellationError {
+                return
+            } catch {
+                suggestionState = .failed
             }
         }
     }

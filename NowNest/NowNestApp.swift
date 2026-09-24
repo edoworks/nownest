@@ -7,11 +7,13 @@ struct NowNestApp: App {
     private let visualVariantConfiguration: VisualVariantConfiguration
     private let recoveryNotice: String?
     private let forcedColorScheme: ColorScheme?
+    private let suggestionClient: StartingActionSuggestionClient
 
     init() {
         let schema = Schema([NowContext.self, ParkedIdea.self, DogfoodEvent.self])
         let arguments = ProcessInfo.processInfo.arguments
         forcedColorScheme = arguments.contains("-ui-testing-dark-mode") ? .dark : nil
+        suggestionClient = StartingActionSuggestionLaunchMode.parse(arguments: arguments)?.client ?? .live
         let isDebug: Bool = {
             #if DEBUG
             return true
@@ -113,6 +115,7 @@ struct NowNestApp: App {
                 .preferredColorScheme(forcedColorScheme)
                 .environment(\.visualVariantConfiguration, visualVariantConfiguration)
                 .environment(\.recoveryNotice, recoveryNotice)
+                .environment(\.startingActionSuggestionClient, suggestionClient)
         }
         .modelContainer(modelContainer)
     }

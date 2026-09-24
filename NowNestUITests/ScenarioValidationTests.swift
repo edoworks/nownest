@@ -148,7 +148,7 @@ final class ScenarioValidationTests: XCTestCase {
             reviewButton.tap()
             let parkedIdea = app.staticTexts[contract.interruption]
             XCTAssertTrue(parkedIdea.waitForExistence(timeout: 5))
-            let parkedIdeaReviewable = parkedIdea.exists && app.staticTexts["READY"].exists
+            let parkedIdeaReviewable = parkedIdea.exists && app.staticTexts["SAVED"].exists
             XCTAssertTrue(parkedIdeaReviewable)
             steps.append("review-saved")
 
