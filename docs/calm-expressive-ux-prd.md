@@ -15,7 +15,8 @@
 > Build-4 feedback amendment (2026-09-24): issue #59 authorizes one optional,
 > explicitly requested on-device starting-action suggestion in the saved-idea
 > detail. Capture remains immediate and the complete manual workflow remains the
-> fallback. This amendment does not authorize upload or release.
+> fallback. The source implementation merged at `66f7b4a`; this amendment does
+> not authorize a replacement build, upload, or release.
 
 Tracking:
 
@@ -627,6 +628,18 @@ date, and either a sanitized authenticated tester-feedback reference or
 compliance or metadata guidance, is recorded separately and never represented
 as tester feedback. Feedback for an earlier revision does not qualify a later
 build, and absence of durable feedback does not mean "no issues found."
+
+Run authenticated feedback freshness checks both before a feedback-driven or
+release-candidate increment is scoped and immediately before it closes. The
+check covers TestFlight screenshot feedback, TestFlight crashes, App Store
+customer reviews, and App Store version state when applicable. Record sanitized
+watermarks, endpoint/filter identity, exhausted page counts, and per-build
+submission counts. A credential, API, pagination, or coverage failure blocks
+closeout; it is not evidence that feedback is absent. If a newer material
+submission is present, reconcile its disposition and acceptance test before
+closure. This two-checkpoint rule is effective after issue #59; its earlier App
+Store intake state remains explicitly `NOT_RUN` rather than retroactively
+inferred.
 
 Store durable summaries under `evidence/ux/<chunk>-YYYY-MM-DD.json` and
 representative PNGs under `evidence/ux/screenshots/<commit>/`. The JSON must

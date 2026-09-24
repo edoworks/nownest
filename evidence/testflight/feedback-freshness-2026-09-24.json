@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "kind": "APPLE_FEEDBACK_FRESHNESS",
+  "app_id": "6814614006",
+  "bundle_id": "com.foculoom.nownest",
+  "subject_build": {
+    "marketing_version": "0.1.0",
+    "build_version": "4",
+    "apple_build_id": "ddd4b09b-9701-4656-b0f8-d0bd4e6db07f",
+    "candidate_source_revision": "405b3124bd92d84e69d1bbc947b6a9abf5ed2aef"
+  },
+  "testflight_query": {
+    "queried_at_utc": "2026-09-24T19:54:30.710981Z",
+    "method": "Authenticated App Store Connect GET-only check",
+    "screenshot_feedback_endpoint": "/apps/6814614006/betaFeedbackScreenshotSubmissions?include=build&limit=200&sort=-createdDate",
+    "screenshot_feedback_pages": 1,
+    "screenshot_feedback_pagination_exhausted": true,
+    "screenshot_feedback_count": 6,
+    "latest_screenshot_feedback_created_at": "2026-09-24T07:06:04.308Z",
+    "latest_screenshot_feedback_id": "AJCLbB4yIgy52G97B5Kv3dA",
+    "screenshot_feedback_by_build": [
+      {
+        "apple_build_id": "55275038-140b-4604-a714-85fb3fc309b3",
+        "build_version": "3",
+        "count": 5,
+        "newest_created_at": "2026-09-23T02:37:59.528Z"
+      },
+      {
+        "apple_build_id": "ddd4b09b-9701-4656-b0f8-d0bd4e6db07f",
+        "build_version": "4",
+        "count": 1,
+        "newest_created_at": "2026-09-24T07:06:04.308Z"
+      }
+    ],
+    "crash_feedback_endpoint": "/apps/6814614006/betaFeedbackCrashSubmissions?include=build&limit=200&sort=-createdDate",
+    "crash_feedback_pages": 1,
+    "crash_feedback_pagination_exhausted": true,
+    "crash_feedback_count": 0,
+    "latest_crash_feedback_created_at": null,
+    "newer_than_accepted_build_4_feedback": false
+  },
+  "app_store_query": {
+    "queried_at_utc": "2026-09-24T19:54:30.710981Z",
+    "method": "Authenticated App Store Connect GET-only check",
+    "customer_reviews_endpoint": "/apps/6814614006/customerReviews?limit=200",
+    "customer_reviews_pages": 1,
+    "customer_reviews_pagination_exhausted": true,
+    "customer_review_count": 0,
+    "latest_customer_review_created_at": null,
+    "rating_distribution": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0
+    },
+    "versions_endpoint": "/apps/6814614006/appStoreVersions?limit=200",
+    "versions_pages": 1,
+    "versions_pagination_exhausted": true,
+    "versions": [
+      {
+        "version": "1.0",
+        "state": "PREPARE_FOR_SUBMISSION"
+      }
+    ],
+    "public_release_present": false
+  },
+  "checkpoint_coverage": {
+    "intake_testflight": "PASS: authenticated build-bound receipt at 2026-09-24T07:21:54.178993Z",
+    "intake_app_store_reviews_and_versions": "NOT_RUN: the two-checkpoint App Store rule was introduced at this closeout and is not retroactively inferred",
+    "closeout_testflight": "PASS",
+    "closeout_app_store_reviews_and_versions": "PASS"
+  },
+  "disposition": "No newer TestFlight feedback, TestFlight crash, or App Store customer review changes issue #59 scope. The accepted build-4 submission remains the latest feedback.",
+  "merged_source_revision": "66f7b4ae0a9ddad03f8ee50cff4ad50075654811",
+  "replacement_build_boundary": "The merged suggestion source is not part of build 4. This receipt does not authorize or claim a replacement archive, upload, TestFlight activation, App Store submission, or public release.",
+  "privacy_boundary": "Tester and reviewer identity, device details, screenshot URLs, credentials, private-key paths, and raw customer-review content are excluded."
+}
