@@ -1,0 +1,32 @@
+{
+  "app_id": "6814614006",
+  "artifact_source_binding": "OPERATOR_ATTESTED_BUILD_SEQUENCE_NOT_EMBEDDED_IN_ARCHIVE",
+  "artifacts": {
+    "archive_sha256": "cff130603ca327ae6247716c8bbf74430ed4587ffe2889fbe7a390de684d3390",
+    "ipa_sha256": "c201c553b53b96349037574b8665be9c976f672172a6406cd6bdf3cfc97d6d99"
+  },
+  "authorization_reference": "owner request 2026-09-23",
+  "build_id": "ddd4b09b-9701-4656-b0f8-d0bd4e6db07f",
+  "build_version": "4",
+  "candidate_source_revision": "405b3124bd92d84e69d1bbc947b6a9abf5ed2aef",
+  "effective_bundle": {
+    "bundle_id": "com.foculoom.nownest",
+    "device_families": [
+      "iPhone",
+      "iPad"
+    ],
+    "uses_non_exempt_encryption": false
+  },
+  "kind": "TESTFLIGHT_LIFECYCLE_RECEIPT",
+  "marketing_version": "0.1.0",
+  "operator": "owner-operator",
+  "recorded_at": "2026-09-24T03:01:29.635716+00:00",
+  "schema_version": 1,
+  "source_checkout_validation": "candidate app source paths match the recorded Git commit",
+  "states": {
+    "export_compliance": "NON_EXEMPT_ENCRYPTION_FALSE",
+    "internal_group_membership": "CONFIRMED",
+    "internal_testflight": "IN_BETA_TESTING",
+    "processed": "VALID"
+  }
+}
