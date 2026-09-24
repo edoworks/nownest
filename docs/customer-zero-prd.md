@@ -5,6 +5,7 @@
 - Tracking: `edoworks/factory#54`, implementation `edoworks/factory#55`, TestFlight lifecycle `edoworks/factory#46`
 - Evidence cutoff: 2026-09-24
 - Accepted-feedback increment: `edoworks/factory#59`
+- Accepted-feedback source merged: `edoworks/nownest@66f7b4a`
 
 ## Product outcome
 
@@ -103,15 +104,47 @@ commercial name adoption requires `CLEARED` identity evidence.
 | PR rationale only | “bland” concern | Visual identity | P1 | Preserve as unattributed | Complete existing treatment decision | Human comparison issue #32 | Open |
 | PR rationale only | “ADHD verbosity concern” | Capture/copy | P1 | Preserve as unattributed | Keep capture terse and Quiet Mode functional | Variant/Quiet Mode matrix | Open |
 | Repository audit before authenticated readback | No durable current-build comments or crashes had been recovered | Feedback | P0 gate | Superseded by authenticated readback | Bind each submission to its Apple build relationship | Build/revision-bound receipt | Build 3 correction and build 4 receipt recorded |
-| Build 4 feedback, 2026-09-24 | Expected Apple Intelligence to process a saved idea | Starting point | P0 | Accept as product direction, not a build-4 regression | Offer one optional on-device suggestion after save; preserve immediate save and manual fallback | Explicit states, editable suggestion, confirmation before Resume, unavailable/failure tests, iPhone/iPad visual evidence | Source implemented and simulator-verified in issue #59; integration pending |
+| Build 4 feedback, 2026-09-24 | Expected Apple Intelligence to process a saved idea | Starting point | P0 | Accept as product direction, not a build-4 regression | Offer one optional on-device suggestion after save; preserve immediate save and manual fallback | Explicit states, editable suggestion, confirmation before Resume, unavailable/failure tests, iPhone/iPad visual evidence | Merged at `66f7b4a`; replacement-build qualification remains separately gated |
 
 Authenticated readback on 2026-09-24 bound the five earlier submissions to build
 3 and one new submission to build 4. The correction is
 `evidence/testflight/founder-feedback-build-binding-correction-2026-09-24.json`;
 the current-build receipt is
 `evidence/testflight/build-4-feedback-2026-09-24.json`. Build-bound feedback is
-now present, but its accepted requirement remains open until issue #59 is
-implemented and validated.
+now present, and its accepted source requirement is implemented and
+simulator/local-source validated in
+`evidence/ux/issue-59-verification-2026-09-24.json`. A fresh authenticated
+readback at closeout found no newer TestFlight submission or crash, no App Store
+customer review, and no public App Store version. That result is recorded in
+`evidence/testflight/feedback-freshness-2026-09-24.json` and does not qualify the
+merged source as a replacement TestFlight build.
+
+### Feedback freshness protocol
+
+Effective after this issue #59 closeout, for any TestFlight, App Store,
+release-candidate, or feedback-driven increment:
+
+1. Query authenticated TestFlight screenshot feedback and crash submissions
+   before scoping work and again immediately before closeout.
+2. Query App Store customer reviews and version state at the same checkpoints
+   when an App Store Connect app exists.
+3. Bind tester feedback to its Apple build relationship; never transfer feedback
+   or an absence claim to a later source revision or build.
+4. Exhaust pagination and record endpoint/filter identity, pages traversed,
+   total count, latest creation time, a sanitized per-build submission inventory,
+   crash count, App Store review count, and version state. Exclude tester and
+   reviewer identity, device details, screenshot URLs, and raw free text unless
+   a separately protected triage record is required.
+5. Treat credential failure, stale key paths, API errors, and unqueried surfaces
+   as a blocker. Never translate them into `NO_DURABLE_FEEDBACK` or “no issues.”
+6. Re-open scope when a newer material submission exists; otherwise record the
+   unchanged watermark before closing the implementation issue.
+
+Issue #59 predates this protocol. Its intake evidence included authenticated,
+build-bound TestFlight feedback but did not query App Store customer reviews or
+version state; those intake fields are `NOT_RUN`, not inferred. Its closeout
+check covers all four required surfaces and establishes the baseline for future
+increments.
 
 ## Optional on-device suggestion contract
 

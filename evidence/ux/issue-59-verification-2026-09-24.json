@@ -65,7 +65,14 @@
     ],
     "mechanical_assertions": "PASS: state, editable field, and Resume frames are within the app viewport after bounded Form scrolling on iPhone and iPad.",
     "vision_model": "ollama/qwen3.5:4b",
-    "vision_result": "PASS: text and non-color state cues are legible, unclipped, and preserve a calm hierarchy with Resume visible."
+    "vision_result": "PASS: text and non-color state cues are legible, unclipped, and preserve a calm hierarchy with Resume visible.",
+    "closeout_revalidation": {
+      "model": "ollama/qwen3.5:9b",
+      "result": "PASS",
+      "scope": "The same eight iPhone/iPad preparing, ready, unavailable, and largest-accessibility-text screenshots.",
+      "observation": "Text-plus-icon states, editable field, Resume reachability, legibility, and calm hierarchy remain visible without horizontal clipping or overlap.",
+      "note": "A smaller-model rerun returned observations inconsistent with its FAIL labels, so closeout escalated to the approved larger local model and retained deterministic viewport assertions as the primary guard."
+    }
   },
   "incidents": [
     "docs/incidents/2026-09-24-suggestion-resume-ipad.md",
