@@ -33,6 +33,19 @@ final class ParkedIdea {
     var resolvedAt: Date?
     var resumeCount: Int?
     var parkCount: Int?
+    // Optional fields preserve compatibility with stores created before reviews existed.
+    var reviewStatus: String?
+    var reviewInput: String?
+    var reviewDraft: String?
+    var reviewCategory: String?
+    var reviewReason: String?
+    var reviewUncertainty: String?
+    var reviewMessage: String?
+    var reviewRequestID: UUID?
+    var reviewDecision: String?
+    // Optional JSON fields allow existing SwiftData stores to migrate in place.
+    var updatesJSON: String?
+    var reviewHistoryJSON: String?
 
     init(
         text: String,
@@ -129,6 +142,7 @@ enum NowNestStore {
             originNextAction: interruptedNextAction
         )
         context.insert(idea)
+        idea.reviewStatus = DeferredReviewStatus.queued.rawValue
         record("successfulPark", in: context)
         do {
             try context.save()

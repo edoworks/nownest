@@ -3,6 +3,7 @@ import SwiftData
 
 @main
 struct NowNestApp: App {
+    @State private var reviewCoordinator: DeferredReviewCoordinator
     private let modelContainer: ModelContainer
     private let visualVariantConfiguration: VisualVariantConfiguration
     private let recoveryNotice: String?
@@ -12,6 +13,12 @@ struct NowNestApp: App {
     init() {
         let schema = Schema([NowContext.self, ParkedIdea.self, DogfoodEvent.self])
         let arguments = ProcessInfo.processInfo.arguments
+        #if DEBUG
+        let reviewClient = DeferredReviewClient.testing(arguments: arguments) ?? .live
+        #else
+        let reviewClient = DeferredReviewClient.live
+        #endif
+        _reviewCoordinator = State(initialValue: DeferredReviewCoordinator(client: reviewClient))
         forcedColorScheme = arguments.contains("-ui-testing-dark-mode") ? .dark : nil
         suggestionClient = StartingActionSuggestionLaunchMode.parse(arguments: arguments)?.client ?? .live
         let isDebug: Bool = {
@@ -112,6 +119,7 @@ struct NowNestApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(reviewCoordinator)
                 .preferredColorScheme(forcedColorScheme)
                 .environment(\.visualVariantConfiguration, visualVariantConfiguration)
                 .environment(\.recoveryNotice, recoveryNotice)

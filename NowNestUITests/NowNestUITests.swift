@@ -8,7 +8,7 @@ final class NowNestUITests: XCTestCase {
 
     private func launchApp(arguments: [String] = ["-ui-testing"]) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = arguments
+        app.launchArguments = arguments + ["-review-mode", "unavailable"]
         app.launch()
         return app
     }
@@ -30,7 +30,14 @@ final class NowNestUITests: XCTestCase {
         let idea = app.staticTexts[text]
         XCTAssertTrue(idea.waitForExistence(timeout: 5))
         idea.tap()
+        revealStartingPoint(in: app)
         XCTAssertTrue(app.textFields["startingActionField"].waitForExistence(timeout: 5))
+    }
+
+    private func revealStartingPoint(in app: XCUIApplication) {
+        let button = app.buttons["requestSuggestionButton"]
+        for _ in 0..<8 where !button.exists || !button.isHittable { app.swipeUp() }
+        XCTAssertTrue(button.isHittable)
     }
 
     private func editText(in field: XCUIElement, adding text: String) {
@@ -167,6 +174,10 @@ final class NowNestUITests: XCTestCase {
         relaunchedApp.staticTexts["Investigate Foundation Models"].tap()
 
         XCTAssertTrue(relaunchedApp.staticTexts["originalThought"].waitForExistence(timeout: 5))
+        let interruptedContext = relaunchedApp.staticTexts["You were doing"]
+        for _ in 0..<6 where !interruptedContext.exists || !interruptedContext.isHittable {
+            relaunchedApp.swipeUp()
+        }
         XCTAssertTrue(relaunchedApp.staticTexts["You were doing"].exists)
         tapResume(in: relaunchedApp)
 
@@ -263,6 +274,7 @@ final class NowNestUITests: XCTestCase {
         relaunchedApp.buttons["reviewParkedButton"].tap()
         XCTAssertTrue(relaunchedApp.staticTexts["Preserve this saved thought"].waitForExistence(timeout: 5))
         relaunchedApp.staticTexts["Preserve this saved thought"].tap()
+        revealStartingPoint(in: relaunchedApp)
         let field = relaunchedApp.textFields["startingActionField"]
         XCTAssertTrue(field.waitForExistence(timeout: 5))
         XCTAssertEqual(field.value as? String, "Preserve this saved thought")

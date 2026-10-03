@@ -2,6 +2,8 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(DeferredReviewCoordinator.self) private var reviewCoordinator
     @Environment(\.modelContext) private var modelContext
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.visualVariantConfiguration) private var variantConfig
@@ -28,6 +30,9 @@ struct ContentView: View {
     private var now: NowContext? { nowContexts.first }
     private var activeIdea: ParkedIdea? { ideas.first { $0.state == "RESUMED" } }
     private var parkedCount: Int { ideas.count { $0.state == "PARKED" } }
+    private var queuedReviewIDs: [UUID] {
+        ideas.filter { $0.state == "PARKED" && $0.deferredReviewStatus == .queued && $0.reviewDecision == nil }.map(\.id)
+    }
     private var currentVariantConfig: VisualVariantConfiguration {
         VisualVariantConfiguration(
             variant: variantConfig.variant,
@@ -96,6 +101,14 @@ struct ContentView: View {
                             }
                             .buttonStyle(.bordered)
                             .accessibilityIdentifier("reviewParkedButton")
+
+                            Text("New ideas get an on-device review while NowNest is open, when Apple Intelligence is available. You decide what to keep.")
+                                .font(.caption)
+                                .foregroundStyle(Color.nestInkMuted)
+
+                            if let message = reviewCoordinator.storageError {
+                                Text(message).font(.caption).foregroundStyle(Color.nestInkMuted)
+                            }
 
                             if currentVariantConfig.showsReassurance {
                                 Text("Capture it safely, then return here. Nothing changes NOW unless you edit it.")
@@ -212,6 +225,13 @@ struct ContentView: View {
                     errorMessage = "Couldn't create NOW."
                 }
                 recoveryAlertPresented = recoveryNotice != nil
+                reviewCoordinator.setActive(scenePhase == .active, in: modelContext)
+            }
+            .onChange(of: scenePhase) { _, phase in
+                reviewCoordinator.setActive(phase == .active, in: modelContext)
+            }
+            .onChange(of: queuedReviewIDs) { _, _ in
+                reviewCoordinator.kick(in: modelContext)
             }
         }
         .environment(\.visualVariantConfiguration, currentVariantConfig)
@@ -567,6 +587,12 @@ private struct ReviewView: View {
                             .font(.caption)
                             .foregroundStyle(Color.nestInkMuted)
                     }
+                    if let status = idea.deferredReviewStatus {
+                        Text(idea.reviewDecision == "kept" ? "Kept for later" :
+                            (status == .ready && idea.hasCurrentReview ? (idea.reviewCategory ?? status.label) : status.label))
+                            .font(.caption)
+                            .foregroundStyle(Color.nestInkMuted)
+                    }
                     HStack {
                         Text("SAVED")
                             .font(.caption2.weight(.black))
@@ -607,6 +633,7 @@ private struct ParkedIdeaDetailView: View {
     @State private var saveFailed = false
     @State private var suggestionState = StartingActionSuggestionState.saved
     @State private var suggestionTask: Task<Void, Never>?
+    @State private var showingUpdateSheet = false
 
     let idea: ParkedIdea
     let onResumed: () -> Void
@@ -624,6 +651,10 @@ private struct ParkedIdeaDetailView: View {
                     Text(idea.text)
                         .accessibilityIdentifier("originalThought")
                 }
+
+                DeferredReviewSection(idea: idea, onDiscarded: { dismiss() }, onAddUpdate: {
+                    showingUpdateSheet = true
+                })
 
                 if idea.originProject != nil || idea.originOutcome != nil || idea.originNextAction != nil {
                     Section("Why it was saved") {
@@ -668,6 +699,9 @@ private struct ParkedIdeaDetailView: View {
             }
             .onDisappear {
                 suggestionTask?.cancel()
+            }
+            .sheet(isPresented: $showingUpdateSheet) {
+                AddIdeaUpdateSheet(idea: idea)
             }
         }
     }
@@ -778,5 +812,6 @@ private struct ParkedIdeaDetailView: View {
 
 #Preview {
     ContentView()
+        .environment(DeferredReviewCoordinator())
         .modelContainer(for: [NowContext.self, ParkedIdea.self, DogfoodEvent.self], inMemory: true)
 }

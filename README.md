@@ -13,6 +13,11 @@ see NOW -> capture idea -> park locally -> confirm -> resume NOW
 
 NOW and parked ideas use local SwiftData storage. The app has no network,
 accounts, analytics, notifications, background work, or cloud backup.
+Newly saved ideas receive an advisory on-device review and critique while the
+app is active, when Apple Intelligence is available. Original content is retained
+and only the user can keep, resume, or discard. A saved idea can receive a dated
+update that prompts a fresh review while retaining the earlier result. See
+[Deferred idea review](docs/deferred-review.md) for availability and recovery behavior.
 
 ## Factory Provenance
 
