@@ -3,7 +3,7 @@
 - Status: P0 historical validation contract with an in-progress October 2026 founder-feedback addendum
 - Historical source revision audited: build 4 candidate `405b3124bd92d84e69d1bbc947b6a9abf5ed2aef`
 - Tracking: `edoworks/factory#54`, implementation `edoworks/factory#55`, TestFlight lifecycle `edoworks/factory#46`
-- Evidence cutoff: 2026-09-24
+- Historical baseline evidence cutoff: 2026-09-24; October addendum evidence through 2026-10-03
 - Accepted-feedback increment: `edoworks/factory#59`
 - Accepted-feedback source merged: `edoworks/nownest@66f7b4a`
 
@@ -42,8 +42,9 @@ correctly judges an idea or that iOS runs the model while the app is suspended.
 ### Approved project-switching behavior
 
 1. A visible Add project action creates a named project with its own outcome and
-   next action. Empty names and duplicate names are rejected with an explanation;
-   stable IDs, not names, associate ideas with projects.
+   next action. **Recommendation pending review:** prevent empty and duplicate
+   display names with a clear explanation. Stable IDs, not names, must associate
+   ideas with projects regardless of the display-name policy.
 2. A visible project selector identifies the project being viewed and, under the
    proposed interaction, selects one active NOW. Switching saves the previous
    project's current work and restores the selected project's outcome and next
@@ -138,7 +139,13 @@ accessibility remain separate owner checks. This increment does not authorize
 cloud inference, imports, orchestration, factory work, public release, or new
 testers.
 
-## Current-state decision
+The sections below preserve the September 24 build-4 baseline and its release
+evidence. Where wording such as “current” or “optional suggestion” conflicts
+with the October addendum, the addendum describes the present build-6 app and
+approved next direction. This precedence does not retroactively revise build-4
+test results or authorize a new release.
+
+## Historical build-4 state decision (superseded for present app behavior)
 
 Build `0.1.0 (4)` implements capture, resurface, reorient, Resume, Done, Save
 again, and Abandon. It passed 75 tests on each supported simulator family,
@@ -155,8 +162,8 @@ qualification.
 
 Build 4 contains no Foundation Models, App Intents, Shortcuts, Siri, Core
 Spotlight, notification, background, network, analytics, or account integration.
-The current TestFlight app is local SwiftData on iPhone and iPad. Build-bound
-feedback now authorizes a later source increment for one optional on-device
+The build-4 TestFlight app was local SwiftData on iPhone and iPad. Its build-bound
+feedback then authorized a later source increment for one optional on-device
 starting-action suggestion; it does not retroactively change build 4 behavior.
 
 The active product, repository, and checkout identity is `NowNest`. `FocusGate`
@@ -181,7 +188,7 @@ temporarily overlays the resumed intention while preserving the prior NOW.
 
 ## Public-surface wording
 
-Public pages describe the current loop in ordinary language:
+The build-4 public-surface contract described its loop in ordinary language:
 
 1. Keep the current project, outcome, and next action visible.
 2. Save an interruption for later without changing NOW.
@@ -203,7 +210,7 @@ required; repeated legalistic or factory-process wording should not displace
 the product explanation.
 
 Public support and legal statements are bounded by implemented behavior and
-identity evidence. The current build supports Done, Save again, and Abandon,
+identity evidence. Build 4 supported Done, Save again, and Abandon,
 not individual hard deletion. Removing the app is the available whole-store
 removal path, subject to operating-system offload, backup, and restore behavior;
 do not promise irreversible deletion without direct lifecycle evidence.
@@ -265,9 +272,9 @@ version state; those intake fields are `NOT_RUN`, not inferred. Its closeout
 check covers all four required surfaces and establishes the baseline for future
 increments.
 
-## Optional on-device suggestion contract
+## Historical build-4 feedback contract: optional on-device suggestion
 
-The accepted build-4 direction adds assistance to the saved-idea detail, not to
+The accepted build-4 direction proposed assistance on saved-idea detail, not on
 the interruption path:
 
 1. Saving remains synchronous, local, and immediately returns to NOW.
@@ -338,6 +345,12 @@ python3 scripts/verify-local-checkout.py --require-clean --require-main-sync
 
 The guard fetches live `origin/main`, then rejects legacy checkout names,
 sibling legacy paths, dirty state, non-`main` branches, and divergence from the
-fetched remote. Historical
-evidence remains immutable; local drafts that are not repository evidence must
-be archived outside the checkout before synchronization.
+fetched remote. This is the September release-sync rule, not the preparation
+path for the separately authorized October draft-PR increment. Its clean-main
+precondition deliberately does not fit work on PR #34's dedicated branch. For
+that increment, verify the authenticated GitHub identity, exact PR head,
+working-tree scope, test evidence, and build source before an internal upload;
+do not run the historical guard merely to force a branch switch or discard
+unfinished local work. Historical evidence remains immutable; local drafts
+that are not repository evidence must be archived outside the checkout before
+any future synchronization that requires it.
