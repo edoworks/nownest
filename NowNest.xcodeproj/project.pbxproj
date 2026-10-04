@@ -8,19 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		0BAB1828C324F693B34BF97C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81C90C6CEBBC4E7BAC718BFD /* Assets.xcassets */; };
+		1A6F18AB7AC7A751BD8A2B0B /* DeferredReviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDD5CB1AB9892A98B521B17 /* DeferredReviewTests.swift */; };
 		1AA42D23A4C2F950391B5E80 /* VisualVerificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FF003C08E81CAB8F29EEA67 /* VisualVerificationTests.swift */; };
 		1CDC4C6E97A965D683A12CD5 /* NestIllustration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81712C656A4B6A888D9022F0 /* NestIllustration.swift */; };
 		34B98F8AC49B3CB48DA99A15 /* NestWordmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A87EAE2ECED9A87E6EAF66 /* NestWordmark.swift */; };
 		3A093E51E3EDAC0D93DC8FCA /* NowNestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE3762B59658AB168CE1A17 /* NowNestApp.swift */; };
 		499B87AD13FFF95264CE338C /* NestTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674DB55743F426BCEFC7F355 /* NestTypography.swift */; };
 		499C53CFB1F51F7CB5F29373 /* SophieMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23326720E81C1E3A223CC9F /* SophieMark.swift */; };
+		4A541FF567E92D5A7D51A4CA /* DeferredReviewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B2F049AB8766AB8FDF9416 /* DeferredReviewUITests.swift */; };
 		4D567B53C0539C0C9FB22BC8 /* VariantJourneyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49543AFEDA364478D1F94647 /* VariantJourneyTests.swift */; };
 		5667A44BAEEAE51D07AEDDDD /* NestSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5ADC2B1639B319E5D67D72 /* NestSurface.swift */; };
 		79D2A1A55E6D11E63AEF215A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A8719FEF75D40BF220B195 /* ContentView.swift */; };
 		7BA7CBF21445E0BC9DD491AD /* VisualVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620F9E8F4BEA668EDD84DBE3 /* VisualVariant.swift */; };
 		81C797BB935DC0EC45FB8AA9 /* NestMotif.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAB7BD56DFA469E1051B98A /* NestMotif.swift */; };
 		82768F4B072275B495472753 /* RecoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7E5256A2CA246BC5D82A71 /* RecoveryTests.swift */; };
+		903E5BD00FDF360FD266085E /* DeferredReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32946B0A9E2D416391F0AF32 /* DeferredReview.swift */; };
 		9045F8957DAF89D37E927FC1 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C49083F92D055EAF0D7379C /* Models.swift */; };
+		B40B41C4C773417ED7D4FC22 /* DeferredReviewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B76A450533C61381CBB5EB7 /* DeferredReviewSection.swift */; };
 		B6723F558A438A0637E098A6 /* StartingActionSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E454BD90F1B43EED0A03BF /* StartingActionSuggestion.swift */; };
 		C860464F248A3EEE7C3AEF58 /* VisualVariantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C5FE16E2B7C955FEB907BF /* VisualVariantTests.swift */; };
 		CCEA57D59C1C90D025C091C1 /* ScenarioValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4033E07F3B0912D3D5B32A /* ScenarioValidationTests.swift */; };
@@ -51,11 +55,14 @@
 /* Begin PBXFileReference section */
 		1C7E5256A2CA246BC5D82A71 /* RecoveryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryTests.swift; sourceTree = "<group>"; };
 		2BECAC0138642477E7BA4EEE /* NowNestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestUITests.swift; sourceTree = "<group>"; };
+		32946B0A9E2D416391F0AF32 /* DeferredReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeferredReview.swift; sourceTree = "<group>"; };
 		34A87EAE2ECED9A87E6EAF66 /* NestWordmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestWordmark.swift; sourceTree = "<group>"; };
 		3B2336443937CC62959A59AF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3C49083F92D055EAF0D7379C /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		3EDD5CB1AB9892A98B521B17 /* DeferredReviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeferredReviewTests.swift; sourceTree = "<group>"; };
 		41C5FE16E2B7C955FEB907BF /* VisualVariantTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualVariantTests.swift; sourceTree = "<group>"; };
 		49543AFEDA364478D1F94647 /* VariantJourneyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariantJourneyTests.swift; sourceTree = "<group>"; };
+		4B76A450533C61381CBB5EB7 /* DeferredReviewSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeferredReviewSection.swift; sourceTree = "<group>"; };
 		620F9E8F4BEA668EDD84DBE3 /* VisualVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualVariant.swift; sourceTree = "<group>"; };
 		65A8719FEF75D40BF220B195 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		674DB55743F426BCEFC7F355 /* NestTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestTypography.swift; sourceTree = "<group>"; };
@@ -68,6 +75,7 @@
 		98D67235DBD629CEE85F4ECB /* NowNestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestTests.swift; sourceTree = "<group>"; };
 		AFAB7BD56DFA469E1051B98A /* NestMotif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestMotif.swift; sourceTree = "<group>"; };
 		B8B80DF5ABCDB27B954D0B37 /* NowNestTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowNestTheme.swift; sourceTree = "<group>"; };
+		C0B2F049AB8766AB8FDF9416 /* DeferredReviewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeferredReviewUITests.swift; sourceTree = "<group>"; };
 		C23326720E81C1E3A223CC9F /* SophieMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SophieMark.swift; sourceTree = "<group>"; };
 		D8E454BD90F1B43EED0A03BF /* StartingActionSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartingActionSuggestion.swift; sourceTree = "<group>"; };
 		E37A336807F27D6E42D52DAA /* NowNestTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NowNestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				6B8E35C34AEAE71BB71F338E /* ColorTokenVerificationTests.swift */,
+				C0B2F049AB8766AB8FDF9416 /* DeferredReviewUITests.swift */,
 				2BECAC0138642477E7BA4EEE /* NowNestUITests.swift */,
 				1C7E5256A2CA246BC5D82A71 /* RecoveryTests.swift */,
 				EA4033E07F3B0912D3D5B32A /* ScenarioValidationTests.swift */,
@@ -94,6 +103,7 @@
 		52E80F6ECF52EA7ECDF4B8CD /* NowNestTests */ = {
 			isa = PBXGroup;
 			children = (
+				3EDD5CB1AB9892A98B521B17 /* DeferredReviewTests.swift */,
 				98D67235DBD629CEE85F4ECB /* NowNestTests.swift */,
 				41C5FE16E2B7C955FEB907BF /* VisualVariantTests.swift */,
 			);
@@ -105,6 +115,8 @@
 			children = (
 				81C90C6CEBBC4E7BAC718BFD /* Assets.xcassets */,
 				65A8719FEF75D40BF220B195 /* ContentView.swift */,
+				32946B0A9E2D416391F0AF32 /* DeferredReview.swift */,
+				4B76A450533C61381CBB5EB7 /* DeferredReviewSection.swift */,
 				80A313B93AE7E4395BEE32D5 /* Info.plist */,
 				3C49083F92D055EAF0D7379C /* Models.swift */,
 				FBE3762B59658AB168CE1A17 /* NowNestApp.swift */,
@@ -270,6 +282,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				79D2A1A55E6D11E63AEF215A /* ContentView.swift in Sources */,
+				903E5BD00FDF360FD266085E /* DeferredReview.swift in Sources */,
+				B40B41C4C773417ED7D4FC22 /* DeferredReviewSection.swift in Sources */,
 				9045F8957DAF89D37E927FC1 /* Models.swift in Sources */,
 				1CDC4C6E97A965D683A12CD5 /* NestIllustration.swift in Sources */,
 				81C797BB935DC0EC45FB8AA9 /* NestMotif.swift in Sources */,
@@ -288,6 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A6F18AB7AC7A751BD8A2B0B /* DeferredReviewTests.swift in Sources */,
 				ED2F68BD3A5134F9D80393E8 /* NowNestTests.swift in Sources */,
 				C860464F248A3EEE7C3AEF58 /* VisualVariantTests.swift in Sources */,
 			);
@@ -298,6 +313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBF327F541149B0A5FFB09CD /* ColorTokenVerificationTests.swift in Sources */,
+				4A541FF567E92D5A7D51A4CA /* DeferredReviewUITests.swift in Sources */,
 				D40665AEEFD0DF808434D4E5 /* NowNestUITests.swift in Sources */,
 				82768F4B072275B495472753 /* RecoveryTests.swift in Sources */,
 				CCEA57D59C1C90D025C091C1 /* ScenarioValidationTests.swift in Sources */,
@@ -425,7 +441,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = H8MJMBTFVP;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -520,7 +536,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = H8MJMBTFVP;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

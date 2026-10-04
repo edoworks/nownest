@@ -94,13 +94,22 @@ final class ScenarioValidationTests: XCTestCase {
             let nextAction = app.staticTexts[contract.expectedNextAction]
             let parkButton = app.buttons["parkIdeaButton"]
 
-            XCTAssertTrue(project.exists)
+            let activeProject = app.staticTexts["activeProjectLabel"]
+            XCTAssertTrue(activeProject.exists)
+            XCTAssertTrue(app.buttons["switchProjectButton"].exists)
+            XCTAssertTrue(app.buttons["addProjectButton"].exists)
+            XCTAssertEqual(project.exists, variant == "control")
             XCTAssertTrue(outcome.exists)
             XCTAssertTrue(nextActionLabel.exists)
             XCTAssertTrue(nextAction.exists)
             XCTAssertTrue(parkButton.exists)
-            XCTAssertTrue(project.frame.minY > app.staticTexts["NOW"].frame.maxY)
-            XCTAssertTrue(outcome.frame.minY > project.frame.maxY)
+            XCTAssertTrue(activeProject.frame.maxY < app.staticTexts["NOW"].frame.minY)
+            if variant == "control" {
+                XCTAssertTrue(project.frame.minY > app.staticTexts["NOW"].frame.maxY)
+                XCTAssertTrue(outcome.frame.minY > project.frame.maxY)
+            } else {
+                XCTAssertTrue(outcome.frame.minY > app.staticTexts["NOW"].frame.maxY)
+            }
             XCTAssertTrue(nextActionLabel.frame.minY > outcome.frame.maxY)
             XCTAssertTrue(nextAction.frame.minY > nextActionLabel.frame.maxY)
             XCTAssertTrue(parkButton.frame.minY > nextAction.frame.maxY)

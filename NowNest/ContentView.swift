@@ -2,11 +2,14 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(DeferredReviewCoordinator.self) private var reviewCoordinator
     @Environment(\.modelContext) private var modelContext
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.visualVariantConfiguration) private var variantConfig
     @Environment(\.recoveryNotice) private var recoveryNotice
     @Query private var nowContexts: [NowContext]
+    @Query(sort: \SavedProject.createdAt) private var projects: [SavedProject]
     @Query(sort: \ParkedIdea.createdAt, order: .reverse) private var ideas: [ParkedIdea]
 
     @AppStorage("quietModeEnabled") private var quietModeStored = false
@@ -16,18 +19,31 @@ struct ContentView: View {
     @State private var errorMessage: String?
     @State private var showTuckedPose = false
     @State private var recoveryAlertPresented = false
+    @State private var helpExpanded = false
 
     private enum Sheet: Identifiable {
         case capture
         case edit
         case review
+        case addProject
+        case importedIdeas
 
         var id: Self { self }
     }
 
     private var now: NowContext? { nowContexts.first }
-    private var activeIdea: ParkedIdea? { ideas.first { $0.state == "RESUMED" } }
-    private var parkedCount: Int { ideas.count { $0.state == "PARKED" } }
+    private var activeProject: SavedProject? { projects.first(where: \.isActive) }
+    private var activeIdea: ParkedIdea? {
+        ideas.first { $0.state == "RESUMED" && $0.projectID == activeProject?.id }
+    }
+    private var parkedCount: Int {
+        ideas.count { $0.state == "PARKED" && $0.projectID == activeProject?.id }
+    }
+    private var importedCount: Int { ideas.count { $0.projectID == nil && ($0.state == "PARKED" || $0.state == "RESUMED") } }
+    private var importedActiveCount: Int { ideas.count { $0.projectID == nil && $0.state == "RESUMED" } }
+    private var queuedReviewIDs: [UUID] {
+        ideas.filter { $0.state == "PARKED" && $0.deferredReviewStatus == .queued && $0.reviewDecision == nil }.map(\.id)
+    }
     private var currentVariantConfig: VisualVariantConfiguration {
         VisualVariantConfiguration(
             variant: variantConfig.variant,
@@ -62,9 +78,51 @@ struct ContentView: View {
                         .accessibilityHidden(true)
                 }
 
-                if let now {
+                if let now, let activeProject {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 28) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Active project: \(activeProject.name)")
+                                    .font(.subheadline.weight(.semibold))
+                                    .accessibilityIdentifier("activeProjectLabel")
+                                HStack {
+                                    Menu {
+                                        ForEach(projects) { project in
+                                            Button {
+                                                switchProject(to: project, now: now)
+                                            } label: {
+                                                if project.isActive {
+                                                    Label(project.name, systemImage: "checkmark")
+                                                } else {
+                                                    Text(project.name)
+                                                }
+                                            }
+                                            .disabled(project.isActive)
+                                        }
+                                    } label: {
+                                        Label("Switch project", systemImage: "square.stack")
+                                    }
+                                    .accessibilityIdentifier("switchProjectButton")
+                                    Spacer()
+                                    Button("Add project", systemImage: "plus") {
+                                        presentedSheet = .addProject
+                                    }
+                                    .accessibilityIdentifier("addProjectButton")
+                                }
+                                .buttonStyle(.bordered)
+                                if importedCount > 0 {
+                                    Button("Imported ideas (\(importedCount))", systemImage: "tray.full") {
+                                        presentedSheet = .importedIdeas
+                                    }
+                                    .accessibilityIdentifier("importedIdeasButton")
+                                    if importedActiveCount > 0 {
+                                        Text("Includes unfinished work awaiting a project.")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                            }
+
                             if let activeIdea {
                                 activeCard(activeIdea)
                             } else {
@@ -97,11 +155,24 @@ struct ContentView: View {
                             .buttonStyle(.bordered)
                             .accessibilityIdentifier("reviewParkedButton")
 
-                            if currentVariantConfig.showsReassurance {
-                                Text("Capture it safely, then return here. Nothing changes NOW unless you edit it.")
-                                    .font(NestTypography.reassurance)
-                                    .foregroundStyle(Color.nestInkMuted)
-                                    .frame(maxWidth: 420, alignment: .leading)
+                            DisclosureGroup(isExpanded: $helpExpanded) {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("New ideas get an on-device review while NowNest is open, when Apple Intelligence is available. You decide what to keep.")
+                                    if currentVariantConfig.showsReassurance {
+                                        Text("Capture it safely, then return here. Nothing changes NOW unless you edit it.")
+                                    }
+                                }
+                                .font(.caption)
+                                .foregroundStyle(Color.nestInkMuted)
+                                .padding(.top, 8)
+                            } label: {
+                                Label("How it works", systemImage: "info.circle")
+                                    .font(.subheadline)
+                            }
+                            .accessibilityIdentifier("nowHelpDisclosure")
+
+                            if let message = reviewCoordinator.storageError {
+                                Text(message).font(.caption).foregroundStyle(Color.nestInkMuted)
                             }
                         }
                         .frame(maxWidth: 680, alignment: .leading)
@@ -109,7 +180,7 @@ struct ContentView: View {
                         .frame(maxWidth: .infinity)
                     }
                 } else {
-                    ProgressView("Preparing NOW")
+                    ProgressView("Preparing projects")
                 }
             }
             .navigationTitle("NowNest")
@@ -189,7 +260,15 @@ struct ContentView: View {
                         }
                     }
                 case .review:
-                    ReviewView { presentedSheet = nil }
+                    ReviewView(projectID: activeProject?.id, projectName: activeProject?.name ?? "Current project") { presentedSheet = nil }
+                case .addProject:
+                    if let now {
+                        AddProjectView { name, outcome, nextAction in
+                            addProject(name: name, outcome: outcome, nextAction: nextAction, now: now)
+                        }
+                    }
+                case .importedIdeas:
+                    ImportedIdeasView(projects: projects)
                 }
             }
             .alert("Couldn’t save", isPresented: Binding(
@@ -208,10 +287,20 @@ struct ContentView: View {
             .task {
                 do {
                     try NowNestStore.ensureNow(in: modelContext, existing: now)
+                    if let currentNow = try modelContext.fetch(FetchDescriptor<NowContext>()).first {
+                        try NowNestStore.ensureProjects(in: modelContext, now: currentNow)
+                    }
                 } catch {
                     errorMessage = "Couldn't create NOW."
                 }
                 recoveryAlertPresented = recoveryNotice != nil
+                reviewCoordinator.setActive(scenePhase == .active, in: modelContext)
+            }
+            .onChange(of: scenePhase) { _, phase in
+                reviewCoordinator.setActive(phase == .active, in: modelContext)
+            }
+            .onChange(of: queuedReviewIDs) { _, _ in
+                reviewCoordinator.kick(in: modelContext)
             }
         }
         .environment(\.visualVariantConfiguration, currentVariantConfig)
@@ -232,8 +321,10 @@ struct ContentView: View {
                     }
                 }
 
-                nowField("PROJECT", value: now.project)
-                Divider()
+                if currentVariantConfig.variant == .control {
+                    nowField("PROJECT", value: now.project)
+                    Divider()
+                }
                 nowField("OUTCOME", value: now.outcome)
                 Divider()
                 nowField("NEXT ACTION", value: now.nextAction, emphasized: true)
@@ -319,6 +410,7 @@ struct ContentView: View {
                 interruptedProject: context.project,
                 interruptedOutcome: context.outcome,
                 interruptedNextAction: context.nextAction,
+                projectID: activeProject?.id,
                 in: modelContext
             ) != nil else { return false }
             presentedSheet = nil
@@ -387,6 +479,26 @@ struct ContentView: View {
         } catch {
             errorMessage = "Couldn't save NOW."
             return false
+        }
+    }
+
+    private func addProject(name: String, outcome: String, nextAction: String, now: NowContext) -> Bool {
+        do {
+            let added = try NowNestStore.addProject(name: name, outcome: outcome, nextAction: nextAction, now: now, in: modelContext)
+            if added { presentedSheet = nil }
+            return added
+        } catch {
+            errorMessage = "Couldn't add this project."
+            return false
+        }
+    }
+
+    private func switchProject(to project: SavedProject, now: NowContext) {
+        do {
+            try NowNestStore.switchProject(to: project, now: now, in: modelContext)
+            presentedSheet = nil
+        } catch {
+            errorMessage = "Couldn't switch projects."
         }
     }
 }
@@ -466,6 +578,7 @@ private struct EditNowView: View {
     @State private var project: String
     @State private var outcome: String
     @State private var nextAction: String
+    @State private var saveRejected = false
 
     let onSave: (String, String, String) -> Bool
 
@@ -488,6 +601,11 @@ private struct EditNowView: View {
                     TextField("Outcome", text: $outcome, axis: .vertical)
                     TextField("Next Action", text: $nextAction, axis: .vertical)
                 }
+                if saveRejected {
+                    Text("A project with this name already exists. Choose another name.")
+                        .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("duplicateProjectMessage")
+                }
             }
             .navigationTitle("Edit NOW")
             .navigationBarTitleDisplayMode(.inline)
@@ -496,9 +614,149 @@ private struct EditNowView: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { _ = onSave(project, outcome, nextAction) }
+                    Button("Save") { saveRejected = !onSave(project, outcome, nextAction) }
                         .disabled(!isValid)
                 }
+            }
+        }
+    }
+}
+
+private struct AddProjectView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var name = ""
+    @State private var outcome = ""
+    @State private var nextAction = ""
+    @State private var saveRejected = false
+
+    let onSave: (String, String, String) -> Bool
+
+    private var isValid: Bool {
+        NowNestRules.validNowValues(project: name, outcome: outcome, nextAction: nextAction) != nil
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("New project") {
+                    TextField("Project name", text: $name)
+                        .accessibilityIdentifier("newProjectNameField")
+                    TextField("Outcome", text: $outcome, axis: .vertical)
+                        .accessibilityIdentifier("newProjectOutcomeField")
+                    TextField("Next action", text: $nextAction, axis: .vertical)
+                        .accessibilityIdentifier("newProjectActionField")
+                }
+                if saveRejected {
+                    Text("A project with this name already exists. Choose another name.")
+                        .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("duplicateProjectMessage")
+                }
+                Text("Your current project stays saved. You can switch back whenever you want.")
+                    .foregroundStyle(.secondary)
+            }
+            .navigationTitle("Add project")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save & switch") {
+                        saveRejected = !onSave(name, outcome, nextAction)
+                    }
+                    .disabled(!isValid)
+                    .accessibilityIdentifier("saveProjectButton")
+                }
+            }
+        }
+    }
+}
+
+private struct ImportedIdeasView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \ParkedIdea.createdAt, order: .reverse) private var ideas: [ParkedIdea]
+    @State private var assignmentFailed = false
+
+    let projects: [SavedProject]
+
+    private var imported: [ParkedIdea] {
+        ideas.filter { $0.projectID == nil && ($0.state == "PARKED" || $0.state == "RESUMED") }
+    }
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    Text("These older ideas did not have a reliable project link. Choose where each belongs; the original and reviews stay unchanged.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+                ForEach(imported) { idea in
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(idea.text)
+                            .font(.body)
+                            .accessibilityIdentifier("importedIdeaTitle")
+                        if let origin = idea.originProject {
+                            Text("Originally saved from \(origin)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        if idea.state == "RESUMED" {
+                            Text("Unfinished work")
+                                .font(.caption.weight(.semibold))
+                            if let action = idea.startingAction {
+                                Text("Next action: \(action)")
+                                    .font(.caption)
+                            }
+                        }
+                        if let category = idea.reviewCategory, let reason = idea.reviewReason {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text("Saved AI review: \(category)").font(.caption.weight(.semibold))
+                                Text(reason).font(.caption)
+                                if let uncertainty = idea.reviewUncertainty {
+                                    Text("Uncertainty: \(uncertainty)").font(.caption)
+                                }
+                            }
+                        }
+                        if !idea.savedUpdates.isEmpty {
+                            DisclosureGroup("Updates (\(idea.savedUpdates.count))") {
+                                ForEach(idea.savedUpdates) { update in Text(update.text) }
+                            }
+                        }
+                        if !idea.savedReviewHistory.isEmpty {
+                            DisclosureGroup("Earlier reviews (\(idea.savedReviewHistory.count))") {
+                                ForEach(idea.savedReviewHistory) { review in
+                                    Text("\(review.category): \(review.reason)")
+                                }
+                            }
+                        }
+                        Menu("Assign to project") {
+                            ForEach(projects) { project in
+                                Button(project.name) {
+                                    do {
+                                        assignmentFailed = !(try NowNestStore.assignImportedIdea(idea, to: project, in: modelContext))
+                                    } catch {
+                                        assignmentFailed = true
+                                    }
+                                }
+                            }
+                        }
+                        .accessibilityIdentifier("assignImportedIdeaButton")
+                    }
+                }
+            }
+            .navigationTitle("Imported ideas")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
+            .alert("Couldn’t assign idea", isPresented: $assignmentFailed) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("It may already be assigned, or that project has unfinished work. The idea is still here.")
             }
         }
     }
@@ -512,16 +770,32 @@ private struct ReviewView: View {
     @State private var updateFailed = false
 
     let onResumed: () -> Void
+    let projectID: UUID?
+    let projectName: String
 
-    private var parkedIdeas: [ParkedIdea] { ideas.filter { $0.state == "PARKED" } }
+    init(projectID: UUID?, projectName: String, onResumed: @escaping () -> Void) {
+        self.projectID = projectID
+        self.projectName = projectName
+        self.onResumed = onResumed
+    }
+
+    private var parkedIdeas: [ParkedIdea] { ideas.filter { $0.state == "PARKED" && $0.projectID == projectID } }
 
     var body: some View {
         NavigationStack {
-            Group {
-                if parkedIdeas.isEmpty {
-                    emptyState
-                } else {
-                    ideaList
+            VStack(spacing: 0) {
+                Text("Ideas in \(projectName)")
+                    .font(.subheadline.weight(.semibold))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    .padding(.top)
+                    .accessibilityIdentifier("savedIdeasProjectLabel")
+                Group {
+                    if parkedIdeas.isEmpty {
+                        emptyState
+                    } else {
+                        ideaList
+                    }
                 }
             }
             .navigationTitle("Saved for later")
@@ -567,6 +841,12 @@ private struct ReviewView: View {
                             .font(.caption)
                             .foregroundStyle(Color.nestInkMuted)
                     }
+                    if let status = idea.deferredReviewStatus {
+                        Text(idea.reviewDecision == "kept" ? "Kept for later" :
+                            (status == .ready && idea.hasCurrentReview ? (idea.reviewCategory ?? status.label) : status.label))
+                            .font(.caption)
+                            .foregroundStyle(Color.nestInkMuted)
+                    }
                     HStack {
                         Text("SAVED")
                             .font(.caption2.weight(.black))
@@ -607,6 +887,7 @@ private struct ParkedIdeaDetailView: View {
     @State private var saveFailed = false
     @State private var suggestionState = StartingActionSuggestionState.saved
     @State private var suggestionTask: Task<Void, Never>?
+    @State private var showingUpdateSheet = false
 
     let idea: ParkedIdea
     let onResumed: () -> Void
@@ -624,6 +905,10 @@ private struct ParkedIdeaDetailView: View {
                     Text(idea.text)
                         .accessibilityIdentifier("originalThought")
                 }
+
+                DeferredReviewSection(idea: idea, onDiscarded: { dismiss() }, onAddUpdate: {
+                    showingUpdateSheet = true
+                })
 
                 if idea.originProject != nil || idea.originOutcome != nil || idea.originNextAction != nil {
                     Section("Why it was saved") {
@@ -668,6 +953,9 @@ private struct ParkedIdeaDetailView: View {
             }
             .onDisappear {
                 suggestionTask?.cancel()
+            }
+            .sheet(isPresented: $showingUpdateSheet) {
+                AddIdeaUpdateSheet(idea: idea)
             }
         }
     }
@@ -778,5 +1066,6 @@ private struct ParkedIdeaDetailView: View {
 
 #Preview {
     ContentView()
+        .environment(DeferredReviewCoordinator())
         .modelContainer(for: [NowContext.self, ParkedIdea.self, DogfoodEvent.self], inMemory: true)
 }
