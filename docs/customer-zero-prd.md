@@ -1,6 +1,6 @@
 # NowNest Customer Zero PRD
 
-- Status: P0 historical validation contract with an October 2026 founder-feedback addendum under simulator validation
+- Status: P0 historical validation contract with October 2026 founder-feedback addenda and a local build-7 usability/icon response awaiting validation
 - Historical source revision audited: build 4 candidate `405b3124bd92d84e69d1bbc947b6a9abf5ed2aef`
 - Tracking: `edoworks/factory#54`, implementation `edoworks/factory#55`, TestFlight lifecycle `edoworks/factory#46`
 - Historical baseline evidence cutoff: 2026-09-24; October addendum evidence through 2026-10-03
@@ -18,6 +18,17 @@ CAPTURE -> PARK -> FORGET -> RESURFACE -> REORIENT -> RESUME -> RESOLVE OR RE-PA
 
 The app succeeds when a person can park an interruption, return to current work,
 and later encounter a better starting point than the sentence alone.
+
+## Build-7 feedback checkpoint
+
+The latest authenticated TestFlight screenshot feedback on `0.1.0 (7)` asks
+for a simpler, less cluttered flow and proposes collapsing related items with
+Apple Intelligence where feasible. This is separate from the older build-6
+multiple-project request. The [build-7 usability and icon review](build7-ux-icon-review.md)
+records the exact feedback, current-screen and Home Screen icon evidence,
+official Apple design references, a bounded proposal, a rubberduck critique,
+and the scope of the approved local response. No TestFlight upload or
+release is authorized by this checkpoint.
 
 ## October 2026 founder-feedback addendum (in progress)
 

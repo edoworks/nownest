@@ -19,6 +19,7 @@ struct ContentView: View {
     @State private var errorMessage: String?
     @State private var showTuckedPose = false
     @State private var recoveryAlertPresented = false
+    @State private var helpExpanded = false
 
     private enum Sheet: Identifiable {
         case capture
@@ -154,19 +155,24 @@ struct ContentView: View {
                             .buttonStyle(.bordered)
                             .accessibilityIdentifier("reviewParkedButton")
 
-                            Text("New ideas get an on-device review while NowNest is open, when Apple Intelligence is available. You decide what to keep.")
+                            DisclosureGroup(isExpanded: $helpExpanded) {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("New ideas get an on-device review while NowNest is open, when Apple Intelligence is available. You decide what to keep.")
+                                    if currentVariantConfig.showsReassurance {
+                                        Text("Capture it safely, then return here. Nothing changes NOW unless you edit it.")
+                                    }
+                                }
                                 .font(.caption)
                                 .foregroundStyle(Color.nestInkMuted)
+                                .padding(.top, 8)
+                            } label: {
+                                Label("How it works", systemImage: "info.circle")
+                                    .font(.subheadline)
+                            }
+                            .accessibilityIdentifier("nowHelpDisclosure")
 
                             if let message = reviewCoordinator.storageError {
                                 Text(message).font(.caption).foregroundStyle(Color.nestInkMuted)
-                            }
-
-                            if currentVariantConfig.showsReassurance {
-                                Text("Capture it safely, then return here. Nothing changes NOW unless you edit it.")
-                                    .font(NestTypography.reassurance)
-                                    .foregroundStyle(Color.nestInkMuted)
-                                    .frame(maxWidth: 420, alignment: .leading)
                             }
                         }
                         .frame(maxWidth: 680, alignment: .leading)
@@ -315,8 +321,10 @@ struct ContentView: View {
                     }
                 }
 
-                nowField("PROJECT", value: now.project)
-                Divider()
+                if currentVariantConfig.variant == .control {
+                    nowField("PROJECT", value: now.project)
+                    Divider()
+                }
                 nowField("OUTCOME", value: now.outcome)
                 Divider()
                 nowField("NEXT ACTION", value: now.nextAction, emphasized: true)

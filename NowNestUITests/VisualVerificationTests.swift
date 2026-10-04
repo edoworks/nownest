@@ -30,6 +30,9 @@ final class VisualVerificationTests: XCTestCase {
         app.buttons["reviewParkedButton"].tap()
         XCTAssertTrue(app.staticTexts["Compare standing desks"].waitForExistence(timeout: 5))
         app.staticTexts["Compare standing desks"].tap()
+        for _ in 0..<3 where !app.buttons["requestSuggestionButton"].exists {
+            app.swipeUp()
+        }
         XCTAssertTrue(app.buttons["requestSuggestionButton"].waitForExistence(timeout: 5))
         return app
     }

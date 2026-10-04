@@ -107,6 +107,10 @@ final class VariantJourneyTests: XCTestCase {
         let app = launchApp(variant: "sophie", quietMode: "disabled")
         let reassurance = app.staticTexts["Capture it safely, then return here. Nothing changes NOW unless you edit it."]
 
+        XCTAssertFalse(reassurance.exists)
+        let help = app.descendants(matching: .any)["nowHelpDisclosure"]
+        XCTAssertTrue(help.waitForExistence(timeout: 5))
+        help.tap()
         XCTAssertTrue(reassurance.waitForExistence(timeout: 5))
         app.buttons["Actions"].tap()
         let quietMode = app.descendants(matching: .any)["quietModeToggle"]
