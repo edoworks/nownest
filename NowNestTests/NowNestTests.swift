@@ -124,7 +124,7 @@ final class NowNestTests: XCTestCase {
 
     @MainActor
     func testEnsureNowMigratesOnlyLegacySeededCopy() throws {
-        let schema = Schema([NowContext.self, ParkedIdea.self, DogfoodEvent.self])
+        let schema = Schema([NowContext.self, SavedProject.self, ParkedIdea.self, DogfoodEvent.self])
         let container = try ModelContainer(
             for: schema,
             configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
@@ -155,7 +155,7 @@ final class NowNestTests: XCTestCase {
         let storeURL = tempDir.appendingPathComponent("default.store")
         try Data("CORRUPTED-GARBAGE".utf8).write(to: storeURL)
 
-        let schema = Schema([NowContext.self, ParkedIdea.self, DogfoodEvent.self])
+        let schema = Schema([NowContext.self, SavedProject.self, ParkedIdea.self, DogfoodEvent.self])
         let (container, recoveryURL) = try NowNestApp.recoverFromCorruptedStore(at: storeURL, schema: schema)
 
         XCTAssertFalse(FileManager.default.fileExists(atPath: storeURL.path), "The live path must be available for a fresh store")
@@ -168,7 +168,7 @@ final class NowNestTests: XCTestCase {
 
     @MainActor
     func testLifecyclePreservesContextAndRecordsContentFreeEvents() throws {
-        let schema = Schema([NowContext.self, ParkedIdea.self, DogfoodEvent.self])
+        let schema = Schema([NowContext.self, SavedProject.self, ParkedIdea.self, DogfoodEvent.self])
         let container = try ModelContainer(
             for: schema,
             configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
@@ -198,5 +198,138 @@ final class NowNestTests: XCTestCase {
 
         let events = try context.fetch(FetchDescriptor<DogfoodEvent>())
         XCTAssertEqual(events.map(\.kind), ["successfulPark", "resumed", "reparked", "completed"])
+    }
+}
+
+@MainActor
+extension NowNestTests {
+    private func projectStore() throws -> (ModelContainer, NowContext) {
+        let schema = Schema([NowContext.self, SavedProject.self, ParkedIdea.self, DogfoodEvent.self])
+        let container = try ModelContainer(for: schema, configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true))
+        let context = container.mainContext
+        let now = NowContext(project: "First", outcome: "First outcome", nextAction: "First action")
+        context.insert(now)
+        try context.save()
+        try NowNestStore.ensureProjects(in: context, now: now)
+        return (container, now)
+    }
+
+    func testProjectSwitchRetainsEachWorkStateAndStableIdentity() throws {
+        let (container, now) = try projectStore()
+        let context = container.mainContext
+        let first = try XCTUnwrap(context.fetch(FetchDescriptor<SavedProject>()).first)
+        XCTAssertTrue(first.isActive)
+
+        XCTAssertTrue(try NowNestStore.addProject(name: "Second", outcome: "Second outcome", nextAction: "Second action", now: now, in: context))
+        let second = try XCTUnwrap(context.fetch(FetchDescriptor<SavedProject>()).first { $0.name == "Second" })
+        XCTAssertNotEqual(first.id, second.id)
+        XCTAssertEqual(now.project, "Second")
+        XCTAssertFalse(first.isActive)
+        XCTAssertTrue(second.isActive)
+
+        XCTAssertTrue(try NowNestStore.update(now, project: "Second", outcome: "Changed outcome", nextAction: "Changed action", in: context))
+        try NowNestStore.switchProject(to: first, now: now, in: context)
+        XCTAssertEqual((now.project, now.outcome, now.nextAction).0, "First")
+        XCTAssertEqual(now.nextAction, "First action")
+        try NowNestStore.switchProject(to: second, now: now, in: context)
+        XCTAssertEqual(now.outcome, "Changed outcome")
+        XCTAssertEqual(now.nextAction, "Changed action")
+    }
+
+    func testEmptyAndDuplicateProjectNamesCannotMutateCurrentProject() throws {
+        let (container, now) = try projectStore()
+        let context = container.mainContext
+        XCTAssertFalse(try NowNestStore.addProject(name: " ", outcome: "Outcome", nextAction: "Action", now: now, in: context))
+        XCTAssertFalse(try NowNestStore.addProject(name: " fIrSt ", outcome: "Outcome", nextAction: "Action", now: now, in: context))
+        XCTAssertEqual(now.project, "First")
+        XCTAssertEqual(try context.fetch(FetchDescriptor<SavedProject>()).count, 1)
+        XCTAssertTrue(try NowNestStore.addProject(name: "Second", outcome: "Outcome", nextAction: "Action", now: now, in: context))
+        XCTAssertFalse(try NowNestStore.update(now, project: "FIRST", outcome: "Oops", nextAction: "Oops", in: context))
+        XCTAssertEqual(now.project, "Second")
+        XCTAssertEqual(now.outcome, "Outcome")
+    }
+
+    func testIdeasAndResumedWorkStayWithTheirProjectAcrossSwitches() throws {
+        let (container, now) = try projectStore()
+        let context = container.mainContext
+        let first = try XCTUnwrap(context.fetch(FetchDescriptor<SavedProject>()).first)
+        let firstIdea = try XCTUnwrap(NowNestStore.park("First idea", interruptedProject: now.project,
+            interruptedOutcome: now.outcome, interruptedNextAction: now.nextAction, projectID: first.id, in: context))
+        XCTAssertTrue(try NowNestStore.resume(firstIdea, startingAction: "Continue first", in: context))
+        XCTAssertTrue(try NowNestStore.addProject(name: "Second", outcome: "Second outcome", nextAction: "Second action", now: now, in: context))
+        let second = try XCTUnwrap(context.fetch(FetchDescriptor<SavedProject>()).first(where: \.isActive))
+        let secondIdea = try XCTUnwrap(NowNestStore.park("Second idea", interruptedProject: now.project,
+            interruptedOutcome: now.outcome, interruptedNextAction: now.nextAction, projectID: second.id, in: context))
+        XCTAssertTrue(try NowNestStore.resume(secondIdea, startingAction: "Continue second", in: context))
+        try NowNestStore.switchProject(to: first, now: now, in: context)
+        XCTAssertEqual(firstIdea.state, "RESUMED")
+        XCTAssertEqual(secondIdea.state, "RESUMED")
+        XCTAssertEqual(firstIdea.projectID, first.id)
+        XCTAssertEqual(secondIdea.projectID, second.id)
+        XCTAssertEqual(firstIdea.originProject, "First")
+        XCTAssertEqual(secondIdea.originProject, "Second")
+    }
+
+    func testImportLeavesAmbiguousIdeaVisibleForExplicitAssignment() throws {
+        let schema = Schema([NowContext.self, SavedProject.self, ParkedIdea.self, DogfoodEvent.self])
+        let container = try ModelContainer(for: schema, configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true))
+        let context = container.mainContext
+        let now = NowContext(project: "Current", outcome: "Outcome", nextAction: "Action")
+        let idea = ParkedIdea(text: "Original", originProject: "Previous project", originOutcome: "Old outcome", originNextAction: "Old action")
+        idea.updatesJSON = #"[{"id":"16D5C535-DAE9-4878-A40B-A64DE65D0179","createdAt":"2026-10-03T00:00:00Z","text":"New context"}]"#
+        idea.reviewReason = "Earlier review"
+        context.insert(now)
+        context.insert(idea)
+        try context.save()
+        try NowNestStore.ensureProjects(in: context, now: now)
+        let imported = try XCTUnwrap(context.fetch(FetchDescriptor<SavedProject>()).first)
+        XCTAssertNil(idea.projectID)
+        XCTAssertEqual(idea.text, "Original")
+        XCTAssertEqual(idea.originProject, "Previous project")
+        XCTAssertEqual(idea.updatesJSON?.contains("New context"), true)
+        XCTAssertEqual(idea.reviewReason, "Earlier review")
+        try NowNestStore.ensureProjects(in: context, now: now)
+        XCTAssertEqual(try context.fetch(FetchDescriptor<SavedProject>()).count, 1)
+        XCTAssertNil(idea.projectID)
+        XCTAssertTrue(try NowNestStore.assignImportedIdea(idea, to: imported, in: context))
+        XCTAssertEqual(idea.projectID, imported.id)
+        XCTAssertEqual(idea.text, "Original")
+        XCTAssertEqual(idea.reviewReason, "Earlier review")
+        XCTAssertFalse(try NowNestStore.assignImportedIdea(idea, to: imported, in: context))
+    }
+
+    func testImportDoesNotInferOwnershipFromMatchingName() throws {
+        let schema = Schema([NowContext.self, SavedProject.self, ParkedIdea.self, DogfoodEvent.self])
+        let container = try ModelContainer(for: schema, configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true))
+        let context = container.mainContext
+        let now = NowContext(project: "Current", outcome: "Outcome", nextAction: "Action")
+        let matching = ParkedIdea(text: "Matching", originProject: "current")
+        let unclear = ParkedIdea(text: "Unclear")
+        context.insert(now)
+        context.insert(matching)
+        context.insert(unclear)
+        try context.save()
+        try NowNestStore.ensureProjects(in: context, now: now)
+        XCTAssertEqual(try context.fetch(FetchDescriptor<SavedProject>()).count, 1)
+        XCTAssertNil(matching.projectID)
+        XCTAssertNil(unclear.projectID)
+    }
+
+    func testImportedResumedIdeaCannotJoinProjectWithOtherActiveWork() throws {
+        let (container, now) = try projectStore()
+        let context = container.mainContext
+        let project = try XCTUnwrap(context.fetch(FetchDescriptor<SavedProject>()).first)
+        let existing = try XCTUnwrap(NowNestStore.park("Existing", interruptedProject: now.project,
+            interruptedOutcome: now.outcome, interruptedNextAction: now.nextAction, projectID: project.id, in: context))
+        XCTAssertTrue(try NowNestStore.resume(existing, startingAction: "Work", in: context))
+        let imported = ParkedIdea(text: "Imported active", originProject: "Other")
+        imported.state = "RESUMED"
+        context.insert(imported)
+        try context.save()
+        XCTAssertFalse(try NowNestStore.assignImportedIdea(imported, to: project, in: context))
+        XCTAssertNil(imported.projectID)
+        try NowNestStore.repark(existing, in: context)
+        XCTAssertTrue(try NowNestStore.assignImportedIdea(imported, to: project, in: context))
+        XCTAssertEqual(imported.state, "RESUMED")
     }
 }

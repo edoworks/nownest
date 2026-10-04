@@ -11,7 +11,10 @@ The v0 loop is deliberately small:
 see NOW -> capture idea -> park locally -> confirm -> resume NOW
 ```
 
-NOW and parked ideas use local SwiftData storage. The app has no network,
+NOW, saved projects, and parked ideas use local SwiftData storage. One project
+is active at a time; switching restores that project's outcome, next action,
+and resumed work. Ideas from older builds remain in a visible Imported ideas
+list until the user assigns them to a project. The app has no network,
 accounts, analytics, notifications, background work, or cloud backup.
 Newly saved ideas receive an advisory on-device review and critique while the
 app is active, when Apple Intelligence is available. Original content is retained

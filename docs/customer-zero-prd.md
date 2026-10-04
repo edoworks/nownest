@@ -1,6 +1,6 @@
 # NowNest Customer Zero PRD
 
-- Status: P0 historical validation contract with an in-progress October 2026 founder-feedback addendum
+- Status: P0 historical validation contract with an October 2026 founder-feedback addendum under simulator validation
 - Historical source revision audited: build 4 candidate `405b3124bd92d84e69d1bbc947b6a9abf5ed2aef`
 - Tracking: `edoworks/factory#54`, implementation `edoworks/factory#55`, TestFlight lifecycle `edoworks/factory#46`
 - Historical baseline evidence cutoff: 2026-09-24; October addendum evidence through 2026-10-03
@@ -30,7 +30,7 @@ evidence below. Evidence labels distinguish observation from intent:
 | **Source inspection** | Build 6 has one editable `NowContext` and no project roster; editing its name does not retain a separate outcome and next action for the former project. [Models.swift](../NowNest/Models.swift), [ContentView.swift](../NowNest/ContentView.swift). It also queues an on-device review then critiques that draft while the app is active and the model is available; the second pass is a critique, **not independent validation**. [DeferredReview.swift](../NowNest/DeferredReview.swift). |
 | **Executed tests** | The build-6 change passed 46 selected iPhone and 33 selected iPad simulator tests. Those deterministic tests cover state and mock model paths, not live Apple Intelligence quality, physical-device layout, or VoiceOver. [Review verification](deferred-review.md); [draft PR #34](https://github.com/edoworks/nownest/pull/34). |
 | **Availability** | Apple sent the owner a TestFlight notification for NowNest `0.1.0 (6)` on 2026-10-03. This confirms availability to the notified tester, not an installation or successful real-model run. |
-| **Approved direction** | The founder approved **multiple saved projects with one active NOW**, updated PR #34, and an internal TestFlight build after testing. Feature implementation and upload are currently **paused pending this reviewed PRD and open-decision review**. |
+| **Approved direction** | The founder approved **multiple saved projects with one active NOW**, updated PR #34, and an internal TestFlight build after testing. The approved defaults below are implemented locally and under simulator validation. |
 
 Build 6 preserves original saved text and interruption context, exposes an Add
 update action and earlier reviews, and keeps Keep, Resume, and confirmed Discard
@@ -42,13 +42,14 @@ correctly judges an idea or that iOS runs the model while the app is suspended.
 ### Approved project-switching behavior
 
 1. A visible Add project action creates a named project with its own outcome and
-   next action. **Recommendation pending review:** prevent empty and duplicate
-   display names with a clear explanation. Stable IDs, not names, must associate
-   ideas with projects regardless of the display-name policy.
-2. A visible project selector identifies the project being viewed and, under the
-   proposed interaction, selects one active NOW. Switching saves the previous
+   next action. Empty and duplicate display names are rejected with a clear
+   explanation as the accepted safe validation choice. Stable IDs, not names,
+   associate ideas with projects.
+2. A visible project selector identifies the project being viewed. Selection
+   makes it the one active NOW. Switching saves the previous
    project's current work and restores the selected project's outcome and next
-   action after a relaunch. The exact view-versus-activate interaction is open.
+   action after a relaunch. An open Capture or Edit task must be saved or
+   cancelled before switching; a sheet never silently commits partial text.
 3. A saved idea remains attached to its project. Its original text, interruption
    snapshot, updates, review history, user decision, and pending review are not
    rewritten by a project switch. Saved-idea counts and review lists must make
@@ -62,7 +63,12 @@ correctly judges an idea or that iOS runs the model while the app is suspended.
    request and input.
 5. Existing build-6 stores migrate in place. The current NOW remains available,
    all existing ideas and model results remain readable, and the migration is
-   idempotent. A store-open failure preserves the existing recovery behavior.
+   idempotent. Build-6 ideas lack a stable project ID: even a matching recorded
+   name does not prove ownership. Therefore **all** pre-ID ideas stay in a
+   visible **Imported ideas** area with their original origin snapshot until
+   the person explicitly assigns them. An imported resumed idea remains visible
+   and actionable throughout migration. A store-open failure preserves the
+   existing recovery behavior.
 
 ### Comparable patterns and rubberduck review
 
@@ -103,30 +109,41 @@ believes it was deleted, the design fails even if storage tests pass. A
 no-guidance founder walkthrough should record wrong turns and missing context;
 no numerical success threshold is approved yet.
 
-### Prototype status and unresolved decisions
+### Approved defaults and prototype gaps
 
-The first local prototype (uncommitted and unshipped) has a project record, a
-stable optional project ID on ideas, Add/Switch sheets, and per-project active
-work. It compiles and three focused store tests pass. This does **not** verify
-the feature. The prototype currently assigns every pre-project idea to the
-imported active project, even when its recorded origin project differs. That
-keeps the text but can mislabel an idea's association. Before shipping, choose
-a migration policy that exposes ambiguous historical ideas without inventing
-project intent. The recommended default is to retain their original project
-snapshot and show them in a clearly labeled imported/uncategorized area until
-the founder assigns them; do not silently group them under a possibly unrelated
-current project. This is a recommendation, not an approved migration rule.
-The prototype's modal Switch project sheet also conflicts with the navigation
-guidance above and should be reconsidered before further UI work.
+The founder approved on 2026-10-03: selection activates NOW; uncertain older
+ideas remain visibly imported until assigned; editors must finish or cancel
+before switching; late AI results stay with the originating idea and project.
+Project deletion, archive/reopen, general Undo, and original-text typo editing
+are outside this increment. This decision is founder direction, not a completed
+test result.
 
-The first prototype also needs explicit duplicate-name feedback in Edit NOW,
-clear project scope on the saved-ideas screen, and visual/accessibility review of
-the Add/Switch controls. These are source-review findings, not verified fixes.
-Other open decisions: whether selecting a project always activates it or can
-only view it; what switching does while Capture, Edit, or Review is open;
-whether correcting a typo edits the original or appends a labeled correction;
-and whether project archive/reopen or Undo are needed in this increment. No
-global search, tags, reminders, calendar, or broad task hierarchy is approved.
+The local implementation (unshipped at this checkpoint) has a
+project record, a stable optional project ID on ideas, a focused Add sheet, a
+visible Switch menu, per-project active work, and an Imported ideas list. It
+now leaves every pre-ID idea imported until explicit assignment; names are
+shown as historical context, never treated as identity. The assignment action
+must leave original text, snapshots, updates, reviews, and decisions untouched.
+A frozen build-6 SQLite migration fixture exercises the final conservative
+rule, including old reviews and a resumed idea. This is **not** a shipped
+feature; test results for the final source belong in the PR's validation record.
+
+Edit NOW now gives explicit duplicate-name feedback, and the saved-ideas screen
+labels its project scope. Add/Switch and Imported ideas received simulator
+visual review; physical-device and VoiceOver review remain open. Reviewing an
+idea is a focused flow: finish or cancel it before switching.
+
+The iPhone and iPad simulator regressions each passed 73 selected tests (43
+unit and 30 UI) on 2026-10-04. They include the frozen build-6 SQLite migration,
+in-flight review across a switch, imported resumed work, project relaunch,
+cancel/duplicate paths, and existing review decisions. Simulator screenshots
+of the project selector and Imported ideas sheet were inspected for clipping
+and readable context. A subsequent saved-ideas project label change passed its
+targeted UI test on each device. Physical-device and VoiceOver checks remain
+open. These deterministic tests do not exercise a real on-device Apple
+Intelligence model.
+No global search, tags, reminders, calendar, or broad task hierarchy is
+approved.
 
 Acceptance remains open until a frozen build-6 SQLite store migrates without
 loss, new and existing projects switch/relaunch with their own work, cancel and

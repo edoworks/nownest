@@ -55,6 +55,28 @@ final class NowNestUITests: XCTestCase {
         button.tap()
     }
 
+    private func addProject(_ name: String, outcome: String, action: String, in app: XCUIApplication) {
+        app.buttons["addProjectButton"].tap()
+        let nameField = app.textFields["newProjectNameField"]
+        XCTAssertTrue(nameField.waitForExistence(timeout: 5))
+        nameField.tap()
+        nameField.typeText(name)
+        let outcomeField = app.textFields["newProjectOutcomeField"]
+        outcomeField.tap()
+        outcomeField.typeText(outcome)
+        let actionField = app.textFields["newProjectActionField"]
+        actionField.tap()
+        actionField.typeText(action)
+        app.buttons["saveProjectButton"].tap()
+    }
+
+    private func switchProject(_ name: String, in app: XCUIApplication) {
+        app.buttons["switchProjectButton"].tap()
+        let project = app.buttons[name]
+        XCTAssertTrue(project.waitForExistence(timeout: 5))
+        project.tap()
+    }
+
     func testNowIsVisibleAtLaunch() {
         let app = launchApp()
 
@@ -284,5 +306,92 @@ final class NowNestUITests: XCTestCase {
 
         XCTAssertTrue(relaunchedApp.staticTexts["nextaction"].waitForExistence(timeout: 5))
         XCTAssertTrue(relaunchedApp.staticTexts["nextaction"].label.contains("Relaunch edit"))
+    }
+
+    func testProjectsSwitchAndRelaunchWithSeparateNextActions() {
+        let app = launchApp(arguments: ["-ui-testing-persistent-reset"])
+        XCTAssertTrue(app.staticTexts["Active project: NowNest"].waitForExistence(timeout: 5))
+        addProject("Second", outcome: "Second outcome", action: "Second action", in: app)
+        XCTAssertTrue(app.staticTexts["Active project: Second"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Second action"].exists)
+        capture(app, named: "active-second-project")
+        switchProject("NowNest", in: app)
+        XCTAssertTrue(app.staticTexts["Save one real idea for later"].waitForExistence(timeout: 5))
+        switchProject("Second", in: app)
+        XCTAssertTrue(app.staticTexts["Second action"].waitForExistence(timeout: 5))
+        app.terminate()
+
+        let relaunched = launchApp(arguments: ["-ui-testing-persistent"])
+        XCTAssertTrue(relaunched.staticTexts["Active project: Second"].waitForExistence(timeout: 5))
+        XCTAssertTrue(relaunched.staticTexts["Second action"].exists)
+        switchProject("NowNest", in: relaunched)
+        XCTAssertTrue(relaunched.staticTexts["Save one real idea for later"].waitForExistence(timeout: 5))
+    }
+
+    func testCancelledAndDuplicateAddProjectLeaveCurrentWorkAlone() {
+        let app = launchApp()
+        app.buttons["addProjectButton"].tap()
+        app.textFields["newProjectNameField"].tap()
+        app.textFields["newProjectNameField"].typeText("Draft")
+        app.buttons["Cancel"].tap()
+        XCTAssertTrue(app.staticTexts["Active project: NowNest"].waitForExistence(timeout: 5))
+        addProject("Second", outcome: "Outcome", action: "Action", in: app)
+        addProject(" second ", outcome: "Other", action: "Other action", in: app)
+        XCTAssertTrue(app.staticTexts["duplicateProjectMessage"].waitForExistence(timeout: 5))
+        app.buttons["Cancel"].tap()
+        XCTAssertTrue(app.staticTexts["Active project: Second"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Action"].exists)
+    }
+
+    func testCancellingNowEditDoesNotRenameOrSwitchProject() {
+        let app = launchApp()
+        app.buttons["Actions"].tap()
+        app.buttons["Edit NOW"].tap()
+        let name = app.textFields.element(boundBy: 0)
+        XCTAssertTrue(name.waitForExistence(timeout: 5))
+        name.tap()
+        name.typeText(" renamed")
+        app.navigationBars["Edit NOW"].buttons["Cancel"].tap()
+        XCTAssertTrue(app.staticTexts["Active project: NowNest"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Save one real idea for later"].exists)
+    }
+
+    func testSavedIdeasFollowTheirProject() {
+        let app = launchApp()
+        app.buttons["parkIdeaButton"].tap()
+        app.textFields["ideaField"].typeText("First idea")
+        app.buttons["confirmParkButton"].tap()
+        addProject("Second", outcome: "Second outcome", action: "Second action", in: app)
+        XCTAssertTrue(app.buttons["reviewParkedButton"].label.contains("(0)"))
+        app.buttons["parkIdeaButton"].tap()
+        app.textFields["ideaField"].typeText("Second idea")
+        app.buttons["confirmParkButton"].tap()
+        app.buttons["reviewParkedButton"].tap()
+        XCTAssertTrue(app.staticTexts["Ideas in Second"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Second idea"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["First idea"].exists)
+        app.buttons["Done"].tap()
+        switchProject("NowNest", in: app)
+        app.buttons["reviewParkedButton"].tap()
+        XCTAssertTrue(app.staticTexts["Ideas in NowNest"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["First idea"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["Second idea"].exists)
+    }
+
+    func testImportedUnfinishedWorkRemainsVisibleUntilAssignment() {
+        let app = launchApp(arguments: ["-ui-testing", "-ui-testing-imported-ideas"])
+        XCTAssertTrue(app.buttons["importedIdeasButton"].waitForExistence(timeout: 5))
+        app.buttons["importedIdeasButton"].tap()
+        XCTAssertTrue(app.staticTexts["Imported active work"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Unfinished work"].exists)
+        capture(app, named: "imported-ideas")
+        let assign = app.descendants(matching: .any).matching(identifier: "assignImportedIdeaButton").firstMatch
+        XCTAssertTrue(assign.waitForExistence(timeout: 5))
+        assign.tap()
+        app.buttons["NowNest"].tap()
+        app.navigationBars["Imported ideas"].buttons["Done"].tap()
+        XCTAssertTrue(app.buttons["completeActiveButton"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Imported active work"].exists)
+        XCTAssertTrue(app.buttons["importedIdeasButton"].exists, "The other imported idea must stay findable")
     }
 }

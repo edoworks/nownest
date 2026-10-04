@@ -15,12 +15,154 @@ private actor ReviewProbe {
     func counts() -> [Int] { [reviews, critiques] }
 }
 
+// Frozen build-6 schema: it has review/update history but no saved project model
+// or stable project ID on ideas.
+private enum BeforeProjectSwitch {
+@Model
+final class ParkedIdea {
+    var id: UUID
+    var text: String
+    var createdAt: Date
+    var state: String
+    var originProject: String?
+    var originOutcome: String?
+    var originNextAction: String?
+    var startingAction: String?
+    var updatedAt: Date?
+    var resumedAt: Date?
+    var resolvedAt: Date?
+    var resumeCount: Int?
+    var parkCount: Int?
+    var reviewStatus: String?
+    var reviewInput: String?
+    var reviewDraft: String?
+    var reviewCategory: String?
+    var reviewReason: String?
+    var reviewUncertainty: String?
+    var reviewMessage: String?
+    var reviewRequestID: UUID?
+    var reviewDecision: String?
+    var updatesJSON: String?
+    var reviewHistoryJSON: String?
+
+    init(text: String, originProject: String, state: String = "PARKED") {
+        id = UUID()
+        self.text = text
+        createdAt = .now
+        self.state = state
+        self.originProject = originProject
+        originOutcome = "Original outcome"
+        originNextAction = "Original action"
+        updatedAt = createdAt
+        parkCount = 1
+        resumeCount = 0
+    }
+}
+}
+
+@MainActor
+extension DeferredReviewTests {
+    func testSwitchDuringInflightReviewKeepsResultOnOriginalProject() async throws {
+        let store = try container()
+        let context = store.mainContext
+        let now = NowContext(project: "First", outcome: "First outcome", nextAction: "First action")
+        context.insert(now)
+        try context.save()
+        try NowNestStore.ensureProjects(in: context, now: now)
+        let first = try XCTUnwrap(context.fetch(FetchDescriptor<SavedProject>()).first)
+        let idea = try XCTUnwrap(NowNestStore.park("Review while switching", interruptedProject: now.project,
+            interruptedOutcome: now.outcome, interruptedNextAction: now.nextAction, projectID: first.id, in: context))
+        let probe = ReviewProbe()
+        let coordinator = DeferredReviewCoordinator(client: client(probe, delay: .milliseconds(200)))
+        coordinator.setActive(true, in: context)
+        try await waitUntil { idea.deferredReviewStatus == .reviewing }
+        XCTAssertTrue(try NowNestStore.addProject(name: "Second", outcome: "Second outcome", nextAction: "Second action", now: now, in: context))
+        XCTAssertEqual(now.project, "Second")
+        try await waitUntil { idea.deferredReviewStatus == .ready }
+        XCTAssertEqual(idea.projectID, first.id)
+        XCTAssertEqual(idea.originProject, "First")
+        XCTAssertEqual(idea.reviewReason, summary.reason)
+        let counts = await probe.counts()
+        XCTAssertEqual(counts, [1, 1])
+        try NowNestStore.switchProject(to: first, now: now, in: context)
+        XCTAssertEqual(now.project, "First")
+        XCTAssertEqual(idea.reviewReason, summary.reason)
+    }
+
+    func testBuild6SQLiteMigratesProjectsWithoutLosingReviewsOrInventingOwnership() throws {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("project-build6-migration-\(UUID()).store")
+        let ambiguousID: UUID
+        let matchingID: UUID
+        let updateJSON = #"[{"id":"16D5C535-DAE9-4878-A40B-A64DE65D0179","createdAt":"2026-10-03T00:00:00Z","text":"New context"}]"#
+        let historyJSON = #"[{"id":"19FB4D41-8334-4C61-82D2-3A02CFABFB24","createdAt":"2026-10-03T00:00:00Z","category":"Needs clarification","reason":"Earlier result","uncertainty":"Unknown"}]"#
+        do {
+            let oldSchema = Schema([NowContext.self, BeforeProjectSwitch.ParkedIdea.self, DogfoodEvent.self])
+            let old = try ModelContainer(for: oldSchema, configurations: ModelConfiguration(schema: oldSchema, url: url))
+            old.mainContext.insert(NowContext(project: "Current", outcome: "Current outcome", nextAction: "Current action"))
+            let ambiguous = BeforeProjectSwitch.ParkedIdea(text: "Keep original", originProject: "Earlier project", state: "RESUMED")
+            ambiguous.startingAction = "Continue this"
+            ambiguous.reviewStatus = "ready"
+            ambiguous.reviewCategory = "Needs clarification"
+            ambiguous.reviewReason = "Current result"
+            ambiguous.updatesJSON = updateJSON
+            ambiguous.reviewHistoryJSON = historyJSON
+            ambiguousID = ambiguous.id
+            let matching = BeforeProjectSwitch.ParkedIdea(text: "Still current", originProject: "Current")
+            matching.reviewStatus = "queued"
+            matching.reviewRequestID = UUID()
+            matchingID = matching.id
+            old.mainContext.insert(ambiguous)
+            old.mainContext.insert(matching)
+            try old.mainContext.save()
+        }
+        let importedProjectID: UUID
+        do {
+            let upgraded = try container(url: url)
+            let context = upgraded.mainContext
+            let now = try XCTUnwrap(context.fetch(FetchDescriptor<NowContext>()).first)
+            try NowNestStore.ensureProjects(in: context, now: now)
+            let project = try XCTUnwrap(context.fetch(FetchDescriptor<SavedProject>()).first)
+            importedProjectID = project.id
+            let ideas = try context.fetch(FetchDescriptor<ParkedIdea>())
+            let ambiguous = try XCTUnwrap(ideas.first { $0.id == ambiguousID })
+            let matching = try XCTUnwrap(ideas.first { $0.id == matchingID })
+            XCTAssertNil(ambiguous.projectID)
+            XCTAssertNil(matching.projectID)
+            XCTAssertEqual(ambiguous.text, "Keep original")
+            XCTAssertEqual(ambiguous.originProject, "Earlier project")
+            XCTAssertEqual(ambiguous.startingAction, "Continue this")
+            XCTAssertEqual(ambiguous.reviewReason, "Current result")
+            XCTAssertEqual(ambiguous.updatesJSON, updateJSON)
+            XCTAssertEqual(ambiguous.reviewHistoryJSON, historyJSON)
+            XCTAssertEqual(matching.reviewStatus, "queued")
+            XCTAssertNotNil(matching.reviewRequestID)
+        }
+        let reopened = try container(url: url)
+        let context = reopened.mainContext
+        let now = try XCTUnwrap(context.fetch(FetchDescriptor<NowContext>()).first)
+        try NowNestStore.ensureProjects(in: context, now: now)
+        XCTAssertEqual(try context.fetch(FetchDescriptor<SavedProject>()).count, 1)
+        XCTAssertEqual(try context.fetch(FetchDescriptor<SavedProject>()).first?.id, importedProjectID)
+        let ambiguous = try XCTUnwrap(context.fetch(FetchDescriptor<ParkedIdea>()).first { $0.id == ambiguousID })
+        XCTAssertNil(ambiguous.projectID)
+        XCTAssertEqual(ambiguous.reviewHistoryJSON, historyJSON)
+        let project = try XCTUnwrap(context.fetch(FetchDescriptor<SavedProject>()).first)
+        XCTAssertTrue(try NowNestStore.assignImportedIdea(ambiguous, to: project, in: context))
+        let assignedStore = try container(url: url)
+        let assigned = try XCTUnwrap(assignedStore.mainContext.fetch(FetchDescriptor<ParkedIdea>()).first { $0.id == ambiguousID })
+        XCTAssertEqual(assigned.projectID, importedProjectID)
+        XCTAssertEqual(assigned.text, "Keep original")
+        XCTAssertEqual(assigned.updatesJSON, updateJSON)
+        XCTAssertEqual(assigned.reviewHistoryJSON, historyJSON)
+    }
+}
+
 @MainActor
 final class DeferredReviewTests: XCTestCase {
     private let summary = DeferredReviewSummary(category: "Needs clarification", reason: "Clarify the benefit.", uncertainty: "Effort is unknown.")
 
     private func container(url: URL? = nil) throws -> ModelContainer {
-        let schema = Schema([NowContext.self, ParkedIdea.self, DogfoodEvent.self])
+        let schema = Schema([NowContext.self, SavedProject.self, ParkedIdea.self, DogfoodEvent.self])
         let configuration = url.map { ModelConfiguration(schema: schema, url: $0) }
             ?? ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: configuration)

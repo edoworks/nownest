@@ -11,7 +11,7 @@ struct NowNestApp: App {
     private let suggestionClient: StartingActionSuggestionClient
 
     init() {
-        let schema = Schema([NowContext.self, ParkedIdea.self, DogfoodEvent.self])
+        let schema = Schema([NowContext.self, SavedProject.self, ParkedIdea.self, DogfoodEvent.self])
         let arguments = ProcessInfo.processInfo.arguments
         #if DEBUG
         let reviewClient = DeferredReviewClient.testing(arguments: arguments) ?? .live
@@ -64,6 +64,22 @@ struct NowNestApp: App {
         } catch {
             fatalError("Unable to create NowNest model container: \(error)")
         }
+        #if DEBUG
+        if arguments.contains("-ui-testing-imported-ideas") {
+            let context = modelContainer.mainContext
+            let note = ParkedIdea(text: "Imported note", originProject: "Earlier project", originOutcome: "Earlier outcome", originNextAction: "Earlier action")
+            note.reviewStatus = DeferredReviewStatus.ready.rawValue
+            note.reviewCategory = "Needs clarification"
+            note.reviewReason = "Earlier review remains"
+            note.reviewUncertainty = "More context needed"
+            context.insert(note)
+            let active = ParkedIdea(text: "Imported active work", originProject: "Older work")
+            active.state = "RESUMED"
+            active.startingAction = "Continue imported work"
+            context.insert(active)
+            try? context.save()
+        }
+        #endif
         recoveryNotice = notice
     }
 
