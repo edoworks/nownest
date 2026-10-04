@@ -1,7 +1,9 @@
 # Build 7 usability and icon review — October 3, 2026
 
-Status: the owner approved a bounded local NOW-screen and icon correction after
-this review. A TestFlight upload remains on hold pending a separate report.
+Status: the owner approved a bounded NOW-screen and icon correction after
+this review, then separately approved an internal TestFlight upload. Build 8
+was uploaded and the notified tester received Apple's ready-to-test email;
+see [build-8 handoff](testflight-build8.md).
 Baseline:
 `edoworks/nownest@82115229487a75568aa0b8b89e619011ceb6573e`, internal
 TestFlight `0.1.0 (7)`.
@@ -130,8 +132,8 @@ simplification separately reviewable. Verify the icon's pixel corners, asset
 sizes, icon masking, and Home Screen previews at ordinary size, including
 tinted mode on a device or supported UI path. Run focused iPhone/iPad UI tests
 for Save, project switch, Imported ideas, and accessibility sizes. Preserve the
-build-7 IPA and baseline screenshots for before/after comparison. Do not
-upload another build until the owner reviews that result.
+build-7 IPA and baseline screenshots for before/after comparison. This was the
+pre-upload gate; the owner later approved the build-8 internal upload.
 
 ## Local implementation evidence (October 3, 2026)
 

@@ -1,6 +1,6 @@
 # NowNest Customer Zero PRD
 
-- Status: P0 historical validation contract with October 2026 founder-feedback addenda and a local build-7 usability/icon response awaiting validation
+- Status: P0 historical validation contract with October 2026 founder-feedback addenda and a build-8 internal TestFlight response awaiting physical validation
 - Historical source revision audited: build 4 candidate `405b3124bd92d84e69d1bbc947b6a9abf5ed2aef`
 - Tracking: `edoworks/factory#54`, implementation `edoworks/factory#55`, TestFlight lifecycle `edoworks/factory#46`
 - Historical baseline evidence cutoff: 2026-09-24; October addendum evidence through 2026-10-03
@@ -27,8 +27,9 @@ Apple Intelligence where feasible. This is separate from the older build-6
 multiple-project request. The [build-7 usability and icon review](build7-ux-icon-review.md)
 records the exact feedback, current-screen and Home Screen icon evidence,
 official Apple design references, a bounded proposal, a rubberduck critique,
-and the scope of the approved local response. No TestFlight upload or
-release is authorized by this checkpoint.
+and the scope of the approved response. The owner subsequently authorized
+the [build-8 internal TestFlight upload](testflight-build8.md); no public
+release is authorized.
 
 ## October 2026 founder-feedback addendum (in progress)
 
