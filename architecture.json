@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "declared-core",
+      "files": [
+        "NowNest/Models.swift"
+      ],
+      "checks": [
+        "store-sdk"
+      ]
+    }
+  ],
+  "review_gaps": [
+    "The model intentionally uses SwiftData, so it is not a platform-independent domain module. Only store SDK references are guarded. If a new runtime is authorized, extract behavior/contracts with shared fixtures rather than forcing a web stack or rewriting native UI.",
+    "Lexical coverage is limited to declared files; review new files, imports and transitive dependencies on every relevant PR."
+  ]
+}
