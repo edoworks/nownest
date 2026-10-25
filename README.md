@@ -1,5 +1,10 @@
 # NowNest
 
+**Deprecated.** The owner retired NowNest on 2026-10-14 and confirmed full
+distribution retirement on 2026-10-25. This repository describes historical
+work; do not build, submit, or promote it as an active product. Existing local
+data on installed devices is not altered by this source decision.
+
 NowNest is an offline iPhone and iPad reference app for protecting the
 current NOW context when a new idea appears.
 
